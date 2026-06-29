@@ -118,10 +118,10 @@ function DatabaseSelector({
     <div ref={ref} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm hover:border-blue-400 dark:hover:border-blue-500 transition-colors min-w-[200px]"
+        className="flex items-center gap-2 px-3 py-2 bg-white border border-zinc-200 rounded-xl text-sm hover:border-blue-400 transition-colors min-w-[200px]"
       >
         <Database className="w-4 h-4 text-blue-500 shrink-0" />
-        <span className="flex-1 text-left truncate text-zinc-700 dark:text-zinc-200">
+        <span className="flex-1 text-left truncate text-zinc-700">
           {selectedDbs.length === 0
             ? 'Select databases...'
             : selectedDbs.length === 1
@@ -132,8 +132,8 @@ function DatabaseSelector({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-full mt-1 w-80 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-xl z-50 overflow-hidden">
-          <div className="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+        <div className="absolute left-0 top-full mt-1 w-80 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="px-3 py-2 border-b border-zinc-100 text-xs font-medium text-zinc-500 uppercase tracking-wider">
             Available Databases
           </div>
           <div className="max-h-64 overflow-y-auto p-1.5">
@@ -145,16 +145,16 @@ function DatabaseSelector({
                   onClick={() => onToggle(db.id)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
                     isSelected
-                      ? 'bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800'
-                      : 'hover:bg-zinc-50 dark:hover:bg-zinc-800 border border-transparent'
+                      ? 'bg-blue-50 border border-blue-200'
+                      : 'hover:bg-zinc-50 border border-transparent'
                   }`}
                 >
                   <div className={`w-2.5 h-2.5 rounded-full ${db.color} shrink-0`} />
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-medium truncate ${isSelected ? 'text-blue-700 dark:text-blue-300' : 'text-zinc-800 dark:text-zinc-200'}`}>
+                    <p className={`text-sm font-medium truncate ${isSelected ? 'text-blue-700' : 'text-zinc-800'}`}>
                       {db.name}
                     </p>
-                    <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
+                    <p className="text-[11px] text-zinc-400">
                       {db.tables} tables · {db.records} records
                     </p>
                   </div>
@@ -220,21 +220,21 @@ function SqlEditor({
   };
 
   return (
-    <div className={`bg-white dark:bg-zinc-950 border rounded-xl overflow-hidden transition-colors ${isEditing ? 'border-violet-300 dark:border-violet-700 ring-1 ring-violet-200 dark:ring-violet-900' : 'border-zinc-200 dark:border-zinc-800'}`}>
+    <div className={`bg-white border rounded-xl overflow-hidden transition-colors ${isEditing ? 'border-violet-300 ring-1 ring-violet-200' : 'border-zinc-200'}`}>
       <div className="flex items-center justify-between px-4 py-3">
         <button
           onClick={onToggle}
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <Code2 className="w-4 h-4 text-violet-500" />
-          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Generated SQL</span>
+          <span className="text-sm font-medium text-zinc-700">Generated SQL</span>
           {isModified && (
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 font-medium">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 font-medium">
               Modified
             </span>
           )}
           {!isModified && (
-            <span className="text-[11px] px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 font-medium">
+            <span className="text-[11px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-600 font-medium">
               3 statements
             </span>
           )}
@@ -244,14 +244,14 @@ function SqlEditor({
             <>
               <button
                 onClick={handleCopy}
-                className="p-1.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                className="p-1.5 text-zinc-400 hover:text-zinc-600 rounded-md hover:bg-zinc-100 transition-colors"
                 title="Copy SQL"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
               <button
                 onClick={onToggleEditing}
-                className={`p-1.5 rounded-md transition-colors ${isEditing ? 'text-violet-600 dark:text-violet-400 bg-violet-100 dark:bg-violet-900/30' : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
+                className={`p-1.5 rounded-md transition-colors ${isEditing ? 'text-violet-600 bg-violet-100' : 'text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100'}`}
                 title={isEditing ? 'Stop editing' : 'Edit SQL manually'}
               >
                 <Pencil className="w-3.5 h-3.5" />
@@ -269,7 +269,7 @@ function SqlEditor({
               {isEditing && isModified && (
                 <button
                   onClick={() => onEditedSqlChange(sql)}
-                  className="p-1.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                  className="p-1.5 text-zinc-400 hover:text-zinc-600 rounded-md hover:bg-zinc-100 transition-colors"
                   title="Reset to original"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -279,14 +279,14 @@ function SqlEditor({
           )}
           <button
             onClick={onToggle}
-            className="p-1.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="p-1.5 text-zinc-400 hover:text-zinc-600 rounded-md hover:bg-zinc-100 transition-colors"
           >
             {isVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
       {isVisible && (
-        <div className="border-t border-zinc-100 dark:border-zinc-800 relative">
+        <div className="border-t border-zinc-100 relative">
           {isEditing ? (
             <div className="relative">
               <textarea
@@ -295,15 +295,15 @@ function SqlEditor({
                 onChange={e => onEditedSqlChange(e.target.value)}
                 onKeyDown={handleEditorKeyDown}
                 spellCheck={false}
-                className="w-full p-4 text-[13px] leading-relaxed text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-900/50 font-mono resize-none focus:outline-none min-h-[200px]"
+                className="w-full p-4 text-[13px] leading-relaxed text-zinc-700 bg-zinc-50 font-mono resize-none focus:outline-none min-h-[200px]"
                 style={{ tabSize: 2 }}
               />
-              <div className="absolute bottom-2 right-2 text-[10px] text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5">
-                <kbd className="px-1.5 py-0.5 bg-zinc-200 dark:bg-zinc-700 rounded font-mono border border-zinc-300 dark:border-zinc-600">⌘↵</kbd> to re-run
+              <div className="absolute bottom-2 right-2 text-[10px] text-zinc-400 flex items-center gap-1.5">
+                <kbd className="px-1.5 py-0.5 bg-zinc-200 rounded font-mono border border-zinc-300">⌘↵</kbd> to re-run
               </div>
             </div>
           ) : (
-            <pre className="p-4 text-[13px] leading-relaxed text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-900/50 overflow-x-auto font-mono">
+            <pre className="p-4 text-[13px] leading-relaxed text-zinc-700 bg-zinc-50 overflow-x-auto font-mono">
               {currentSql}
             </pre>
           )}
@@ -317,18 +317,18 @@ function ResultTableView({ table }: { table: ResultTable }) {
   return (
     <div className="flex-1 overflow-auto">
       <table className="w-full text-sm text-left whitespace-nowrap">
-        <thead className="text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/80 sticky top-0 z-10">
+        <thead className="text-xs text-zinc-500 bg-zinc-50 sticky top-0 z-10">
           <tr>
             {table.columns.map(col => (
-              <th key={col} className="px-4 py-3 font-medium border-b border-zinc-200 dark:border-zinc-800">
+              <th key={col} className="px-4 py-3 font-medium border-b border-zinc-200">
                 {col}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/50">
+        <tbody className="divide-y divide-zinc-100">
           {table.rows.map((row, i) => (
-            <tr key={i} className="hover:bg-zinc-50/80 dark:hover:bg-zinc-900/30 transition-colors">
+            <tr key={i} className="hover:bg-zinc-50/80 transition-colors">
               {table.columns.map(col => {
                 const val = row[col];
                 const isId = col.endsWith('_id') && typeof val === 'string' && (val as string).includes('-');
@@ -336,11 +336,11 @@ function ResultTableView({ table }: { table: ResultTable }) {
                 return (
                   <td key={col} className="px-4 py-2.5">
                     {isId ? (
-                      <span className="font-medium text-blue-600 dark:text-blue-400">{String(val)}</span>
+                      <span className="font-medium text-blue-600">{String(val)}</span>
                     ) : isFlag ? (
                       <FlagBadge value={String(val)} />
                     ) : (
-                      <span className="text-zinc-700 dark:text-zinc-300">{String(val)}</span>
+                      <span className="text-zinc-700">{String(val)}</span>
                     )}
                   </td>
                 );
@@ -355,13 +355,13 @@ function ResultTableView({ table }: { table: ResultTable }) {
 
 function FlagBadge({ value }: { value: string }) {
   const v = value.toLowerCase();
-  let cls = 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700';
+  let cls = 'bg-zinc-100 text-zinc-600 border-zinc-200';
   if (['active', 'normal', 'mild', 'unlikely'].includes(v))
-    cls = 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20';
+    cls = 'bg-emerald-50 text-emerald-600 border-emerald-200';
   else if (['high', 'moderate', 'possible', 'probable'].includes(v))
-    cls = 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20';
+    cls = 'bg-amber-50 text-amber-600 border-amber-200';
   else if (['severe', 'critical', 'definite'].includes(v))
-    cls = 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/20';
+    cls = 'bg-red-50 text-red-600 border-red-200';
   return <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${cls}`}>{value}</span>;
 }
 
@@ -434,9 +434,9 @@ export function QueryTool() {
   return (
     <div className="flex flex-col gap-4 h-full w-full">
       {/* ─── Query Input Area ─── */}
-      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm transition-colors">
+      <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm transition-colors">
         {/* Toolbar */}
-        <div className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between gap-3 flex-wrap">
+        <div className="px-4 py-3 border-b border-zinc-100 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 flex-wrap">
             <DatabaseSelector selected={selectedDbs} onToggle={toggleDb} />
             {selectedDbs.size > 0 && (
@@ -445,10 +445,10 @@ export function QueryTool() {
                   const db = AVAILABLE_DATABASES.find(d => d.id === id);
                   if (!db) return null;
                   return (
-                    <span key={id} className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                    <span key={id} className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-zinc-100 rounded-lg text-xs font-medium text-zinc-700">
                       <span className={`w-2 h-2 rounded-full ${db.color}`} />
                       {db.name}
-                      <button onClick={() => toggleDb(id)} className="ml-0.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200">
+                      <button onClick={() => toggleDb(id)} className="ml-0.5 text-zinc-400 hover:text-zinc-600">
                         <X className="w-3 h-3" />
                       </button>
                     </span>
@@ -461,7 +461,7 @@ export function QueryTool() {
             {hasResults && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 border border-zinc-200 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-700 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 New Query
@@ -482,12 +482,12 @@ export function QueryTool() {
             onKeyDown={handleKeyDown}
             placeholder="Describe your query in plain English... e.g. 'Show all active patients over 30 with their lab results and adverse events'"
             rows={isExpanded ? 6 : 2}
-            className="w-full pl-12 pr-32 py-4 bg-transparent text-sm text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 resize-none focus:outline-none leading-relaxed"
+            className="w-full pl-12 pr-32 py-4 bg-transparent text-sm text-zinc-800 placeholder:text-zinc-400 resize-none focus:outline-none leading-relaxed"
           />
           <div className="absolute right-3 top-3 flex items-center gap-1.5">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="p-1.5 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              className="p-1.5 text-zinc-400 hover:text-zinc-600 rounded-md hover:bg-zinc-100 transition-colors"
               title={isExpanded ? 'Collapse' : 'Expand'}
             >
               {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
@@ -495,7 +495,7 @@ export function QueryTool() {
             <button
               onClick={handleRun}
               disabled={isRunning || !prompt.trim() || selectedDbs.size === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-300 dark:disabled:bg-zinc-700 text-white rounded-lg text-sm font-medium transition-colors disabled:cursor-not-allowed shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-300 text-white rounded-lg text-sm font-medium transition-colors disabled:cursor-not-allowed shadow-sm"
             >
               {isRunning ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -506,8 +506,8 @@ export function QueryTool() {
             </button>
           </div>
           {!prompt && !hasResults && (
-            <div className="px-4 pb-3 text-[11px] text-zinc-400 dark:text-zinc-500">
-              Press <kbd className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded text-[10px] font-mono border border-zinc-200 dark:border-zinc-700">⌘</kbd> + <kbd className="px-1.5 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded text-[10px] font-mono border border-zinc-200 dark:border-zinc-700">↵</kbd> to run
+            <div className="px-4 pb-3 text-[11px] text-zinc-400">
+              Press <kbd className="px-1.5 py-0.5 bg-zinc-100 rounded text-[10px] font-mono border border-zinc-200">⌘</kbd> + <kbd className="px-1.5 py-0.5 bg-zinc-100 rounded text-[10px] font-mono border border-zinc-200">↵</kbd> to run
             </div>
           )}
         </div>
@@ -519,7 +519,7 @@ export function QueryTool() {
               <button
                 key={i}
                 onClick={() => handleExampleClick(ex)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs text-zinc-600 dark:text-zinc-400 hover:border-blue-300 dark:hover:border-blue-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-50 border border-zinc-200 rounded-lg text-xs text-zinc-600 hover:border-blue-300 hover:text-blue-600 transition-colors"
               >
                 <MessageSquare className="w-3 h-3" />
                 {ex}
@@ -531,14 +531,14 @@ export function QueryTool() {
 
       {/* ─── Running State ─── */}
       {isRunning && (
-        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 flex flex-col items-center gap-4 transition-colors">
+        <div className="bg-white border border-zinc-200 rounded-xl p-8 flex flex-col items-center gap-4 transition-colors">
           <div className="relative">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-blue-500 animate-pulse" />
             </div>
           </div>
           <div className="text-center">
-            <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Translating your query...</p>
+            <p className="text-sm font-medium text-zinc-700">Translating your query...</p>
             <p className="text-xs text-zinc-400 mt-1">Analyzing schema and generating optimized SQL</p>
           </div>
           <div className="flex items-center gap-3 text-xs text-zinc-400">
@@ -566,9 +566,9 @@ export function QueryTool() {
           />
 
           {/* Result Tables */}
-          <div className="flex-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors min-h-0">
+          <div className="flex-1 bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors min-h-0">
             {/* Tabs & Actions */}
-            <div className="border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between shrink-0">
+            <div className="border-b border-zinc-200 flex items-center justify-between shrink-0">
               <div className="flex items-center overflow-x-auto">
                 {MOCK_RESULT_TABLES.map((t, i) => (
                   <button
@@ -576,24 +576,24 @@ export function QueryTool() {
                     onClick={() => setActiveResultTab(i)}
                     className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                       activeResultTab === i
-                        ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20'
-                        : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-900/30'
+                        ? 'border-blue-500 text-blue-600 bg-blue-50/50'
+                        : 'border-transparent text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50'
                     }`}
                   >
                     <Table2 className="w-4 h-4" />
                     {t.name}
-                    <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 font-normal">
+                    <span className="text-[11px] px-1.5 py-0.5 rounded-full bg-zinc-100 text-zinc-500 font-normal">
                       {t.rows.length}/{t.totalRows}
                     </span>
                   </button>
                 ))}
               </div>
               <div className="flex items-center gap-2 px-4 shrink-0">
-                <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900 transition-colors">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-600 border border-zinc-200 rounded-lg hover:bg-zinc-50 bg-white transition-colors">
                   <Save className="w-3.5 h-3.5" />
                   Save
                 </button>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900 transition-colors">
+                <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-600 border border-zinc-200 rounded-lg hover:bg-zinc-50 bg-white transition-colors">
                   <Download className="w-3.5 h-3.5" />
                   Export
                 </button>
@@ -604,19 +604,19 @@ export function QueryTool() {
             <ResultTableView table={MOCK_RESULT_TABLES[activeResultTab]} />
 
             {/* Footer */}
-            <div className="h-10 border-t border-zinc-200 dark:border-zinc-800 px-4 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-900/50 text-xs text-zinc-500 dark:text-zinc-400 shrink-0">
+            <div className="h-10 border-t border-zinc-200 px-4 flex items-center justify-between bg-zinc-50/50 text-xs text-zinc-500 shrink-0">
               <span>
                 Showing {MOCK_RESULT_TABLES[activeResultTab].rows.length} of {MOCK_RESULT_TABLES[activeResultTab].totalRows} rows
-                <span className="mx-2 text-zinc-300 dark:text-zinc-700">·</span>
+                <span className="mx-2 text-zinc-300">·</span>
                 {MOCK_RESULT_TABLES.length} tables returned
-                <span className="mx-2 text-zinc-300 dark:text-zinc-700">·</span>
+                <span className="mx-2 text-zinc-300">·</span>
                 Executed in 0.82s
               </span>
               <div className="flex gap-1">
-                <button className="px-2 py-0.5 border border-zinc-200 dark:border-zinc-700 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50" disabled>
+                <button className="px-2 py-0.5 border border-zinc-200 rounded hover:bg-zinc-100 transition-colors disabled:opacity-50" disabled>
                   Previous
                 </button>
-                <button className="px-2 py-0.5 border border-zinc-200 dark:border-zinc-700 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                <button className="px-2 py-0.5 border border-zinc-200 rounded hover:bg-zinc-100 transition-colors">
                   Next
                 </button>
               </div>
@@ -627,12 +627,12 @@ export function QueryTool() {
 
       {/* ─── Empty State ─── */}
       {!hasResults && !isRunning && (
-        <div className="flex-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 transition-colors">
-          <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center mb-4">
-            <Sparkles className="w-8 h-8 text-zinc-300 dark:text-zinc-700" />
+        <div className="flex-1 bg-white border border-zinc-200 rounded-xl flex flex-col items-center justify-center text-zinc-400 transition-colors">
+          <div className="w-16 h-16 rounded-2xl bg-zinc-100 flex items-center justify-center mb-4">
+            <Sparkles className="w-8 h-8 text-zinc-300" />
           </div>
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1">Describe what you need</p>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500 max-w-md text-center">
+          <p className="text-sm font-medium text-zinc-500 mb-1">Describe what you need</p>
+          <p className="text-xs text-zinc-400 max-w-md text-center">
             Write your query in natural language, select the target databases, and the AI engine will generate optimized SQL returning multi-table results.
           </p>
         </div>

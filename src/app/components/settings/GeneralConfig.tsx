@@ -85,50 +85,50 @@ export function GeneralConfig() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">General Configuration</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Platform-wide settings, security policies, and compliance configuration</p>
+          <h1 className="text-zinc-900">General Configuration</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Platform-wide settings, security policies, and compliance configuration</p>
         </div>
         <button onClick={handleSave}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[14px] transition-colors ${saved ? 'bg-emerald-600 text-white' : 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200'}`}>
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[14px] transition-colors ${saved ? 'bg-emerald-600 text-white' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
           <Save size={16} /> {saved ? 'Saved!' : 'Save Changes'}
         </button>
       </div>
 
       <div className="flex-1 overflow-auto space-y-6 pb-4">
         {SECTIONS.map(section => (
-          <div key={section.title} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
-              <h2 className="text-[15px] text-zinc-900 dark:text-zinc-100">{section.title}</h2>
-              <p className="text-[13px] text-zinc-400 dark:text-zinc-500 mt-0.5">{section.description}</p>
+          <div key={section.title} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-zinc-100">
+              <h2 className="text-[15px] text-zinc-900">{section.title}</h2>
+              <p className="text-[13px] text-zinc-400 mt-0.5">{section.description}</p>
             </div>
-            <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <div className="divide-y divide-zinc-100">
               {section.fields.map(field => (
                 <div key={field.key} className="px-6 py-4 flex items-center justify-between gap-8">
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] text-zinc-900 dark:text-zinc-100">{field.label}</p>
-                    <p className="text-[12px] text-zinc-400 dark:text-zinc-500 mt-0.5">{field.description}</p>
+                    <p className="text-[14px] text-zinc-900">{field.label}</p>
+                    <p className="text-[12px] text-zinc-400 mt-0.5">{field.description}</p>
                   </div>
                   <div className="shrink-0 w-56">
                     {field.type === 'text' && (
                       <input type="text" value={fields[field.key] as string} onChange={e => updateField(field.key, e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+                        className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/10" />
                     )}
                     {field.type === 'select' && (
                       <select value={fields[field.key] as string} onChange={e => updateField(field.key, e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+                        className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
                         {field.options!.map(o => <option key={o} value={o}>{o}</option>)}
                       </select>
                     )}
                     {field.type === 'number' && (
                       <div className="flex items-center gap-2">
                         <input type="number" value={fields[field.key] as number} onChange={e => updateField(field.key, parseInt(e.target.value) || 0)}
-                          className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+                          className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/10" />
                         {field.unit && <span className="text-[12px] text-zinc-400 whitespace-nowrap">{field.unit}</span>}
                       </div>
                     )}
                     {field.type === 'toggle' && (
                       <button onClick={() => updateField(field.key, !fields[field.key])}
-                        className={`relative w-11 h-6 rounded-full transition-colors ${fields[field.key] ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-600'}`}>
+                        className={`relative w-11 h-6 rounded-full transition-colors ${fields[field.key] ? 'bg-emerald-500' : 'bg-zinc-300'}`}>
                         <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${fields[field.key] ? 'translate-x-5.5' : 'translate-x-0.5'}`} />
                       </button>
                     )}

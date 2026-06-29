@@ -16,10 +16,10 @@ interface UploadProcess {
 }
 
 const STATUS_CONFIG = {
-  completed: { icon: CheckCircle2, cls: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/30', label: 'Completed' },
-  running: { icon: Loader2, cls: 'text-blue-600 dark:text-blue-400 animate-spin', bg: 'bg-blue-50 dark:bg-blue-950/30', label: 'Running' },
-  queued: { icon: Clock, cls: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-950/30', label: 'Queued' },
-  failed: { icon: XCircle, cls: 'text-red-500 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/30', label: 'Failed' },
+  completed: { icon: CheckCircle2, cls: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Completed' },
+  running: { icon: Loader2, cls: 'text-blue-600 animate-spin', bg: 'bg-blue-50', label: 'Running' },
+  queued: { icon: Clock, cls: 'text-amber-600', bg: 'bg-amber-50', label: 'Queued' },
+  failed: { icon: XCircle, cls: 'text-red-500', bg: 'bg-red-50', label: 'Failed' },
 };
 
 const DB_COLORS: Record<string, string> = {
@@ -59,8 +59,8 @@ export function UploadProcesses() {
     <div className="flex flex-col gap-4 h-full w-full min-h-0">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Upload Processes</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Manage and monitor data upload operations.</p>
+          <h2 className="text-2xl font-bold text-zinc-900">Upload Processes</h2>
+          <p className="text-sm text-zinc-500 mt-1">Manage and monitor data upload operations.</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm">
           <Upload className="w-4 h-4" /> New Upload
@@ -71,10 +71,10 @@ export function UploadProcesses() {
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search processes..."
-            className="w-full pl-9 pr-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:text-zinc-200" />
+            className="w-full pl-9 pr-4 py-2 bg-white border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
         </div>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-          className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 pr-8 py-2 text-sm text-zinc-700 dark:text-zinc-300 outline-none appearance-none"
+          className="bg-white border border-zinc-200 rounded-xl px-3 pr-8 py-2 text-sm text-zinc-700 outline-none appearance-none"
           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2371717a' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center' }}>
           <option value="all">All statuses</option>
           <option value="running">Running</option>
@@ -92,7 +92,7 @@ export function UploadProcesses() {
             const StIcon = stCfg.icon;
             const progress = proc.filesTotal > 0 ? (proc.filesProcessed / proc.filesTotal) * 100 : 0;
             return (
-              <div key={proc.id} className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group">
+              <div key={proc.id} className="bg-white border border-zinc-200 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group">
                 <div className="flex items-start gap-4">
                   <div className={`p-2 rounded-lg ${stCfg.bg} shrink-0`}>
                     <StIcon className={`w-5 h-5 ${stCfg.cls}`} />
@@ -102,9 +102,9 @@ export function UploadProcesses() {
                       <span className="text-xs font-mono text-zinc-400">{proc.id}</span>
                       <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${stCfg.bg} ${stCfg.cls}`}>{stCfg.label}</span>
                     </div>
-                    <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate">{proc.name}</p>
+                    <p className="text-sm font-semibold text-zinc-900 truncate">{proc.name}</p>
                     <div className="flex items-center gap-3 mt-1.5 flex-wrap">
-                      <span className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                      <span className="flex items-center gap-1.5 text-xs text-zinc-500">
                         <span className={`w-2 h-2 rounded-full ${DB_COLORS[proc.database] || 'bg-zinc-400'}`} />{proc.database}
                       </span>
                       <span className="text-xs text-zinc-400">{proc.filesProcessed.toLocaleString()} / {proc.filesTotal.toLocaleString()} files</span>
@@ -114,18 +114,18 @@ export function UploadProcesses() {
                     </div>
                     {(proc.status === 'running' || proc.status === 'failed') && (
                       <div className="mt-2.5">
-                        <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full transition-all ${proc.status === 'failed' ? 'bg-red-500' : 'bg-blue-500'}`} style={{ width: `${progress}%` }} />
                         </div>
                         {proc.errorMessage && (
-                          <p className="text-xs text-red-500 dark:text-red-400 mt-1.5 flex items-center gap-1">
+                          <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
                             <AlertCircle className="w-3 h-3 shrink-0" />{proc.errorMessage}
                           </p>
                         )}
                       </div>
                     )}
                   </div>
-                  <ChevronRight className="w-4 h-4 text-zinc-300 dark:text-zinc-600 shrink-0 mt-1 group-hover:text-zinc-500 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-zinc-300 shrink-0 mt-1 group-hover:text-zinc-500 transition-colors" />
                 </div>
               </div>
             );

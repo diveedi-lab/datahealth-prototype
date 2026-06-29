@@ -26,9 +26,9 @@ const DB_COLORS: Record<string, string> = {
 };
 
 const STATUS_CONFIG = {
-  completed: { icon: CheckCircle2, cls: 'text-emerald-600 dark:text-emerald-400', label: 'Completed' },
-  failed: { icon: XCircle, cls: 'text-red-500 dark:text-red-400', label: 'Failed' },
-  cancelled: { icon: AlertCircle, cls: 'text-zinc-400 dark:text-zinc-500', label: 'Cancelled' },
+  completed: { icon: CheckCircle2, cls: 'text-emerald-600', label: 'Completed' },
+  failed: { icon: XCircle, cls: 'text-red-500', label: 'Failed' },
+  cancelled: { icon: AlertCircle, cls: 'text-zinc-400', label: 'Cancelled' },
 };
 
 const AUTHORS = ['You', 'Dr. M. Rossi', 'Dr. L. Bianchi', 'Dr. A. Verdi', 'Dr. S. Russo', 'Dr. P. Marino'];
@@ -78,27 +78,27 @@ function SearchSelect({ value, onChange, options, placeholder, allLabel }: {
   return (
     <div ref={ref} className="relative">
       <button onClick={() => { setOpen(!open); setSearch(''); }}
-        className="flex items-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors min-w-[160px]">
+        className="flex items-center gap-2 bg-white border border-zinc-200 rounded-xl px-3 py-2 text-sm text-zinc-700 hover:border-zinc-300 transition-colors min-w-[160px]">
         <span className="flex-1 text-left truncate">{displayLabel}</span>
         <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-xl z-50 overflow-hidden">
-          <div className="p-2 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="p-2 border-b border-zinc-100">
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder={placeholder}
-                className="w-full pl-8 pr-3 py-1.5 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 text-zinc-700 dark:text-zinc-300" autoFocus />
+                className="w-full pl-8 pr-3 py-1.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 text-zinc-700" autoFocus />
             </div>
           </div>
           <div className="max-h-48 overflow-y-auto p-1">
             <button onClick={() => { onChange('all'); setOpen(false); }}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${value === 'all' ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'}`}>
+              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${value === 'all' ? 'bg-blue-50 text-blue-600' : 'text-zinc-700 hover:bg-zinc-50'}`}>
               {allLabel}
             </button>
             {filtered.map(o => (
               <button key={o} onClick={() => { onChange(o); setOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${value === o ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400' : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'}`}>
+                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${value === o ? 'bg-blue-50 text-blue-600' : 'text-zinc-700 hover:bg-zinc-50'}`}>
                 {o}
               </button>
             ))}
@@ -151,24 +151,24 @@ export function QueryHistory() {
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search history..."
-            className="w-full pl-9 pr-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:text-zinc-200 transition-colors" />
+            className="w-full pl-9 pr-4 py-2 bg-white border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors" />
         </div>
         <SearchSelect value={filterAuthor} onChange={setFilterAuthor} options={AUTHORS} placeholder="Search authors..." allLabel="All authors" />
         <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
-          className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 pr-8 py-2 text-sm text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
+          className="bg-white border border-zinc-200 rounded-xl px-3 pr-8 py-2 text-sm text-zinc-700 focus:ring-2 focus:ring-blue-500/50 outline-none appearance-none"
           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2371717a' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center' }}>
           <option value="all">All statuses</option>
           <option value="completed">Completed</option>
           <option value="failed">Failed</option>
           <option value="cancelled">Cancelled</option>
         </select>
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">{filtered.length} entries</span>
+        <span className="text-xs text-zinc-400">{filtered.length} entries</span>
       </div>
 
       {/* Log List */}
-      <div className="flex-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden flex flex-col min-h-0">
+      <div className="flex-1 bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden flex flex-col min-h-0">
         <div className="overflow-auto flex-1">
-          <div className="divide-y divide-zinc-100 dark:divide-zinc-800/50">
+          <div className="divide-y divide-zinc-100">
             {filtered.map(entry => {
               const isExpanded = expandedId === entry.id;
               const stCfg = STATUS_CONFIG[entry.status];
@@ -176,12 +176,12 @@ export function QueryHistory() {
               return (
                 <div key={entry.id} className="transition-colors">
                   <button onClick={() => setExpandedId(isExpanded ? null : entry.id)}
-                    className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-zinc-50/80 dark:hover:bg-zinc-900/30 transition-colors">
+                    className="w-full flex items-center gap-4 px-4 py-3 text-left hover:bg-zinc-50/80 transition-colors">
                     <ChevronRight className={`w-4 h-4 text-zinc-400 shrink-0 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                     <StIcon className={`w-4 h-4 shrink-0 ${stCfg.cls}`} />
                     <span className="text-xs font-mono text-zinc-400 shrink-0 w-20">{entry.id}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-zinc-700 dark:text-zinc-300 truncate">{entry.prompt}</p>
+                      <p className="text-sm text-zinc-700 truncate">{entry.prompt}</p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       {entry.databases.map(db => (
@@ -189,7 +189,7 @@ export function QueryHistory() {
                       ))}
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[9px] font-medium text-zinc-600 dark:text-zinc-300">{entry.author.avatar}</div>
+                      <div className="w-5 h-5 rounded-full bg-zinc-200 flex items-center justify-center text-[9px] font-medium text-zinc-600">{entry.author.avatar}</div>
                     </div>
                     <span className="text-xs text-zinc-400 shrink-0 w-16 text-right">{entry.status === 'failed' ? '—' : entry.rowCount.toLocaleString() + ' rows'}</span>
                     <span className="text-xs text-zinc-400 shrink-0 w-14 text-right">{entry.executionTime}</span>
@@ -197,27 +197,27 @@ export function QueryHistory() {
                   </button>
                   {isExpanded && (
                     <div className="px-4 pb-4 pt-1 ml-10 mr-4">
-                      <div className="bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-                        <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200 dark:border-zinc-800">
+                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg overflow-hidden">
+                        <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200">
                           <div className="flex items-center gap-2">
                             <Code2 className="w-3.5 h-3.5 text-violet-500" />
-                            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Generated SQL</span>
+                            <span className="text-xs font-medium text-zinc-500">Generated SQL</span>
                           </div>
-                          <button onClick={() => copySql(entry.id, entry.sql)} className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 flex items-center gap-1">
+                          <button onClick={() => copySql(entry.id, entry.sql)} className="text-xs text-zinc-400 hover:text-zinc-600 flex items-center gap-1">
                             {copiedId === entry.id ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                             {copiedId === entry.id ? 'Copied' : 'Copy'}
                           </button>
                         </div>
-                        <pre className="p-3 text-[12px] leading-relaxed text-zinc-600 dark:text-zinc-400 font-mono overflow-x-auto">{entry.sql}</pre>
+                        <pre className="p-3 text-[12px] leading-relaxed text-zinc-600 font-mono overflow-x-auto">{entry.sql}</pre>
                       </div>
                       <div className="flex items-center gap-4 mt-3 flex-wrap">
-                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400"><Database className="w-3.5 h-3.5" />{entry.databases.join(', ')}</div>
-                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400"><Table2 className="w-3.5 h-3.5" />{entry.tables.join(', ')}</div>
-                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400"><User className="w-3.5 h-3.5" />{entry.author.name}</div>
-                        <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400"><Clock className="w-3.5 h-3.5" />{new Date(entry.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-500"><Database className="w-3.5 h-3.5" />{entry.databases.join(', ')}</div>
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-500"><Table2 className="w-3.5 h-3.5" />{entry.tables.join(', ')}</div>
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-500"><User className="w-3.5 h-3.5" />{entry.author.name}</div>
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-500"><Clock className="w-3.5 h-3.5" />{new Date(entry.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
                         <div className="flex-1" />
                         <button className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors"><Play className="w-3 h-3" /> Re-run</button>
-                        <button className="flex items-center gap-1.5 px-3 py-1.5 border border-zinc-200 dark:border-zinc-700 rounded-lg text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"><Download className="w-3 h-3" /> Export</button>
+                        <button className="flex items-center gap-1.5 px-3 py-1.5 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600 hover:bg-zinc-100 transition-colors"><Download className="w-3 h-3" /> Export</button>
                       </div>
                     </div>
                   )}
@@ -225,7 +225,7 @@ export function QueryHistory() {
               );
             })}
             {filtered.length === 0 && (
-              <div className="py-16 flex flex-col items-center text-zinc-400 dark:text-zinc-600">
+              <div className="py-16 flex flex-col items-center text-zinc-400">
                 <Clock className="w-8 h-8 mb-2 opacity-50" />
                 <p className="text-sm">No queries match your filters</p>
               </div>

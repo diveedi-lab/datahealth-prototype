@@ -48,12 +48,12 @@ const ENTITY_COLORS = ['#6366f1', '#3b82f6', '#10b981', '#f59e0b', '#ec4899'];
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg px-3 py-2 text-xs">
-      {label && <p className="text-zinc-500 dark:text-zinc-400 mb-1">{label}</p>}
+    <div className="bg-white border border-zinc-200 rounded-lg shadow-lg px-3 py-2 text-xs">
+      {label && <p className="text-zinc-500 mb-1">{label}</p>}
       {payload.map((p: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: p.color || p.fill }} />
-          <span className="text-zinc-700 dark:text-zinc-300">{p.name}: <span className="font-medium">{typeof p.value === 'number' ? p.value.toLocaleString() : p.value}</span></span>
+          <span className="text-zinc-700">{p.name}: <span className="font-medium">{typeof p.value === 'number' ? p.value.toLocaleString() : p.value}</span></span>
         </div>
       ))}
     </div>
@@ -92,8 +92,8 @@ export function DataDashboard() {
     <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto h-full overflow-y-auto pb-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Data Dashboard</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Detailed variable, entity, and file breakdown by selected databases.</p>
+          <h2 className="text-2xl font-bold text-zinc-900">Data Dashboard</h2>
+          <p className="text-sm text-zinc-500 mt-1">Detailed variable, entity, and file breakdown by selected databases.</p>
         </div>
         <SearchMultiSelect
           options={MOCK_DATABASES.map(db => ({ id: db.id, name: db.name }))}
@@ -105,7 +105,7 @@ export function DataDashboard() {
       </div>
 
       {selectedDbs.length === 0 ? (
-        <div className="py-16 flex flex-col items-center justify-center text-zinc-400 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl">
+        <div className="py-16 flex flex-col items-center justify-center text-zinc-400 border-2 border-dashed border-zinc-200 rounded-2xl">
           <Database className="w-8 h-8 mb-3 opacity-50" />
           <p>Select at least one database to view statistics.</p>
         </div>
@@ -119,18 +119,18 @@ export function DataDashboard() {
               { icon: <List className="w-4 h-4" />, label: 'Total Rows', value: stats.rows },
               { icon: <HardDrive className="w-4 h-4" />, label: 'Space Occupied', value: stats.space },
             ].map(kpi => (
-              <div key={kpi.label} className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                <div className="flex items-center gap-2 mb-2 text-zinc-500 dark:text-zinc-400">{kpi.icon}<span className="text-sm font-medium">{kpi.label}</span></div>
-                <p className="text-2xl font-bold text-zinc-900 dark:text-white">{kpi.value}</p>
+              <div key={kpi.label} className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm">
+                <div className="flex items-center gap-2 mb-2 text-zinc-500">{kpi.icon}<span className="text-sm font-medium">{kpi.label}</span></div>
+                <p className="text-2xl font-bold text-zinc-900">{kpi.value}</p>
               </div>
             ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* File Types Pie */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Files by Type</h3>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Distribution of stored file formats.</p>
+            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-zinc-900 mb-1">Files by Type</h3>
+              <p className="text-sm text-zinc-500 mb-4">Distribution of stored file formats.</p>
               <div className="flex items-center gap-6">
                 <div className="h-52 w-52 shrink-0">
                   {stats.fileTypes.length > 0 ? (
@@ -146,9 +146,9 @@ export function DataDashboard() {
                 </div>
                 <div className="flex flex-col gap-2">
                   {stats.fileTypes.map((type, i) => (
-                    <div key={type.name} className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    <div key={type.name} className="flex items-center gap-2 text-sm text-zinc-600">
                       <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
-                      {type.name} <span className="font-medium text-zinc-900 dark:text-white">({type.value.toLocaleString()})</span>
+                      {type.name} <span className="font-medium text-zinc-900">({type.value.toLocaleString()})</span>
                     </div>
                   ))}
                 </div>
@@ -156,9 +156,9 @@ export function DataDashboard() {
             </div>
 
             {/* Variables by Type */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Variables by Type</h3>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Breakdown of variable data types.</p>
+            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+              <h3 className="text-lg font-bold text-zinc-900 mb-1">Variables by Type</h3>
+              <p className="text-sm text-zinc-500 mb-4">Breakdown of variable data types.</p>
               <div className="h-56">
                 <ResponsiveContainer width="100%" height={224}>
                   <BarChart data={stats.variablesByType} layout="vertical">
@@ -174,9 +174,9 @@ export function DataDashboard() {
           </div>
 
           {/* Entity Breakdown */}
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Entity Breakdown</h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Record counts per entity type across selected databases.</p>
+          <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-zinc-900 mb-1">Entity Breakdown</h3>
+            <p className="text-sm text-zinc-500 mb-4">Record counts per entity type across selected databases.</p>
             <div className="h-64">
               <ResponsiveContainer width="100%" height={256}>
                 <BarChart data={stats.entityBreakdown}>
@@ -191,14 +191,14 @@ export function DataDashboard() {
           </div>
 
           {/* Per-DB comparison table */}
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-4">Database Comparison</h3>
+          <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-zinc-900 mb-4">Database Comparison</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-200 dark:border-zinc-800">
+                  <tr className="border-b border-zinc-200">
                     {['Database', 'Variables', 'Entities', 'Rows', 'Storage', 'File Types'].map(h => (
-                      <th key={h} className="text-left py-3 px-4 text-zinc-500 dark:text-zinc-400 font-medium">{h}</th>
+                      <th key={h} className="text-left py-3 px-4 text-zinc-500 font-medium">{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -206,16 +206,16 @@ export function DataDashboard() {
                   {MOCK_DATABASES.filter(db => selectedDbs.includes(db.id)).map(db => {
                     const d = MOCK_DB_DATA[db.id];
                     return (
-                      <tr key={db.id} className="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
-                        <td className="py-3 px-4 font-medium text-zinc-900 dark:text-white">{db.name}</td>
-                        <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{d.variables.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{d.entities}</td>
-                        <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{d.rows.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{d.spaceGB >= 1024 ? `${(d.spaceGB / 1024).toFixed(1)} TB` : `${d.spaceGB} GB`}</td>
+                      <tr key={db.id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors">
+                        <td className="py-3 px-4 font-medium text-zinc-900">{db.name}</td>
+                        <td className="py-3 px-4 text-zinc-700">{d.variables.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-zinc-700">{d.entities}</td>
+                        <td className="py-3 px-4 text-zinc-700">{d.rows.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-zinc-700">{d.spaceGB >= 1024 ? `${(d.spaceGB / 1024).toFixed(1)} TB` : `${d.spaceGB} GB`}</td>
                         <td className="py-3 px-4">
                           <div className="flex flex-wrap gap-1.5">
                             {Object.entries(d.fileTypes).map(([type, count]) => (
-                              <span key={type} className="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-2 py-0.5 rounded-full">{type} ({count})</span>
+                              <span key={type} className="text-xs bg-zinc-100 text-zinc-600 px-2 py-0.5 rounded-full">{type} ({count})</span>
                             ))}
                           </div>
                         </td>

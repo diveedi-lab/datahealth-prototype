@@ -96,24 +96,24 @@ const MOCK_ALERTS: SecurityAlert[] = [
 ];
 
 const severityColors: Record<string, string> = {
-  Critical: 'bg-red-200 text-red-900 dark:bg-red-900/60 dark:text-red-200',
-  High: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Medium: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Low: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
+  Critical: 'bg-red-200 text-red-900',
+  High: 'bg-red-100 text-red-800',
+  Medium: 'bg-amber-100 text-amber-800',
+  Low: 'bg-blue-100 text-blue-800',
 };
 
 const statusColors: Record<string, string> = {
-  Open: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Investigating: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Resolved: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  Dismissed: 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-400',
+  Open: 'bg-red-100 text-red-800',
+  Investigating: 'bg-amber-100 text-amber-800',
+  Resolved: 'bg-emerald-100 text-emerald-800',
+  Dismissed: 'bg-zinc-200 text-zinc-600',
 };
 
 const severityIcon = (s: AlertSeverity) => {
-  if (s === 'Critical') return <WarningFilled size={16} className="text-red-600 dark:text-red-400" />;
-  if (s === 'High') return <WarningAlt size={16} className="text-red-500 dark:text-red-400" />;
-  if (s === 'Medium') return <WarningAlt size={16} className="text-amber-500 dark:text-amber-400" />;
-  return <WarningAlt size={16} className="text-blue-500 dark:text-blue-400" />;
+  if (s === 'Critical') return <WarningFilled size={16} className="text-red-600" />;
+  if (s === 'High') return <WarningAlt size={16} className="text-red-500" />;
+  if (s === 'Medium') return <WarningAlt size={16} className="text-amber-500" />;
+  return <WarningAlt size={16} className="text-blue-500" />;
 };
 
 export function SecurityAlerts() {
@@ -139,31 +139,31 @@ export function SecurityAlerts() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Security Alerts</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Threat detection, anomaly alerts, and security incident management</p>
+          <h1 className="text-zinc-900">Security Alerts</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Threat detection, anomaly alerts, and security incident management</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-[14px]">
+        <button className="flex items-center gap-2 px-4 py-2 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-100 transition-colors text-[14px]">
           <Download size={16} /> Export Report
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Total Alerts</p>
-          <p className="text-[24px] text-zinc-900 dark:text-zinc-100 mt-1">{alerts.length}</p>
+        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+          <p className="text-[12px] text-zinc-500">Total Alerts</p>
+          <p className="text-[24px] text-zinc-900 mt-1">{alerts.length}</p>
         </div>
-        <div className="bg-white dark:bg-zinc-900 border border-red-200 dark:border-red-900/40 rounded-xl p-4">
-          <p className="text-[12px] text-red-600 dark:text-red-400">Open</p>
-          <p className="text-[24px] text-red-600 dark:text-red-400 mt-1">{openCount}</p>
+        <div className="bg-white border border-red-200 rounded-xl p-4">
+          <p className="text-[12px] text-red-600">Open</p>
+          <p className="text-[24px] text-red-600 mt-1">{openCount}</p>
         </div>
-        <div className="bg-white dark:bg-zinc-900 border border-amber-200 dark:border-amber-900/40 rounded-xl p-4">
-          <p className="text-[12px] text-amber-600 dark:text-amber-400">Investigating</p>
-          <p className="text-[24px] text-amber-600 dark:text-amber-400 mt-1">{investigatingCount}</p>
+        <div className="bg-white border border-amber-200 rounded-xl p-4">
+          <p className="text-[12px] text-amber-600">Investigating</p>
+          <p className="text-[24px] text-amber-600 mt-1">{investigatingCount}</p>
         </div>
-        <div className="bg-white dark:bg-zinc-900 border border-red-300 dark:border-red-900/60 rounded-xl p-4">
-          <p className="text-[12px] text-red-700 dark:text-red-300">Critical (Active)</p>
-          <p className="text-[24px] text-red-700 dark:text-red-300 mt-1">{criticalOpen}</p>
+        <div className="bg-white border border-red-300 rounded-xl p-4">
+          <p className="text-[12px] text-red-700">Critical (Active)</p>
+          <p className="text-[24px] text-red-700 mt-1">{criticalOpen}</p>
         </div>
       </div>
 
@@ -172,13 +172,13 @@ export function SecurityAlerts() {
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" placeholder="Search alerts..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
         </div>
-        <select value={filterSeverity} onChange={e => setFilterSeverity(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterSeverity} onChange={e => setFilterSeverity(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Severities</option>
           <option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
         </select>
-        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Statuses</option>
           <option>Open</option><option>Investigating</option><option>Resolved</option><option>Dismissed</option>
         </select>
@@ -188,24 +188,24 @@ export function SecurityAlerts() {
       <div className="flex-1 overflow-auto space-y-3">
         {filtered.map(alert => (
           <div key={alert.id}
-            className={`bg-white dark:bg-zinc-900 border rounded-xl p-5 cursor-pointer hover:shadow-md transition-all ${
+            className={`bg-white border rounded-xl p-5 cursor-pointer hover:shadow-md transition-all ${
               alert.status === 'Open' && alert.severity === 'Critical'
-                ? 'border-red-300 dark:border-red-800'
+                ? 'border-red-300'
                 : alert.status === 'Open'
-                ? 'border-red-200 dark:border-red-900/40'
-                : 'border-zinc-200 dark:border-zinc-800 dark:hover:border-zinc-700'
+                ? 'border-red-200'
+                : 'border-zinc-200'
             }`}
             onClick={() => setSelected(alert)}>
             <div className="flex items-start gap-3">
               <div className="mt-0.5 shrink-0">{severityIcon(alert.severity)}</div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <p className="text-[15px] text-zinc-900 dark:text-zinc-100">{alert.title}</p>
+                  <p className="text-[15px] text-zinc-900">{alert.title}</p>
                   <span className={`text-[10px] px-2 py-0.5 rounded-full ${severityColors[alert.severity]}`}>{alert.severity}</span>
                   <span className={`text-[10px] px-2 py-0.5 rounded-full ${statusColors[alert.status]}`}>{alert.status}</span>
                 </div>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400 line-clamp-2">{alert.description}</p>
-                <div className="flex gap-4 mt-2 text-[12px] text-zinc-400 dark:text-zinc-500">
+                <p className="text-[13px] text-zinc-500 line-clamp-2">{alert.description}</p>
+                <div className="flex gap-4 mt-2 text-[12px] text-zinc-400">
                   <span>{alert.timestamp}</span>
                   <span>{alert.category}</span>
                   <span>{alert.affectedUser}</span>
@@ -220,54 +220,54 @@ export function SecurityAlerts() {
 
       {/* Detail */}
       {selected && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[560px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-start justify-between gap-4">
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
+          <div className="w-[560px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-start justify-between gap-4">
               <div className="flex items-start gap-3">
                 <div className="mt-1 shrink-0">{severityIcon(selected.severity)}</div>
                 <div>
-                  <h2 className="text-zinc-900 dark:text-zinc-100">{selected.title}</h2>
-                  <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-0.5">{selected.timestamp}</p>
+                  <h2 className="text-zinc-900">{selected.title}</h2>
+                  <p className="text-[13px] text-zinc-500 mt-0.5">{selected.timestamp}</p>
                 </div>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg shrink-0"><Close size={20} className="text-zinc-400" /></button>
+              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 rounded-lg shrink-0"><Close size={20} className="text-zinc-400" /></button>
             </div>
             <div className="p-6 space-y-5">
               <div className="flex gap-2 flex-wrap">
                 <span className={`text-[11px] px-2.5 py-1 rounded-full ${severityColors[selected.severity]}`}>{selected.severity}</span>
                 <span className={`text-[11px] px-2.5 py-1 rounded-full ${statusColors[selected.status]}`}>{selected.status}</span>
-                <span className="text-[11px] px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{selected.category}</span>
+                <span className="text-[11px] px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-700">{selected.category}</span>
               </div>
 
               <div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">Source</p>
-                <p className="text-[14px] text-zinc-900 dark:text-zinc-100">{selected.source}</p>
+                <p className="text-[12px] text-zinc-500 mb-1">Source</p>
+                <p className="text-[14px] text-zinc-900">{selected.source}</p>
               </div>
 
               <div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">Affected User</p>
-                <p className="text-[14px] text-zinc-900 dark:text-zinc-100">{selected.affectedUser}</p>
+                <p className="text-[12px] text-zinc-500 mb-1">Affected User</p>
+                <p className="text-[14px] text-zinc-900">{selected.affectedUser}</p>
               </div>
 
               <div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">IP Address</p>
-                <p className="text-[14px] text-zinc-900 dark:text-zinc-100 font-mono">{selected.ip}</p>
+                <p className="text-[12px] text-zinc-500 mb-1">IP Address</p>
+                <p className="text-[14px] text-zinc-900 font-mono">{selected.ip}</p>
               </div>
 
               <div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">Description</p>
-                <p className="text-[14px] text-zinc-900 dark:text-zinc-100 leading-relaxed">{selected.description}</p>
+                <p className="text-[12px] text-zinc-500 mb-1">Description</p>
+                <p className="text-[14px] text-zinc-900 leading-relaxed">{selected.description}</p>
               </div>
 
-              <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-                <p className="text-[12px] text-amber-700 dark:text-amber-300 mb-1">Recommendation</p>
-                <p className="text-[14px] text-amber-900 dark:text-amber-200 leading-relaxed">{selected.recommendation}</p>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <p className="text-[12px] text-amber-700 mb-1">Recommendation</p>
+                <p className="text-[14px] text-amber-900 leading-relaxed">{selected.recommendation}</p>
               </div>
 
               {selected.resolvedBy && (
-                <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
-                  <p className="text-[12px] text-emerald-700 dark:text-emerald-300 mb-1">Resolution</p>
-                  <p className="text-[14px] text-emerald-900 dark:text-emerald-200">Resolved by <span className="font-mono">{selected.resolvedBy}</span> at {selected.resolvedAt}</p>
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+                  <p className="text-[12px] text-emerald-700 mb-1">Resolution</p>
+                  <p className="text-[14px] text-emerald-900">Resolved by <span className="font-mono">{selected.resolvedBy}</span> at {selected.resolvedAt}</p>
                 </div>
               )}
 

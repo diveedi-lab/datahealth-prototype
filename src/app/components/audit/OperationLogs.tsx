@@ -37,20 +37,20 @@ const MOCK_LOGS: LogEntry[] = [
 ];
 
 const severityColors: Record<string, string> = {
-  Info: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  Warning: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Error: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Critical: 'bg-red-200 text-red-900 dark:bg-red-900/60 dark:text-red-200',
+  Info: 'bg-blue-100 text-blue-800',
+  Warning: 'bg-amber-100 text-amber-800',
+  Error: 'bg-red-100 text-red-800',
+  Critical: 'bg-red-200 text-red-900',
 };
 
 const categoryColors: Record<string, string> = {
-  Data: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  User: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
-  System: 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700/40 dark:text-zinc-300',
-  Query: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
-  Import: 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300',
-  Export: 'bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300',
-  Config: 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+  Data: 'bg-violet-100 text-violet-800',
+  User: 'bg-cyan-100 text-cyan-800',
+  System: 'bg-zinc-200 text-zinc-700',
+  Query: 'bg-indigo-100 text-indigo-800',
+  Import: 'bg-teal-100 text-teal-800',
+  Export: 'bg-sky-100 text-sky-800',
+  Config: 'bg-orange-100 text-orange-800',
 };
 
 export function OperationLogs() {
@@ -72,10 +72,10 @@ export function OperationLogs() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Operation Logs</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Complete audit trail of all user and system actions</p>
+          <h1 className="text-zinc-900">Operation Logs</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Complete audit trail of all user and system actions</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-[14px]">
+        <button className="flex items-center gap-2 px-4 py-2 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-100 transition-colors text-[14px]">
           <Download size={16} /> Export Logs
         </button>
       </div>
@@ -85,39 +85,39 @@ export function OperationLogs() {
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" placeholder="Search by user, action, resource, or details..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
         </div>
-        <select value={filterSeverity} onChange={e => setFilterSeverity(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterSeverity} onChange={e => setFilterSeverity(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Severities</option>
           <option>Info</option><option>Warning</option><option>Error</option><option>Critical</option>
         </select>
-        <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Categories</option>
           <option>Data</option><option>User</option><option>System</option><option>Query</option><option>Import</option><option>Export</option><option>Config</option>
         </select>
       </div>
 
-      <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{filtered.length} log entries</p>
+      <p className="text-[13px] text-zinc-500">{filtered.length} log entries</p>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-800">
+            <tr className="border-b border-zinc-200">
               {['Timestamp', 'Severity', 'Category', 'User', 'Action', 'Resource', 'Duration'].map(h => (
-                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{h}</th>
+                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map(log => (
-              <tr key={log.id} className="border-b last:border-b-0 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 cursor-pointer transition-colors" onClick={() => setSelected(log)}>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400 font-mono whitespace-nowrap">{log.timestamp}</td>
+              <tr key={log.id} className="border-b last:border-b-0 border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-colors" onClick={() => setSelected(log)}>
+                <td className="px-4 py-3 text-[13px] text-zinc-500 font-mono whitespace-nowrap">{log.timestamp}</td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${severityColors[log.severity]}`}>{log.severity}</span></td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${categoryColors[log.category]}`}>{log.category}</span></td>
-                <td className="px-4 py-3 text-[13px] text-zinc-700 dark:text-zinc-300 max-w-[180px] truncate">{log.user}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-900 dark:text-zinc-100 font-mono">{log.action}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-600 dark:text-zinc-400 max-w-[200px] truncate">{log.resource}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-700 max-w-[180px] truncate">{log.user}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-900 font-mono">{log.action}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-600 max-w-[200px] truncate">{log.resource}</td>
                 <td className="px-4 py-3 text-[12px] text-zinc-400">{log.duration}</td>
               </tr>
             ))}
@@ -128,14 +128,14 @@ export function OperationLogs() {
 
       {/* Detail */}
       {selected && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[540px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
+          <div className="w-[540px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-zinc-900 dark:text-zinc-100 font-mono">{selected.action}</h2>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{selected.timestamp}</p>
+                <h2 className="text-zinc-900 font-mono">{selected.action}</h2>
+                <p className="text-[13px] text-zinc-500">{selected.timestamp}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div className="flex gap-2 flex-wrap">
@@ -151,8 +151,8 @@ export function OperationLogs() {
                 { label: 'Duration', value: selected.duration },
               ].map(f => (
                 <div key={f.label}>
-                  <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">{f.label}</p>
-                  <p className="text-[14px] text-zinc-900 dark:text-zinc-100 break-all">{f.value}</p>
+                  <p className="text-[12px] text-zinc-500 mb-1">{f.label}</p>
+                  <p className="text-[14px] text-zinc-900 break-all">{f.value}</p>
                 </div>
               ))}
             </div>

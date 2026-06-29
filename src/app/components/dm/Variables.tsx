@@ -36,21 +36,21 @@ const MOCK_VARIABLES: Variable[] = [
 ];
 
 const standardColors: Record<string, string> = {
-  CDISC: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  OMOP: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
-  Custom: 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700/40 dark:text-zinc-300',
+  CDISC: 'bg-violet-100 text-violet-800',
+  OMOP: 'bg-cyan-100 text-cyan-800',
+  Custom: 'bg-zinc-200 text-zinc-700',
 };
 
 const originColors: Record<string, string> = {
-  Standard: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  'Standard-Modified': 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Custom: 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300',
+  Standard: 'bg-emerald-100 text-emerald-800',
+  'Standard-Modified': 'bg-amber-100 text-amber-800',
+  Custom: 'bg-rose-100 text-rose-800',
 };
 
 const coreColors: Record<string, string> = {
-  Req: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
-  Exp: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  Perm: 'bg-zinc-100 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-400',
+  Req: 'bg-red-100 text-red-700',
+  Exp: 'bg-amber-100 text-amber-700',
+  Perm: 'bg-zinc-100 text-zinc-600',
 };
 
 export function Variables() {
@@ -77,10 +77,10 @@ export function Variables() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Variables</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Define and manage variables across entities and standards</p>
+          <h1 className="text-zinc-900">Variables</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Define and manage variables across entities and standards</p>
         </div>
-        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:opacity-90 transition-opacity text-[14px]">
+        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white rounded-lg hover:opacity-90 transition-opacity text-[14px]">
           <Add size={16} /> New Variable
         </button>
       </div>
@@ -90,41 +90,41 @@ export function Variables() {
         <div className="relative flex-1 min-w-[200px]">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" placeholder="Search variables..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
         </div>
-        <select value={filterStandard} onChange={e => setFilterStandard(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterStandard} onChange={e => setFilterStandard(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Standards</option><option>CDISC</option><option>OMOP</option><option>Custom</option>
         </select>
-        <select value={filterEntity} onChange={e => setFilterEntity(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterEntity} onChange={e => setFilterEntity(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Entities</option>
           {entities.map(e => <option key={e} value={e}>{e}</option>)}
         </select>
-        <select value={filterOrigin} onChange={e => setFilterOrigin(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterOrigin} onChange={e => setFilterOrigin(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Origins</option><option>Standard</option><option>Standard-Modified</option><option>Custom</option>
         </select>
       </div>
 
-      <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{filtered.length} variables found</p>
+      <p className="text-[13px] text-zinc-500">{filtered.length} variables found</p>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-800">
+            <tr className="border-b border-zinc-200">
               {['Name', 'Label', 'Entity', 'Standard', 'Origin', 'Type', 'Core', 'Codelist'].map(h => (
-                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{h}</th>
+                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map(v => (
-              <tr key={v.id} className="border-b last:border-b-0 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 cursor-pointer transition-colors" onClick={() => setSelectedVar(v)}>
-                <td className="px-4 py-3 text-[14px] text-zinc-900 dark:text-zinc-100 font-mono">{v.name}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-700 dark:text-zinc-300 max-w-[200px] truncate">{v.label}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-600 dark:text-zinc-400 font-mono">{v.entity}</td>
+              <tr key={v.id} className="border-b last:border-b-0 border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-colors" onClick={() => setSelectedVar(v)}>
+                <td className="px-4 py-3 text-[14px] text-zinc-900 font-mono">{v.name}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-700 max-w-[200px] truncate">{v.label}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-600 font-mono">{v.entity}</td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${standardColors[v.standard]}`}>{v.standard}</span></td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${originColors[v.origin]}`}>{v.origin}</span></td>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400">{v.dataType}{v.length ? `(${v.length})` : ''}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-500">{v.dataType}{v.length ? `(${v.length})` : ''}</td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${coreColors[v.core]}`}>{v.core}</span></td>
                 <td className="px-4 py-3 text-[13px] text-zinc-400 font-mono">{v.codelist || '—'}</td>
               </tr>
@@ -136,21 +136,21 @@ export function Variables() {
 
       {/* Detail */}
       {selectedVar && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelectedVar(null)}>
-          <div className="w-[500px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelectedVar(null)}>
+          <div className="w-[500px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-zinc-900 dark:text-zinc-100 font-mono">{selectedVar.name}</h2>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{selectedVar.label}</p>
+                <h2 className="text-zinc-900 font-mono">{selectedVar.name}</h2>
+                <p className="text-[13px] text-zinc-500">{selectedVar.label}</p>
               </div>
-              <button onClick={() => setSelectedVar(null)} className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 text-[20px]">&times;</button>
+              <button onClick={() => setSelectedVar(null)} className="text-zinc-400 hover:text-zinc-600 text-[20px]">&times;</button>
             </div>
             <div className="p-6 space-y-4">
               <div className="flex gap-2 flex-wrap">
                 <span className={`text-[11px] px-2 py-0.5 rounded-full ${standardColors[selectedVar.standard]}`}>{selectedVar.standard}</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full ${originColors[selectedVar.origin]}`}>{selectedVar.origin}</span>
                 <span className={`text-[11px] px-2 py-0.5 rounded-full ${coreColors[selectedVar.core]}`}>{selectedVar.core}</span>
-                {selectedVar.required && <span className="text-[11px] px-2 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300">Required</span>}
+                {selectedVar.required && <span className="text-[11px] px-2 py-0.5 rounded-full bg-red-100 text-red-700">Required</span>}
               </div>
               {[
                 { label: 'Entity', value: selectedVar.entity },
@@ -159,8 +159,8 @@ export function Variables() {
                 { label: 'Description', value: selectedVar.description },
               ].map(f => (
                 <div key={f.label}>
-                  <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">{f.label}</p>
-                  <p className="text-[14px] text-zinc-900 dark:text-zinc-100">{f.value}</p>
+                  <p className="text-[12px] text-zinc-500 mb-1">{f.label}</p>
+                  <p className="text-[14px] text-zinc-900">{f.value}</p>
                 </div>
               ))}
             </div>
@@ -170,50 +170,50 @@ export function Variables() {
 
       {/* Create Modal */}
       {showCreate && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="w-[560px] bg-white dark:bg-zinc-900 rounded-2xl shadow-xl max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
-              <h2 className="text-zinc-900 dark:text-zinc-100">Create New Variable</h2>
+        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
+          <div className="w-[560px] bg-white rounded-2xl shadow-xl max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200">
+              <h2 className="text-zinc-900">Create New Variable</h2>
             </div>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Name</label>
-                  <input className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none font-mono" placeholder="VARNAME" />
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Name</label>
+                  <input className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none font-mono" placeholder="VARNAME" />
                 </div>
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Label</label>
-                  <input className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none" />
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Label</label>
+                  <input className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none" />
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Standard</label>
-                  <select className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Standard</label>
+                  <select className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
                     <option>CDISC</option><option>OMOP</option><option>Custom</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Entity</label>
-                  <select className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Entity</label>
+                  <select className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
                     {entities.map(e => <option key={e}>{e}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Data Type</label>
-                  <select className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Data Type</label>
+                  <select className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
                     {['Char','Num','Integer','Float','Date','DateTime','Boolean','Text'].map(t => <option key={t}>{t}</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Description</label>
-                <textarea className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none resize-none h-20" />
+                <label className="text-[12px] text-zinc-500 mb-1 block">Description</label>
+                <textarea className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none resize-none h-20" />
               </div>
             </div>
-            <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-end gap-3">
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">Cancel</button>
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:opacity-90 transition-opacity">Create</button>
+            <div className="p-6 border-t border-zinc-200 flex justify-end gap-3">
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors">Cancel</button>
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] bg-zinc-900 text-white rounded-lg hover:opacity-90 transition-opacity">Create</button>
             </div>
           </div>
         </div>

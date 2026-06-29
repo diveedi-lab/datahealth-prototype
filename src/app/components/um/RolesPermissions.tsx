@@ -105,9 +105,9 @@ const MOCK_ROLES: RoleRecord[] = [
 ];
 
 const permLevelIcon = (level: PermLevel) => {
-  if (level === 'full') return <Checkmark size={14} className="text-emerald-600 dark:text-emerald-400" />;
-  if (level === 'read') return <Subtract size={14} className="text-amber-500 dark:text-amber-400" />;
-  return <Close size={14} className="text-zinc-300 dark:text-zinc-600" />;
+  if (level === 'full') return <Checkmark size={14} className="text-emerald-600" />;
+  if (level === 'read') return <Subtract size={14} className="text-amber-500" />;
+  return <Close size={14} className="text-zinc-300" />;
 };
 
 const permLevelLabel = (level: PermLevel) => {
@@ -117,18 +117,18 @@ const permLevelLabel = (level: PermLevel) => {
 };
 
 const permLevelColor = (level: PermLevel) => {
-  if (level === 'full') return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
-  if (level === 'read') return 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300';
-  return 'bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-500';
+  if (level === 'full') return 'bg-emerald-100 text-emerald-800';
+  if (level === 'read') return 'bg-amber-100 text-amber-800';
+  return 'bg-zinc-100 text-zinc-500';
 };
 
 const roleColors: Record<string, string> = {
-  Admin: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  'Data Manager': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
-  Analyst: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
-  Viewer: 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-400',
-  'API User': 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  'Lab Coordinator': 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300',
+  Admin: 'bg-violet-100 text-violet-800',
+  'Data Manager': 'bg-cyan-100 text-cyan-800',
+  Analyst: 'bg-indigo-100 text-indigo-800',
+  Viewer: 'bg-zinc-200 text-zinc-600',
+  'API User': 'bg-amber-100 text-amber-800',
+  'Lab Coordinator': 'bg-teal-100 text-teal-800',
 };
 
 export function RolesPermissions() {
@@ -171,10 +171,10 @@ export function RolesPermissions() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Roles & Permissions</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Define roles with fine-grained access control across all platform sections</p>
+          <h1 className="text-zinc-900">Roles & Permissions</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Define roles with fine-grained access control across all platform sections</p>
         </div>
-        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors text-[14px]">
+        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors text-[14px]">
           <Add size={16} /> Create Role
         </button>
       </div>
@@ -183,26 +183,26 @@ export function RolesPermissions() {
       <div className="relative">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
         <input type="text" placeholder="Search roles..." value={search} onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+          className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
       </div>
 
       {/* Role Cards */}
       <div className="flex-1 overflow-auto grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filtered.map(role => (
           <div key={role.id}
-            className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 hover:shadow-md transition-all cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700"
+            className="bg-white border border-zinc-200 rounded-xl p-5 hover:shadow-md transition-all cursor-pointer hover:border-zinc-300"
             onClick={() => { setSelected(role); setDetailTab('permissions'); setExpandedSections(new Set()); }}>
             <div className="flex items-start justify-between mb-3">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-[11px] px-2 py-0.5 rounded-full ${roleColors[role.name] || 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400'}`}>{role.name}</span>
-                  {role.isSystem && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-500">System</span>}
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full ${roleColors[role.name] || 'bg-zinc-200 text-zinc-600'}`}>{role.name}</span>
+                  {role.isSystem && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500">System</span>}
                 </div>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">{role.description}</p>
+                <p className="text-[13px] text-zinc-500 mt-1">{role.description}</p>
               </div>
-              <ChevronRight size={16} className="text-zinc-300 dark:text-zinc-600 shrink-0 mt-1" />
+              <ChevronRight size={16} className="text-zinc-300 shrink-0 mt-1" />
             </div>
-            <div className="flex gap-4 text-[12px] text-zinc-400 dark:text-zinc-500">
+            <div className="flex gap-4 text-[12px] text-zinc-400">
               <span>{role.usersCount} user{role.usersCount !== 1 ? 's' : ''}</span>
               <span>Created {role.createdAt}</span>
               {role.sharedQueries.length > 0 && <span>{role.sharedQueries.length} shared queries</span>}
@@ -214,9 +214,9 @@ export function RolesPermissions() {
                 const allFull = p.subSections.every(s => s.level === 'full');
                 return (
                   <span key={p.section} className={`text-[10px] px-2 py-0.5 rounded-full ${
-                    allFull ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
-                    : hasAccess ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                    : 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600'
+                    allFull ? 'bg-emerald-100 text-emerald-700'
+                    : hasAccess ? 'bg-amber-100 text-amber-700'
+                    : 'bg-zinc-100 text-zinc-400'
                   }`}>{p.section}</span>
                 );
               })}
@@ -227,33 +227,33 @@ export function RolesPermissions() {
 
       {/* Create Role Modal */}
       {showCreate && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-[640px] max-h-[85vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between shrink-0">
-              <h2 className="text-zinc-900 dark:text-zinc-100">Create New Role</h2>
-              <button onClick={() => setShowCreate(false)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
+          <div className="bg-white rounded-2xl shadow-xl w-[640px] max-h-[85vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-center justify-between shrink-0">
+              <h2 className="text-zinc-900">Create New Role</h2>
+              <button onClick={() => setShowCreate(false)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
             <div className="p-6 space-y-4 overflow-auto flex-1">
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1.5 block">Role Name *</label>
+                <label className="text-[12px] text-zinc-500 mb-1.5 block">Role Name *</label>
                 <input type="text" value={newName} onChange={e => setNewName(e.target.value)} placeholder="e.g. Site Monitor"
-                  className="w-full px-4 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none" />
+                  className="w-full px-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none" />
               </div>
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1.5 block">Description</label>
+                <label className="text-[12px] text-zinc-500 mb-1.5 block">Description</label>
                 <input type="text" value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Describe the role purpose"
-                  className="w-full px-4 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none" />
+                  className="w-full px-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none" />
               </div>
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-3 block">Permissions — Click to cycle: None → Read → Full</label>
+                <label className="text-[12px] text-zinc-500 mb-3 block">Permissions — Click to cycle: None → Read → Full</label>
                 <div className="space-y-2">
                   {newPerms.map((p, pi) => (
-                    <div key={p.section} className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-                      <div className="px-4 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 text-[13px] text-zinc-700 dark:text-zinc-300">{p.section}</div>
-                      <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <div key={p.section} className="border border-zinc-200 rounded-lg overflow-hidden">
+                      <div className="px-4 py-2.5 bg-zinc-50 text-[13px] text-zinc-700">{p.section}</div>
+                      <div className="divide-y divide-zinc-100">
                         {p.subSections.map((sub, si) => (
-                          <div key={sub.name} className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors" onClick={() => cyclePermLevel(pi, si)}>
-                            <span className="text-[13px] text-zinc-600 dark:text-zinc-400">{sub.name}</span>
+                          <div key={sub.name} className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-zinc-50 transition-colors" onClick={() => cyclePermLevel(pi, si)}>
+                            <span className="text-[13px] text-zinc-600">{sub.name}</span>
                             <span className={`text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${permLevelColor(sub.level)}`}>
                               {permLevelIcon(sub.level)} {permLevelLabel(sub.level)}
                             </span>
@@ -265,9 +265,9 @@ export function RolesPermissions() {
                 </div>
               </div>
             </div>
-            <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-end gap-3 shrink-0">
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-[14px]">Cancel</button>
-              <button onClick={handleCreateRole} className="px-4 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors text-[14px]">Create Role</button>
+            <div className="p-6 border-t border-zinc-200 flex justify-end gap-3 shrink-0">
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2.5 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-100 transition-colors text-[14px]">Cancel</button>
+              <button onClick={handleCreateRole} className="px-4 py-2.5 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors text-[14px]">Create Role</button>
             </div>
           </div>
         </div>
@@ -275,30 +275,30 @@ export function RolesPermissions() {
 
       {/* Role Detail Panel */}
       {selected && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[580px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-start justify-between">
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
+          <div className="w-[580px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-zinc-900 dark:text-zinc-100">{selected.name}</h2>
-                  {selected.isSystem && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-500">System</span>}
+                  <h2 className="text-zinc-900">{selected.name}</h2>
+                  {selected.isSystem && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500">System</span>}
                 </div>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{selected.description}</p>
-                <p className="text-[12px] text-zinc-400 dark:text-zinc-500 mt-1">{selected.usersCount} users · Created {selected.createdAt}</p>
+                <p className="text-[13px] text-zinc-500">{selected.description}</p>
+                <p className="text-[12px] text-zinc-400 mt-1">{selected.usersCount} users · Created {selected.createdAt}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-zinc-200 dark:border-zinc-800">
+            <div className="flex border-b border-zinc-200">
               {([['permissions', 'Permissions'], ['queries', 'Shared Queries']] as const).map(([key, label]) => (
                 <button key={key} onClick={() => setDetailTab(key)}
                   className={`px-5 py-3 text-[13px] border-b-2 transition-colors ${detailTab === key
-                    ? 'border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100'
-                    : 'border-transparent text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300'
+                    ? 'border-zinc-900 text-zinc-900'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-600'
                   }`}>
                   {label}
-                  {key === 'queries' && <span className="ml-1.5 text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-full">{selected.sharedQueries.length}</span>}
+                  {key === 'queries' && <span className="ml-1.5 text-[11px] bg-zinc-100 px-1.5 py-0.5 rounded-full">{selected.sharedQueries.length}</span>}
                 </button>
               ))}
             </div>
@@ -311,21 +311,21 @@ export function RolesPermissions() {
                     const allFull = p.subSections.every(s => s.level === 'full');
                     const allNone = p.subSections.every(s => s.level === 'none');
                     return (
-                      <div key={p.section} className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-                        <button className="w-full flex items-center justify-between px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors" onClick={() => toggleSection(p.section)}>
+                      <div key={p.section} className="border border-zinc-200 rounded-lg overflow-hidden">
+                        <button className="w-full flex items-center justify-between px-4 py-3 hover:bg-zinc-50 transition-colors" onClick={() => toggleSection(p.section)}>
                           <div className="flex items-center gap-2">
                             {isExpanded ? <ChevronDown size={14} className="text-zinc-400" /> : <ChevronRight size={14} className="text-zinc-400" />}
-                            <span className="text-[14px] text-zinc-900 dark:text-zinc-100">{p.section}</span>
+                            <span className="text-[14px] text-zinc-900">{p.section}</span>
                           </div>
-                          <span className={`text-[11px] px-2 py-0.5 rounded-full ${allFull ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' : allNone ? 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'}`}>
+                          <span className={`text-[11px] px-2 py-0.5 rounded-full ${allFull ? 'bg-emerald-100 text-emerald-700' : allNone ? 'bg-zinc-100 text-zinc-400' : 'bg-amber-100 text-amber-700'}`}>
                             {allFull ? 'Full Access' : allNone ? 'No Access' : 'Partial'}
                           </span>
                         </button>
                         {isExpanded && (
-                          <div className="border-t border-zinc-100 dark:border-zinc-800 divide-y divide-zinc-100 dark:divide-zinc-800">
+                          <div className="border-t border-zinc-100 divide-y divide-zinc-100">
                             {p.subSections.map(sub => (
                               <div key={sub.name} className="flex items-center justify-between px-4 py-2.5 pl-10">
-                                <span className="text-[13px] text-zinc-600 dark:text-zinc-400">{sub.name}</span>
+                                <span className="text-[13px] text-zinc-600">{sub.name}</span>
                                 <span className={`text-[11px] px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${permLevelColor(sub.level)}`}>
                                   {permLevelIcon(sub.level)} {permLevelLabel(sub.level)}
                                 </span>
@@ -343,15 +343,15 @@ export function RolesPermissions() {
                 <div className="space-y-3">
                   {selected.sharedQueries.length === 0 && <p className="text-[14px] text-zinc-400 text-center py-8">No queries shared with this role</p>}
                   {selected.sharedQueries.map(q => (
-                    <div key={q.id} className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 rounded-lg p-4">
-                      <p className="text-[14px] text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                    <div key={q.id} className="bg-zinc-50 border border-zinc-100 rounded-lg p-4">
+                      <p className="text-[14px] text-zinc-900 flex items-center gap-2">
                         <Query size={14} className="text-zinc-400 shrink-0" />
                         {q.name}
                       </p>
-                      <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mt-1">
-                        Shared by <span className="text-zinc-700 dark:text-zinc-300">{q.sharedBy}</span> on {q.sharedAt}
+                      <p className="text-[12px] text-zinc-500 mt-1">
+                        Shared by <span className="text-zinc-700">{q.sharedBy}</span> on {q.sharedAt}
                       </p>
-                      <p className="text-[11px] text-violet-600 dark:text-violet-400 mt-1">Accessible to all users with role "{selected.name}"</p>
+                      <p className="text-[11px] text-violet-600 mt-1">Accessible to all users with role "{selected.name}"</p>
                     </div>
                   ))}
                 </div>

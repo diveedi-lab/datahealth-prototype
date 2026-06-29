@@ -46,12 +46,12 @@ const MOCK_EVENTS = [
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg px-3 py-2 text-xs">
-      {label && <p className="text-zinc-500 dark:text-zinc-400 mb-1">{label}</p>}
+    <div className="bg-white border border-zinc-200 rounded-lg shadow-lg px-3 py-2 text-xs">
+      {label && <p className="text-zinc-500 mb-1">{label}</p>}
       {payload.map((p: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: p.color || p.fill || p.stroke }} />
-          <span className="text-zinc-700 dark:text-zinc-300">{p.name}: <span className="font-medium">{typeof p.value === 'number' ? (p.name === 'Uptime' ? `${p.value.toFixed(3)}%` : p.value.toLocaleString()) : p.value}</span></span>
+          <span className="text-zinc-700">{p.name}: <span className="font-medium">{typeof p.value === 'number' ? (p.name === 'Uptime' ? `${p.value.toFixed(3)}%` : p.value.toLocaleString()) : p.value}</span></span>
         </div>
       ))}
     </div>
@@ -81,15 +81,15 @@ export function DataLakeReport() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Data Lake Report</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Infrastructure health, storage metrics, and ingestion trends.</p>
+          <h2 className="text-2xl font-bold text-zinc-900">Data Lake Report</h2>
+          <p className="text-sm text-zinc-500 mt-1">Infrastructure health, storage metrics, and ingestion trends.</p>
         </div>
         <div className="flex items-center gap-3">
           {/* Time range */}
           <select
             value={timeRange}
             onChange={e => setTimeRange(e.target.value)}
-            className="px-3 py-2 text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-700 dark:text-zinc-300"
+            className="px-3 py-2 text-sm bg-white border border-zinc-200 rounded-lg text-zinc-700"
           >
             {TIME_RANGES.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
@@ -112,21 +112,21 @@ export function DataLakeReport() {
           { icon: <FileText className="w-5 h-5" />, label: 'Registered Files', value: totals.files.toLocaleString(), color: 'amber', badge: `+22%` },
           { icon: <HardDrive className="w-5 h-5" />, label: 'Total Storage', value: totals.storage, color: 'rose', badge: `${selectedDbs.length} DBs` },
         ].map(card => (
-          <div key={card.label} className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
+          <div key={card.label} className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm flex flex-col justify-between">
             <div className="flex items-start justify-between mb-4">
-              <div className={`bg-${card.color}-100 dark:bg-${card.color}-900/30 p-2 rounded-xl text-${card.color}-600 dark:text-${card.color}-400`}>{card.icon}</div>
-              <span className="text-xs font-medium text-zinc-500 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 px-2 py-1 rounded-full">{card.badge}</span>
+              <div className={`bg-${card.color}-100{card.color}-900/30 p-2 rounded-xl text-${card.color}-600{card.color}-400`}>{card.icon}</div>
+              <span className="text-xs font-medium text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">{card.badge}</span>
             </div>
-            <h3 className="text-3xl font-bold text-zinc-900 dark:text-white">{card.value}</h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{card.label}</p>
+            <h3 className="text-3xl font-bold text-zinc-900">{card.value}</h3>
+            <p className="text-sm text-zinc-500 mt-1">{card.label}</p>
           </div>
         ))}
       </div>
 
       {/* Uptime Chart */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Uptime History</h3>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">System availability over the selected period.</p>
+      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-bold text-zinc-900 mb-1">Uptime History</h3>
+        <p className="text-sm text-zinc-500 mb-4">System availability over the selected period.</p>
         <div className="h-64">
           <ResponsiveContainer width="100%" height={256}>
             <AreaChart data={uptimeData}>
@@ -148,9 +148,9 @@ export function DataLakeReport() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Ingestion Trend */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Ingestion Trend</h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Monthly file ingestion volume.</p>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-zinc-900 mb-1">Ingestion Trend</h3>
+          <p className="text-sm text-zinc-500 mb-4">Monthly file ingestion volume.</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height={224}>
               <BarChart data={MOCK_INGESTION_TREND}>
@@ -165,17 +165,17 @@ export function DataLakeReport() {
         </div>
 
         {/* Recent Events */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Recent Events</h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Latest system activity log.</p>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-zinc-900 mb-1">Recent Events</h3>
+          <p className="text-sm text-zinc-500 mb-4">Latest system activity log.</p>
           <div className="flex flex-col gap-3">
             {MOCK_EVENTS.map((evt, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800">
+              <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
                 {evt.type === 'success' ? <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" /> :
                   evt.type === 'warning' ? <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" /> :
                     <Clock className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-zinc-700 dark:text-zinc-300">{evt.message}</p>
+                  <p className="text-sm text-zinc-700">{evt.message}</p>
                   <p className="text-xs text-zinc-400 mt-0.5">{evt.time}</p>
                 </div>
               </div>
@@ -185,14 +185,14 @@ export function DataLakeReport() {
       </div>
 
       {/* Per-Database Table */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-4">Database Breakdown</h3>
+      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <h3 className="text-lg font-bold text-zinc-900 mb-4">Database Breakdown</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-800">
+              <tr className="border-b border-zinc-200">
                 {['Database', 'Status', 'Patients', 'Files', 'Tables', 'Storage', 'Last Ingestion'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-zinc-500 dark:text-zinc-400 font-medium">{h}</th>
+                  <th key={h} className="text-left py-3 px-4 text-zinc-500 font-medium">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -200,19 +200,19 @@ export function DataLakeReport() {
               {MOCK_DATABASES.filter(db => selectedDbs.includes(db.id)).map(db => {
                 const s = MOCK_DB_STATS[db.id];
                 return (
-                  <tr key={db.id} className="border-b border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
-                    <td className="py-3 px-4 font-medium text-zinc-900 dark:text-white">{db.name}</td>
+                  <tr key={db.id} className="border-b border-zinc-100 hover:bg-zinc-50 transition-colors">
+                    <td className="py-3 px-4 font-medium text-zinc-900">{db.name}</td>
                     <td className="py-3 px-4">
-                      <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-full ${s.status === 'healthy' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'}`}>
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-full ${s.status === 'healthy' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${s.status === 'healthy' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                         {s.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{s.patients.toLocaleString()}</td>
-                    <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{s.files.toLocaleString()}</td>
-                    <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{s.tables}</td>
-                    <td className="py-3 px-4 text-zinc-700 dark:text-zinc-300">{s.storageGB >= 1024 ? `${(s.storageGB / 1024).toFixed(1)} TB` : `${s.storageGB} GB`}</td>
-                    <td className="py-3 px-4 text-zinc-500 dark:text-zinc-400">{s.lastIngestion}</td>
+                    <td className="py-3 px-4 text-zinc-700">{s.patients.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-zinc-700">{s.files.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-zinc-700">{s.tables}</td>
+                    <td className="py-3 px-4 text-zinc-700">{s.storageGB >= 1024 ? `${(s.storageGB / 1024).toFixed(1)} TB` : `${s.storageGB} GB`}</td>
+                    <td className="py-3 px-4 text-zinc-500">{s.lastIngestion}</td>
                   </tr>
                 );
               })}

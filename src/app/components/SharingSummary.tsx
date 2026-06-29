@@ -37,12 +37,12 @@ const ROLE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'];
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg px-3 py-2 text-xs">
-      {label && <p className="text-zinc-500 dark:text-zinc-400 mb-1">{label}</p>}
+    <div className="bg-white border border-zinc-200 rounded-lg shadow-lg px-3 py-2 text-xs">
+      {label && <p className="text-zinc-500 mb-1">{label}</p>}
       {payload.map((p: any, i: number) => (
         <div key={i} className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: p.color || p.fill || p.stroke }} />
-          <span className="text-zinc-700 dark:text-zinc-300">{p.name}: <span className="font-medium">{typeof p.value === 'number' ? p.value.toLocaleString() : p.value}</span></span>
+          <span className="text-zinc-700">{p.name}: <span className="font-medium">{typeof p.value === 'number' ? p.value.toLocaleString() : p.value}</span></span>
         </div>
       ))}
     </div>
@@ -85,11 +85,11 @@ export function SharingSummary() {
     <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto h-full overflow-y-auto pb-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Sharing Summary</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Access metrics, collaboration activity, and query usage across databases.</p>
+          <h2 className="text-2xl font-bold text-zinc-900">Sharing Summary</h2>
+          <p className="text-sm text-zinc-500 mt-1">Access metrics, collaboration activity, and query usage across databases.</p>
         </div>
         <div className="flex items-center gap-3">
-          <select value={timeRange} onChange={e => setTimeRange(e.target.value)} className="px-3 py-2 text-sm bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-700 dark:text-zinc-300">
+          <select value={timeRange} onChange={e => setTimeRange(e.target.value)} className="px-3 py-2 text-sm bg-white border border-zinc-200 rounded-lg text-zinc-700">
             {TIME_RANGES.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
           <SearchMultiSelect
@@ -111,12 +111,12 @@ export function SharingSummary() {
           { icon: <Download className="w-5 h-5" />, label: 'Data Downloads', value: fmt(totals.downloads), color: 'emerald', trend: '+8%', up: true },
           { icon: <Eye className="w-5 h-5" />, label: 'Data Views', value: fmt(totals.views), color: 'amber', trend: '-3%', up: false },
         ].map(card => (
-          <div key={card.label} className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-            <div className={`bg-${card.color}-100 dark:bg-${card.color}-900/30 p-2 rounded-xl text-${card.color}-600 dark:text-${card.color}-400 w-fit mb-3`}>{card.icon}</div>
-            <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">{card.value}</h3>
+          <div key={card.label} className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm">
+            <div className={`bg-${card.color}-100{card.color}-900/30 p-2 rounded-xl text-${card.color}-600{card.color}-400 w-fit mb-3`}>{card.icon}</div>
+            <h3 className="text-2xl font-bold text-zinc-900">{card.value}</h3>
             <div className="flex items-center justify-between mt-1">
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">{card.label}</p>
-              <span className={`flex items-center gap-0.5 text-xs font-medium ${card.up ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}`}>
+              <p className="text-sm text-zinc-500">{card.label}</p>
+              <span className={`flex items-center gap-0.5 text-xs font-medium ${card.up ? 'text-emerald-600' : 'text-red-500'}`}>
                 {card.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}{card.trend}
               </span>
             </div>
@@ -126,9 +126,9 @@ export function SharingSummary() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Query Trend */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Query Volume Trend</h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Monthly query execution count.</p>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-zinc-900 mb-1">Query Volume Trend</h3>
+          <p className="text-sm text-zinc-500 mb-4">Monthly query execution count.</p>
           <div className="h-56">
             <ResponsiveContainer width="100%" height={224}>
               <LineChart data={QUERY_TREND}>
@@ -143,9 +143,9 @@ export function SharingSummary() {
         </div>
 
         {/* Access by Role */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-1">Access by Role</h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">User distribution across roles.</p>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-zinc-900 mb-1">Access by Role</h3>
+          <p className="text-sm text-zinc-500 mb-4">User distribution across roles.</p>
           <div className="flex items-center gap-6">
             <div className="h-48 w-48 shrink-0">
               <ResponsiveContainer width="100%" height={192}>
@@ -159,7 +159,7 @@ export function SharingSummary() {
             </div>
             <div className="flex flex-col gap-2">
               {ACCESS_BY_ROLE.map((role, i) => (
-                <div key={role.name} className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                <div key={role.name} className="flex items-center gap-2 text-sm text-zinc-600">
                   <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: ROLE_COLORS[i] }} />
                   {role.name} ({role.value})
                 </div>
@@ -171,36 +171,36 @@ export function SharingSummary() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Sharing Activity */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-4">Recent Activity</h3>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-zinc-900 mb-4">Recent Activity</h3>
           <div className="flex flex-col gap-3">
             {RECENT_SHARES.map((item, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800">
-                <div className="bg-blue-100 dark:bg-blue-900/30 p-1.5 rounded-full text-blue-600 dark:text-blue-400 mt-0.5 shrink-0">
+              <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
+                <div className="bg-blue-100 p-1.5 rounded-full text-blue-600 mt-0.5 shrink-0">
                   <UserCheck className="w-3.5 h-3.5" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-zinc-700 dark:text-zinc-300"><span className="font-medium">{item.user}</span> &middot; {item.action}</p>
+                  <p className="text-sm text-zinc-700"><span className="font-medium">{item.user}</span> &middot; {item.action}</p>
                   <p className="text-xs text-zinc-400 mt-0.5">{item.database} &middot; {item.time}</p>
                 </div>
-                <span className="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 px-2 py-1 rounded-full shrink-0">{item.role}</span>
+                <span className="text-xs bg-zinc-100 text-zinc-500 px-2 py-1 rounded-full shrink-0">{item.role}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Top Queriers */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-4">Top Queriers</h3>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <h3 className="text-lg font-bold text-zinc-900 mb-4">Top Queriers</h3>
           <div className="flex flex-col gap-3">
             {TOP_QUERIERS.map((item, i) => (
-              <div key={i} className="flex items-center gap-4 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-100 dark:border-zinc-800">
-                <span className="text-lg font-bold text-zinc-300 dark:text-zinc-600 w-6 text-center">{i + 1}</span>
+              <div key={i} className="flex items-center gap-4 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
+                <span className="text-lg font-bold text-zinc-300 w-6 text-center">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{item.user}</p>
+                  <p className="text-sm font-medium text-zinc-700">{item.user}</p>
                   <p className="text-xs text-zinc-400">{item.db}</p>
                 </div>
-                <span className="text-sm font-bold text-zinc-900 dark:text-white">{item.queries.toLocaleString()}</span>
+                <span className="text-sm font-bold text-zinc-900">{item.queries.toLocaleString()}</span>
                 <span className="text-xs text-zinc-400">queries</span>
               </div>
             ))}

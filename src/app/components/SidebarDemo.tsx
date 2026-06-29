@@ -364,12 +364,12 @@ function getSidebarContent(
       ],
     },
     ingestor: {
-      title: "Ingestor",
+      title: "Collections",
       sections: [
         {
           title: "Importation",
           items: [
-            { icon: <CloudUpload size={16} className="text-neutral-50" />, label: "Database" },
+            { icon: <CloudUpload size={16} className="text-neutral-50" />, label: "Collections" },
             { icon: <Integration size={16} className="text-neutral-50" />, label: "Connectors" },
             { icon: <DocumentAdd size={16} className="text-neutral-50" />, label: "File Uploader" },
           ],

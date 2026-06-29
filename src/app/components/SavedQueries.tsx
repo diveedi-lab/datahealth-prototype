@@ -32,15 +32,15 @@ const DB_COLORS: Record<string, string> = {
 };
 
 const VIS_CONFIG = {
-  private: { icon: Lock, label: 'Private', cls: 'text-zinc-500 bg-zinc-100 dark:bg-zinc-800' },
-  team: { icon: Users, label: 'Team', cls: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30' },
-  public: { icon: Globe, label: 'Public', cls: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30' },
+  private: { icon: Lock, label: 'Private', cls: 'text-zinc-500 bg-zinc-100' },
+  team: { icon: Users, label: 'Team', cls: 'text-blue-600 bg-blue-50' },
+  public: { icon: Globe, label: 'Public', cls: 'text-emerald-600 bg-emerald-50' },
 };
 
 const PERM_CONFIG = {
-  owner: { icon: ShieldCheck, cls: 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/30', label: 'Owner' },
-  editor: { icon: Shield, cls: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30', label: 'Editor' },
-  viewer: { icon: Eye, cls: 'text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800', label: 'Viewer' },
+  owner: { icon: ShieldCheck, cls: 'text-violet-600 bg-violet-50', label: 'Owner' },
+  editor: { icon: Shield, cls: 'text-blue-600 bg-blue-50', label: 'Editor' },
+  viewer: { icon: Eye, cls: 'text-zinc-600 bg-zinc-100', label: 'Viewer' },
 };
 
 const MOCK_SAVED: SavedQuery[] = [
@@ -131,8 +131,8 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
   };
 
   return (
-    <div className="w-full lg:w-[420px] shrink-0 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors">
-      <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 flex items-start justify-between gap-3">
+    <div className="w-full lg:w-[420px] shrink-0 bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors">
+      <div className="p-4 border-b border-zinc-100 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="text-xs font-mono text-zinc-400">{query.id}</span>
@@ -140,48 +140,48 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
               <VisIcon className="w-3 h-3" />{vis.label}
             </span>
           </div>
-          <p className="text-sm font-semibold text-zinc-900 dark:text-white">{query.name}</p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{query.description}</p>
+          <p className="text-sm font-semibold text-zinc-900">{query.name}</p>
+          <p className="text-xs text-zinc-500 mt-1">{query.description}</p>
         </div>
-        <button onClick={onClose} className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800"><X className="w-4 h-4" /></button>
+        <button onClick={onClose} className="p-1 text-zinc-400 hover:text-zinc-600 rounded-md hover:bg-zinc-100"><X className="w-4 h-4" /></button>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {/* Meta */}
-        <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 grid grid-cols-2 gap-3">
+        <div className="p-4 border-b border-zinc-100 grid grid-cols-2 gap-3">
           <div>
             <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-1">Author</p>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-medium text-zinc-600 dark:text-zinc-300 shrink-0">{query.author.avatar}</div>
-              <span className="text-sm text-zinc-700 dark:text-zinc-300 truncate">{query.author.name}</span>
+              <div className="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center text-[10px] font-medium text-zinc-600 shrink-0">{query.author.avatar}</div>
+              <span className="text-sm text-zinc-700 truncate">{query.author.name}</span>
             </div>
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-1">Last run</p>
-            <p className="text-sm text-zinc-700 dark:text-zinc-300">{new Date(query.lastRun).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+            <p className="text-sm text-zinc-700">{new Date(query.lastRun).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-1">Total runs</p>
-            <p className="text-sm text-zinc-700 dark:text-zinc-300">{query.runCount}</p>
+            <p className="text-sm text-zinc-700">{query.runCount}</p>
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-1">Created</p>
-            <p className="text-sm text-zinc-700 dark:text-zinc-300">{new Date(query.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+            <p className="text-sm text-zinc-700">{new Date(query.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
           </div>
         </div>
 
         {/* NL Prompt */}
-        <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="p-4 border-b border-zinc-100">
           <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-2">Natural language prompt</p>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 italic leading-relaxed">"{query.prompt}"</p>
+          <p className="text-sm text-zinc-600 italic leading-relaxed">"{query.prompt}"</p>
         </div>
 
         {/* DBs & Tables */}
-        <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="p-4 border-b border-zinc-100">
           <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-2">Databases</p>
           <div className="flex flex-wrap gap-1.5 mb-3">
             {query.databases.map(db => (
-              <span key={db} className="inline-flex items-center gap-1.5 px-2 py-1 bg-zinc-100 dark:bg-zinc-800 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <span key={db} className="inline-flex items-center gap-1.5 px-2 py-1 bg-zinc-100 rounded-md text-xs font-medium text-zinc-700">
                 <span className={`w-2 h-2 rounded-full ${DB_COLORS[db] || 'bg-zinc-400'}`} />{db}
               </span>
             ))}
@@ -189,7 +189,7 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
           <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-2">Tables</p>
           <div className="flex flex-wrap gap-1.5">
             {query.tables.map(t => (
-              <span key={t} className="inline-flex items-center gap-1 px-2 py-1 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-md text-xs text-zinc-600 dark:text-zinc-400">
+              <span key={t} className="inline-flex items-center gap-1 px-2 py-1 bg-zinc-50 border border-zinc-200 rounded-md text-xs text-zinc-600">
                 <Table2 className="w-3 h-3" />{t}
               </span>
             ))}
@@ -197,18 +197,18 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
         </div>
 
         {/* SQL */}
-        <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="p-4 border-b border-zinc-100">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-1.5">
               <Code2 className="w-3.5 h-3.5 text-violet-500" />
               <p className="text-[11px] uppercase tracking-wider text-zinc-400">Generated SQL</p>
             </div>
-            <button onClick={copySql} className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 flex items-center gap-1">
+            <button onClick={copySql} className="text-xs text-zinc-400 hover:text-zinc-600 flex items-center gap-1">
               {sqlCopied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
               {sqlCopied ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <pre className="text-[12px] leading-relaxed text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 rounded-lg p-3 overflow-x-auto font-mono border border-zinc-200 dark:border-zinc-800">{query.sql}</pre>
+          <pre className="text-[12px] leading-relaxed text-zinc-600 bg-zinc-50 rounded-lg p-3 overflow-x-auto font-mono border border-zinc-200">{query.sql}</pre>
         </div>
 
         {/* Permissions */}
@@ -226,9 +226,9 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
                   <div className="space-y-1 ml-1">
                     {perm.users.map(u => (
                       <div key={u.email} className="flex items-center gap-2 py-1">
-                        <div className="w-6 h-6 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[10px] font-medium text-zinc-600 dark:text-zinc-300 shrink-0">{u.avatar}</div>
+                        <div className="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center text-[10px] font-medium text-zinc-600 shrink-0">{u.avatar}</div>
                         <div className="min-w-0">
-                          <p className="text-sm text-zinc-700 dark:text-zinc-300 truncate">{u.name}</p>
+                          <p className="text-sm text-zinc-700 truncate">{u.name}</p>
                           <p className="text-[11px] text-zinc-400 truncate">{u.email}</p>
                         </div>
                       </div>
@@ -241,14 +241,14 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
         </div>
       </div>
 
-      <div className="p-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center gap-2 shrink-0">
+      <div className="p-3 border-t border-zinc-100 flex items-center gap-2 shrink-0">
         <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors">
           <Play className="w-3.5 h-3.5" /> Run
         </button>
-        <button className="flex items-center justify-center gap-1.5 px-3 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+        <button className="flex items-center justify-center gap-1.5 px-3 py-2 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600 hover:bg-zinc-50 transition-colors">
           <Share2 className="w-3.5 h-3.5" /> Share
         </button>
-        <button className="flex items-center justify-center gap-1.5 px-3 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+        <button className="flex items-center justify-center gap-1.5 px-3 py-2 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600 hover:bg-zinc-50 transition-colors">
           <Download className="w-3.5 h-3.5" /> Export
         </button>
       </div>
@@ -282,10 +282,10 @@ export function SavedQueries() {
           <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
             <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search saved queries..."
-              className="w-full pl-9 pr-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:text-zinc-200 transition-colors" />
+              className="w-full pl-9 pr-4 py-2 bg-white border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors" />
           </div>
           <select value={filterVis} onChange={e => setFilterVis(e.target.value)}
-            className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-blue-500/50 outline-none">
+            className="bg-white border border-zinc-200 rounded-xl px-3 py-2 text-sm text-zinc-700 focus:ring-2 focus:ring-blue-500/50 outline-none">
             <option value="all">All visibility</option>
             <option value="private">Private</option>
             <option value="team">Team</option>
@@ -305,25 +305,25 @@ export function SavedQueries() {
                 <div
                   key={q.id}
                   onClick={() => setSelected(q)}
-                  className={`bg-white dark:bg-zinc-950 border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                    isSelected ? 'border-blue-400 dark:border-blue-600 shadow-md ring-1 ring-blue-200 dark:ring-blue-900' : 'border-zinc-200 dark:border-zinc-800'
+                  className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
+                    isSelected ? 'border-blue-400 shadow-md ring-1 ring-blue-200' : 'border-zinc-200'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate">{q.name}</p>
+                        <p className="text-sm font-semibold text-zinc-900 truncate">{q.name}</p>
                         <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full shrink-0 ${vis.cls}`}>
                           <VisIcon className="w-2.5 h-2.5" />{vis.label}
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">{q.description}</p>
+                      <p className="text-xs text-zinc-500 line-clamp-2">{q.description}</p>
                     </div>
                     <button
                       onClick={e => { e.stopPropagation(); toggleStar(q.id); }}
-                      className="shrink-0 p-1 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                      className="shrink-0 p-1 rounded-md hover:bg-zinc-100 transition-colors"
                     >
-                      {q.starred ? <Star className="w-4 h-4 text-amber-500 fill-amber-500" /> : <StarOff className="w-4 h-4 text-zinc-300 dark:text-zinc-600" />}
+                      {q.starred ? <Star className="w-4 h-4 text-amber-500 fill-amber-500" /> : <StarOff className="w-4 h-4 text-zinc-300" />}
                     </button>
                   </div>
 
@@ -342,7 +342,7 @@ export function SavedQueries() {
                       <Clock className="w-3 h-3" />{new Date(q.lastRun).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </div>
                     <div className="flex items-center gap-1">
-                      <div className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[9px] font-medium text-zinc-600 dark:text-zinc-300">{q.author.avatar}</div>
+                      <div className="w-5 h-5 rounded-full bg-zinc-200 flex items-center justify-center text-[9px] font-medium text-zinc-600">{q.author.avatar}</div>
                     </div>
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export function SavedQueries() {
             })}
           </div>
           {filtered.length === 0 && (
-            <div className="py-16 flex flex-col items-center text-zinc-400 dark:text-zinc-600">
+            <div className="py-16 flex flex-col items-center text-zinc-400">
               <Search className="w-8 h-8 mb-2 opacity-50" />
               <p className="text-sm">No saved queries found</p>
             </div>

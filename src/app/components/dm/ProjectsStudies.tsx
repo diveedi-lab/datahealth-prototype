@@ -149,29 +149,29 @@ const MOCK_PROJECTS: ProjectItem[] = [
 ];
 
 const statusColors: Record<string, string> = {
-  Active: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  Completed: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  Planned: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Suspended: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Archived: 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-400',
+  Active: 'bg-emerald-100 text-emerald-800',
+  Completed: 'bg-blue-100 text-blue-800',
+  Planned: 'bg-amber-100 text-amber-800',
+  Suspended: 'bg-red-100 text-red-800',
+  Archived: 'bg-zinc-200 text-zinc-600',
 };
 
 const typeColors: Record<string, string> = {
-  Program: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
-  'Research Project': 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  Consortium: 'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900/40 dark:text-fuchsia-300',
-  'Clinical Trial': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
-  'Observational Study': 'bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300',
-  Registry: 'bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300',
-  'Biomarker Study': 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
-  'Genetic Study': 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300',
-  'CRO': 'bg-lime-100 text-lime-800 dark:bg-lime-900/40 dark:text-lime-300',
-  'Hospital': 'bg-pink-100 text-pink-800 dark:bg-pink-900/40 dark:text-pink-300',
-  'Biotech': 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+  Program: 'bg-indigo-100 text-indigo-800',
+  'Research Project': 'bg-violet-100 text-violet-800',
+  Consortium: 'bg-fuchsia-100 text-fuchsia-800',
+  'Clinical Trial': 'bg-cyan-100 text-cyan-800',
+  'Observational Study': 'bg-teal-100 text-teal-800',
+  Registry: 'bg-sky-100 text-sky-800',
+  'Biomarker Study': 'bg-orange-100 text-orange-800',
+  'Genetic Study': 'bg-rose-100 text-rose-800',
+  'CRO': 'bg-lime-100 text-lime-800',
+  'Hospital': 'bg-pink-100 text-pink-800',
+  'Biotech': 'bg-emerald-100 text-emerald-800',
 };
 
 function getTypeColor(type: string) {
-  return typeColors[type] || 'bg-zinc-100 text-zinc-700 dark:bg-zinc-700/40 dark:text-zinc-300';
+  return typeColors[type] || 'bg-zinc-100 text-zinc-700';
 }
 
 export function ProjectsStudies() {
@@ -198,11 +198,11 @@ export function ProjectsStudies() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Projects & Studies</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Organize research projects, studies, registries, and programs with flexible metadata</p>
+          <h1 className="text-zinc-900">Projects & Studies</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Organize research projects, studies, registries, and programs with flexible metadata</p>
         </div>
         <button onClick={() => { setShowCreate(true); setNewMeta([{ key: '', value: '' }]); }}
-          className="flex items-center gap-2 px-4 py-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:opacity-90 transition-opacity text-[14px]">
+          className="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white rounded-lg hover:opacity-90 transition-opacity text-[14px]">
           <Add size={16} /> New Item
         </button>
       </div>
@@ -210,46 +210,46 @@ export function ProjectsStudies() {
       <div className="relative">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
         <input type="text" placeholder="Search by name or type..." value={search} onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+          className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
       </div>
 
       {/* Tree */}
       <div className="flex-1 overflow-auto space-y-3">
         {filtered.map(project => (
-          <div key={project.id} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-            <div className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
+          <div key={project.id} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+            <div className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-zinc-50 transition-colors"
               onClick={() => toggle(project.id)}>
               {project.children.length > 0 ? (
                 expanded.has(project.id) ? <ChevronDown size={16} className="text-zinc-400 shrink-0" /> : <ChevronRight size={16} className="text-zinc-400 shrink-0" />
               ) : <div className="w-4" />}
-              <FolderOpen size={18} className="text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <FolderOpen size={18} className="text-zinc-500 shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-[15px] text-zinc-900 dark:text-zinc-100 truncate">{project.name}</p>
+                  <p className="text-[15px] text-zinc-900 truncate">{project.name}</p>
                   <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${getTypeColor(project.type)}`}>{project.type}</span>
                   <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${statusColors[project.status]}`}>{project.status}</span>
                 </div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate">{project.description}</p>
+                <p className="text-[12px] text-zinc-500 truncate">{project.description}</p>
               </div>
-              <span className="text-[12px] text-zinc-400 dark:text-zinc-500 shrink-0">{project.children.length} {project.children.length === 1 ? 'child' : 'children'}</span>
-              <button className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors shrink-0" onClick={e => { e.stopPropagation(); setSelected(project); }}>
+              <span className="text-[12px] text-zinc-400 shrink-0">{project.children.length} {project.children.length === 1 ? 'child' : 'children'}</span>
+              <button className="p-1.5 hover:bg-zinc-100 rounded-lg transition-colors shrink-0" onClick={e => { e.stopPropagation(); setSelected(project); }}>
                 <Edit size={14} className="text-zinc-400" />
               </button>
             </div>
 
             {expanded.has(project.id) && project.children.length > 0 && (
-              <div className="border-t border-zinc-100 dark:border-zinc-800">
+              <div className="border-t border-zinc-100">
                 {project.children.map(child => (
                   <div key={child.id}
-                    className="flex items-center gap-3 px-5 py-3 pl-14 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 cursor-pointer transition-colors border-b last:border-b-0 border-zinc-100 dark:border-zinc-800"
+                    className="flex items-center gap-3 px-5 py-3 pl-14 hover:bg-zinc-50 cursor-pointer transition-colors border-b last:border-b-0 border-zinc-100"
                     onClick={() => setSelected(child)}>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="text-[14px] text-zinc-800 dark:text-zinc-200">{child.name}</p>
+                        <p className="text-[14px] text-zinc-800">{child.name}</p>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${getTypeColor(child.type)}`}>{child.type}</span>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${statusColors[child.status]}`}>{child.status}</span>
                       </div>
-                      <p className="text-[12px] text-zinc-500 dark:text-zinc-400 truncate">{child.description}</p>
+                      <p className="text-[12px] text-zinc-500 truncate">{child.description}</p>
                     </div>
                     <span className="text-[12px] text-zinc-400 shrink-0">{child.metadata.length} fields</span>
                   </div>
@@ -262,14 +262,14 @@ export function ProjectsStudies() {
 
       {/* Detail Panel */}
       {selected && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[520px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
+          <div className="w-[520px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-zinc-900 dark:text-zinc-100">{selected.name}</h2>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{selected.description}</p>
+                <h2 className="text-zinc-900">{selected.name}</h2>
+                <p className="text-[13px] text-zinc-500">{selected.description}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
             <div className="p-6 space-y-5">
               <div className="flex gap-2 flex-wrap">
@@ -278,33 +278,33 @@ export function ProjectsStudies() {
               </div>
 
               <div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">Created</p>
-                <p className="text-[14px] text-zinc-900 dark:text-zinc-100">{selected.createdAt}</p>
+                <p className="text-[12px] text-zinc-500 mb-1">Created</p>
+                <p className="text-[14px] text-zinc-900">{selected.createdAt}</p>
               </div>
 
               <div>
-                <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-3">Metadata</p>
+                <p className="text-[12px] text-zinc-500 mb-3">Metadata</p>
                 <div className="space-y-2">
                   {selected.metadata.map((m, i) => (
-                    <div key={i} className="flex items-center gap-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg px-4 py-2.5">
-                      <span className="text-[12px] text-zinc-500 dark:text-zinc-400 min-w-[140px] shrink-0">{m.key}</span>
-                      <span className="text-[14px] text-zinc-900 dark:text-zinc-100">{m.value}</span>
+                    <div key={i} className="flex items-center gap-3 bg-zinc-50 rounded-lg px-4 py-2.5">
+                      <span className="text-[12px] text-zinc-500 min-w-[140px] shrink-0">{m.key}</span>
+                      <span className="text-[14px] text-zinc-900">{m.value}</span>
                     </div>
                   ))}
                   {selected.metadata.length === 0 && (
-                    <p className="text-[13px] text-zinc-400 dark:text-zinc-500 italic">No metadata defined</p>
+                    <p className="text-[13px] text-zinc-400 italic">No metadata defined</p>
                   )}
                 </div>
               </div>
 
               {selected.children.length > 0 && (
                 <div>
-                  <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-3">Children ({selected.children.length})</p>
+                  <p className="text-[12px] text-zinc-500 mb-3">Children ({selected.children.length})</p>
                   <div className="space-y-2">
                     {selected.children.map(c => (
-                      <div key={c.id} className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg px-4 py-2.5 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                      <div key={c.id} className="flex items-center gap-2 bg-zinc-50 rounded-lg px-4 py-2.5 cursor-pointer hover:bg-zinc-100 transition-colors"
                         onClick={() => setSelected(c)}>
-                        <span className="text-[14px] text-zinc-900 dark:text-zinc-100 flex-1">{c.name}</span>
+                        <span className="text-[14px] text-zinc-900 flex-1">{c.name}</span>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full ${getTypeColor(c.type)}`}>{c.type}</span>
                       </div>
                     ))}
@@ -318,40 +318,40 @@ export function ProjectsStudies() {
 
       {/* Create Modal */}
       {showCreate && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="w-[580px] bg-white dark:bg-zinc-900 rounded-2xl shadow-xl max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
-              <h2 className="text-zinc-900 dark:text-zinc-100">Create New Item</h2>
-              <p className="text-[13px] text-zinc-500 dark:text-zinc-400 mt-1">Add a project, study, registry, or any research item</p>
+        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
+          <div className="w-[580px] bg-white rounded-2xl shadow-xl max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200">
+              <h2 className="text-zinc-900">Create New Item</h2>
+              <p className="text-[13px] text-zinc-500 mt-1">Add a project, study, registry, or any research item</p>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Name</label>
-                <input className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none" />
+                <label className="text-[12px] text-zinc-500 mb-1 block">Name</label>
+                <input className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Type</label>
-                  <input className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none" placeholder="e.g. Research Project, Clinical Trial..." />
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Type</label>
+                  <input className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none" placeholder="e.g. Research Project, Clinical Trial..." />
                 </div>
                 <div>
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Parent (optional)</label>
-                  <select className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+                  <label className="text-[12px] text-zinc-500 mb-1 block">Parent (optional)</label>
+                  <select className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
                     <option value="">None (top-level)</option>
                     {projects.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1 block">Description</label>
-                <textarea className="w-full px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none resize-none h-16" />
+                <label className="text-[12px] text-zinc-500 mb-1 block">Description</label>
+                <textarea className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none resize-none h-16" />
               </div>
 
               {/* Flexible Metadata */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-[12px] text-zinc-500 dark:text-zinc-400">Metadata Fields</label>
-                  <button onClick={() => setNewMeta([...newMeta, { key: '', value: '' }])} className="text-[12px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center gap-1 transition-colors">
+                  <label className="text-[12px] text-zinc-500">Metadata Fields</label>
+                  <button onClick={() => setNewMeta([...newMeta, { key: '', value: '' }])} className="text-[12px] text-zinc-500 hover:text-zinc-900 flex items-center gap-1 transition-colors">
                     <Add size={14} /> Add Field
                   </button>
                 </div>
@@ -359,11 +359,11 @@ export function ProjectsStudies() {
                   {newMeta.map((m, i) => (
                     <div key={i} className="flex gap-2 items-center">
                       <input placeholder="Key" value={m.key} onChange={e => { const n = [...newMeta]; n[i].key = e.target.value; setNewMeta(n); }}
-                        className="flex-1 px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[13px] text-zinc-900 dark:text-zinc-100 outline-none" />
+                        className="flex-1 px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[13px] text-zinc-900 outline-none" />
                       <input placeholder="Value" value={m.value} onChange={e => { const n = [...newMeta]; n[i].value = e.target.value; setNewMeta(n); }}
-                        className="flex-1 px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[13px] text-zinc-900 dark:text-zinc-100 outline-none" />
+                        className="flex-1 px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[13px] text-zinc-900 outline-none" />
                       {newMeta.length > 1 && (
-                        <button onClick={() => setNewMeta(newMeta.filter((_, j) => j !== i))} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors shrink-0">
+                        <button onClick={() => setNewMeta(newMeta.filter((_, j) => j !== i))} className="p-1.5 hover:bg-zinc-100 rounded-lg transition-colors shrink-0">
                           <Close size={14} className="text-zinc-400" />
                         </button>
                       )}
@@ -372,9 +372,9 @@ export function ProjectsStudies() {
                 </div>
               </div>
             </div>
-            <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-end gap-3">
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">Cancel</button>
-              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:opacity-90 transition-opacity">Create</button>
+            <div className="p-6 border-t border-zinc-200 flex justify-end gap-3">
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors">Cancel</button>
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2 text-[14px] bg-zinc-900 text-white rounded-lg hover:opacity-90 transition-opacity">Create</button>
             </div>
           </div>
         </div>

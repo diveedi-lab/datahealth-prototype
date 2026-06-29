@@ -69,23 +69,23 @@ export function NotificationSettings() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Notifications</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Configure alert channels and notification preferences for platform events</p>
+          <h1 className="text-zinc-900">Notifications</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Configure alert channels and notification preferences for platform events</p>
         </div>
         <button onClick={handleSave}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[14px] transition-colors ${saved ? 'bg-emerald-600 text-white' : 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200'}`}>
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[14px] transition-colors ${saved ? 'bg-emerald-600 text-white' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
           <Save size={16} /> {saved ? 'Saved!' : 'Save Preferences'}
         </button>
       </div>
 
       {/* Digest setting */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-6 py-4 flex items-center justify-between">
+      <div className="bg-white border border-zinc-200 rounded-xl px-6 py-4 flex items-center justify-between">
         <div>
-          <p className="text-[14px] text-zinc-900 dark:text-zinc-100">Email Digest Frequency</p>
-          <p className="text-[12px] text-zinc-400 dark:text-zinc-500 mt-0.5">Combine non-critical email notifications into a periodic digest</p>
+          <p className="text-[14px] text-zinc-900">Email Digest Frequency</p>
+          <p className="text-[12px] text-zinc-400 mt-0.5">Combine non-critical email notifications into a periodic digest</p>
         </div>
         <select value={digestFreq} onChange={e => setDigestFreq(e.target.value)}
-          className="px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+          className="px-3 py-2 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option>Immediately</option><option>Hourly</option><option>Daily</option><option>Weekly</option>
         </select>
       </div>
@@ -93,31 +93,31 @@ export function NotificationSettings() {
       {/* Channel groups */}
       <div className="flex-1 overflow-auto space-y-4 pb-4">
         {CHANNEL_GROUPS.map(group => (
-          <div key={group.title} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
-            <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-              <h2 className="text-[14px] text-zinc-900 dark:text-zinc-100">{group.title}</h2>
-              <div className="flex gap-8 text-[11px] text-zinc-400 dark:text-zinc-500">
+          <div key={group.title} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+            <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between">
+              <h2 className="text-[14px] text-zinc-900">{group.title}</h2>
+              <div className="flex gap-8 text-[11px] text-zinc-400">
                 <span className="w-14 text-center">Email</span>
                 <span className="w-14 text-center">In-App</span>
               </div>
             </div>
-            <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <div className="divide-y divide-zinc-100">
               {group.channels.map(ch => (
                 <div key={ch.key} className="px-6 py-3 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] text-zinc-900 dark:text-zinc-100">{ch.label}</p>
-                    <p className="text-[12px] text-zinc-400 dark:text-zinc-500 mt-0.5">{ch.description}</p>
+                    <p className="text-[13px] text-zinc-900">{ch.label}</p>
+                    <p className="text-[12px] text-zinc-400 mt-0.5">{ch.description}</p>
                   </div>
                   <div className="flex gap-8 shrink-0">
                     <div className="w-14 flex justify-center">
                       <button onClick={() => toggle(ch.key, 'email')}
-                        className={`relative w-9 h-5 rounded-full transition-colors ${channels[ch.key]?.email ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-600'}`}>
+                        className={`relative w-9 h-5 rounded-full transition-colors ${channels[ch.key]?.email ? 'bg-emerald-500' : 'bg-zinc-300'}`}>
                         <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${channels[ch.key]?.email ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
                       </button>
                     </div>
                     <div className="w-14 flex justify-center">
                       <button onClick={() => toggle(ch.key, 'inApp')}
-                        className={`relative w-9 h-5 rounded-full transition-colors ${channels[ch.key]?.inApp ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-600'}`}>
+                        className={`relative w-9 h-5 rounded-full transition-colors ${channels[ch.key]?.inApp ? 'bg-emerald-500' : 'bg-zinc-300'}`}>
                         <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${channels[ch.key]?.inApp ? 'translate-x-4.5' : 'translate-x-0.5'}`} />
                       </button>
                     </div>

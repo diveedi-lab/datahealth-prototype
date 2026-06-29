@@ -38,19 +38,19 @@ const MOCK_ACCESS: AccessEntry[] = [
 ];
 
 const resultColors: Record<string, string> = {
-  Success: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  Failed: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Blocked: 'bg-red-200 text-red-900 dark:bg-red-900/60 dark:text-red-200',
+  Success: 'bg-emerald-100 text-emerald-800',
+  Failed: 'bg-red-100 text-red-800',
+  Blocked: 'bg-red-200 text-red-900',
 };
 
 const typeColors: Record<string, string> = {
-  Login: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  Logout: 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700/40 dark:text-zinc-300',
-  'Token Refresh': 'bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300',
-  'Password Change': 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  'MFA Verify': 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  'Session Timeout': 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
-  'API Key Used': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
+  Login: 'bg-blue-100 text-blue-800',
+  Logout: 'bg-zinc-200 text-zinc-700',
+  'Token Refresh': 'bg-sky-100 text-sky-800',
+  'Password Change': 'bg-amber-100 text-amber-800',
+  'MFA Verify': 'bg-violet-100 text-violet-800',
+  'Session Timeout': 'bg-orange-100 text-orange-800',
+  'API Key Used': 'bg-cyan-100 text-cyan-800',
 };
 
 export function AccessLogs() {
@@ -78,31 +78,31 @@ export function AccessLogs() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">Access Logs</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Authentication events, login attempts, and session management</p>
+          <h1 className="text-zinc-900">Access Logs</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Authentication events, login attempts, and session management</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-[14px]">
+        <button className="flex items-center gap-2 px-4 py-2 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-100 transition-colors text-[14px]">
           <Download size={16} /> Export
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Total Events</p>
-          <p className="text-[24px] text-zinc-900 dark:text-zinc-100 mt-1">{logs.length}</p>
+        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+          <p className="text-[12px] text-zinc-500">Total Events</p>
+          <p className="text-[24px] text-zinc-900 mt-1">{logs.length}</p>
         </div>
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Failed Logins</p>
-          <p className="text-[24px] text-red-600 dark:text-red-400 mt-1">{failedCount}</p>
+        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+          <p className="text-[12px] text-zinc-500">Failed Logins</p>
+          <p className="text-[24px] text-red-600 mt-1">{failedCount}</p>
         </div>
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Blocked</p>
-          <p className="text-[24px] text-red-700 dark:text-red-300 mt-1">{blockedCount}</p>
+        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+          <p className="text-[12px] text-zinc-500">Blocked</p>
+          <p className="text-[24px] text-red-700 mt-1">{blockedCount}</p>
         </div>
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400">MFA Used</p>
-          <p className="text-[24px] text-emerald-600 dark:text-emerald-400 mt-1">{mfaCount}</p>
+        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+          <p className="text-[12px] text-zinc-500">MFA Used</p>
+          <p className="text-[24px] text-emerald-600 mt-1">{mfaCount}</p>
         </div>
       </div>
 
@@ -111,42 +111,42 @@ export function AccessLogs() {
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" placeholder="Search by user, IP, location..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
         </div>
-        <select value={filterResult} onChange={e => setFilterResult(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterResult} onChange={e => setFilterResult(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Results</option>
           <option>Success</option><option>Failed</option><option>Blocked</option>
         </select>
-        <select value={filterType} onChange={e => setFilterType(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterType} onChange={e => setFilterType(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Types</option>
           {types.map(t => <option key={t} value={t}>{t}</option>)}
         </select>
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-800">
+            <tr className="border-b border-zinc-200">
               {['Timestamp', 'Result', 'Type', 'User', 'IP Address', 'Location', 'Device', 'MFA'].map(h => (
-                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{h}</th>
+                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map(log => (
-              <tr key={log.id} className="border-b last:border-b-0 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 cursor-pointer transition-colors" onClick={() => setSelected(log)}>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400 font-mono whitespace-nowrap">{log.timestamp}</td>
+              <tr key={log.id} className="border-b last:border-b-0 border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-colors" onClick={() => setSelected(log)}>
+                <td className="px-4 py-3 text-[13px] text-zinc-500 font-mono whitespace-nowrap">{log.timestamp}</td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${resultColors[log.result]}`}>{log.result}</span></td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${typeColors[log.type]}`}>{log.type}</span></td>
-                <td className="px-4 py-3 text-[13px] text-zinc-700 dark:text-zinc-300 max-w-[180px] truncate">{log.user}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400 font-mono">{log.ip}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-600 dark:text-zinc-400">{log.location}</td>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400 max-w-[120px] truncate">{log.device}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-700 max-w-[180px] truncate">{log.user}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-500 font-mono">{log.ip}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-600">{log.location}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-500 max-w-[120px] truncate">{log.device}</td>
                 <td className="px-4 py-3">
                   {log.mfaUsed
-                    ? <Locked size={16} className="text-emerald-600 dark:text-emerald-400" />
-                    : <Unlocked size={16} className="text-zinc-300 dark:text-zinc-600" />}
+                    ? <Locked size={16} className="text-emerald-600" />
+                    : <Unlocked size={16} className="text-zinc-300" />}
                 </td>
               </tr>
             ))}
@@ -157,20 +157,20 @@ export function AccessLogs() {
 
       {/* Detail */}
       {selected && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[520px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
+          <div className="w-[520px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h2 className="text-zinc-900 dark:text-zinc-100">{selected.type}</h2>
-                <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{selected.timestamp}</p>
+                <h2 className="text-zinc-900">{selected.type}</h2>
+                <p className="text-[13px] text-zinc-500">{selected.timestamp}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div className="flex gap-2 flex-wrap">
                 <span className={`text-[11px] px-2.5 py-1 rounded-full ${resultColors[selected.result]}`}>{selected.result}</span>
                 <span className={`text-[11px] px-2.5 py-1 rounded-full ${typeColors[selected.type]}`}>{selected.type}</span>
-                {selected.mfaUsed && <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">MFA Verified</span>}
+                {selected.mfaUsed && <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">MFA Verified</span>}
               </div>
               {[
                 { label: 'User', value: selected.user },
@@ -182,8 +182,8 @@ export function AccessLogs() {
                 { label: 'Details', value: selected.details },
               ].map(f => (
                 <div key={f.label}>
-                  <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">{f.label}</p>
-                  <p className="text-[14px] text-zinc-900 dark:text-zinc-100 break-all">{f.value}</p>
+                  <p className="text-[12px] text-zinc-500 mb-1">{f.label}</p>
+                  <p className="text-[14px] text-zinc-900 break-all">{f.value}</p>
                 </div>
               ))}
             </div>

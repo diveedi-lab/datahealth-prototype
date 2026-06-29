@@ -148,25 +148,25 @@ const MOCK_USERS: UserRecord[] = [
 ];
 
 const statusColors: Record<string, string> = {
-  Active: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  Invited: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  Suspended: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Deactivated: 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-400',
+  Active: 'bg-emerald-100 text-emerald-800',
+  Invited: 'bg-blue-100 text-blue-800',
+  Suspended: 'bg-red-100 text-red-800',
+  Deactivated: 'bg-zinc-200 text-zinc-600',
 };
 
 const roleColors: Record<string, string> = {
-  Admin: 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300',
-  'Data Manager': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300',
-  Analyst: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300',
-  Viewer: 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700/40 dark:text-zinc-400',
-  'API User': 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
+  Admin: 'bg-violet-100 text-violet-800',
+  'Data Manager': 'bg-cyan-100 text-cyan-800',
+  Analyst: 'bg-indigo-100 text-indigo-800',
+  Viewer: 'bg-zinc-200 text-zinc-600',
+  'API User': 'bg-amber-100 text-amber-800',
 };
 
 const sevColors: Record<string, string> = {
-  Info: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300',
-  Warning: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Error: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300',
-  Critical: 'bg-red-200 text-red-900 dark:bg-red-900/60 dark:text-red-200',
+  Info: 'bg-blue-100 text-blue-800',
+  Warning: 'bg-amber-100 text-amber-800',
+  Error: 'bg-red-100 text-red-800',
+  Critical: 'bg-red-200 text-red-900',
 };
 
 const ROLES = ['Admin', 'Data Manager', 'Analyst', 'Viewer', 'API User'];
@@ -217,10 +217,10 @@ export function UserManagement() {
     <div className="h-full flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-zinc-900 dark:text-zinc-100">User Management</h1>
-          <p className="text-[14px] text-zinc-500 dark:text-zinc-400 mt-1">Manage platform users, invite new members, and review activity</p>
+          <h1 className="text-zinc-900">User Management</h1>
+          <p className="text-[14px] text-zinc-500 mt-1">Manage platform users, invite new members, and review activity</p>
         </div>
-        <button onClick={() => setShowInvite(true)} className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors text-[14px]">
+        <button onClick={() => setShowInvite(true)} className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors text-[14px]">
           <Add size={16} /> Invite User
         </button>
       </div>
@@ -228,14 +228,14 @@ export function UserManagement() {
       {/* Stats */}
       <div className="grid grid-cols-5 gap-3">
         {(['Active', 'Invited', 'Suspended', 'Deactivated'] as UserStatus[]).map(s => (
-          <div key={s} className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-3">
-            <p className="text-[12px] text-zinc-500 dark:text-zinc-400">{s}</p>
-            <p className="text-[20px] text-zinc-900 dark:text-zinc-100 mt-0.5">{users.filter(u => u.status === s).length}</p>
+          <div key={s} className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+            <p className="text-[12px] text-zinc-500">{s}</p>
+            <p className="text-[20px] text-zinc-900 mt-0.5">{users.filter(u => u.status === s).length}</p>
           </div>
         ))}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-3">
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400">Total</p>
-          <p className="text-[20px] text-zinc-900 dark:text-zinc-100 mt-0.5">{users.length}</p>
+        <div className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+          <p className="text-[12px] text-zinc-500">Total</p>
+          <p className="text-[20px] text-zinc-900 mt-0.5">{users.length}</p>
         </div>
       </div>
 
@@ -244,46 +244,46 @@ export function UserManagement() {
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <input type="text" placeholder="Search by name, email, department..." value={search} onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
         </div>
-        <select value={filterRole} onChange={e => setFilterRole(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterRole} onChange={e => setFilterRole(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Roles</option>
           {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
-        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
           <option value="All">All Statuses</option>
           <option>Active</option><option>Invited</option><option>Suspended</option><option>Deactivated</option>
         </select>
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-800">
+            <tr className="border-b border-zinc-200">
               {['User', 'Email', 'Role', 'Department', 'Status', 'Last Login', 'MFA', ''].map(h => (
-                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{h}</th>
+                <th key={h} className="text-left px-4 py-3 text-[12px] text-zinc-500 whitespace-nowrap">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {filtered.map(u => (
-              <tr key={u.id} className="border-b last:border-b-0 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 cursor-pointer transition-colors" onClick={() => { setSelected(u); setDetailTab('info'); }}>
+              <tr key={u.id} className="border-b last:border-b-0 border-zinc-100 hover:bg-zinc-50 cursor-pointer transition-colors" onClick={() => { setSelected(u); setDetailTab('info'); }}>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[12px] text-zinc-600 dark:text-zinc-300 shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-zinc-200 flex items-center justify-center text-[12px] text-zinc-600 shrink-0">
                       {u.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </div>
-                    <span className="text-[14px] text-zinc-900 dark:text-zinc-100">{u.name}</span>
+                    <span className="text-[14px] text-zinc-900">{u.name}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400">{u.email}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-500">{u.email}</td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${roleColors[u.role] || 'bg-zinc-200 text-zinc-600'}`}>{u.role}</span></td>
-                <td className="px-4 py-3 text-[13px] text-zinc-500 dark:text-zinc-400">{u.department}</td>
+                <td className="px-4 py-3 text-[13px] text-zinc-500">{u.department}</td>
                 <td className="px-4 py-3"><span className={`text-[11px] px-2 py-0.5 rounded-full ${statusColors[u.status]}`}>{u.status}</span></td>
                 <td className="px-4 py-3 text-[12px] text-zinc-400 font-mono">{u.lastLogin}</td>
-                <td className="px-4 py-3 text-[12px]">{u.mfaEnabled ? <span className="text-emerald-600 dark:text-emerald-400">Enabled</span> : <span className="text-zinc-400">Off</span>}</td>
-                <td className="px-4 py-3"><ChevronRight size={16} className="text-zinc-300 dark:text-zinc-600" /></td>
+                <td className="px-4 py-3 text-[12px]">{u.mfaEnabled ? <span className="text-emerald-600">Enabled</span> : <span className="text-zinc-400">Off</span>}</td>
+                <td className="px-4 py-3"><ChevronRight size={16} className="text-zinc-300" /></td>
               </tr>
             ))}
           </tbody>
@@ -293,38 +293,38 @@ export function UserManagement() {
 
       {/* Invite Modal */}
       {showInvite && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex items-center justify-center" onClick={() => setShowInvite(false)}>
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-[480px] overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
-              <h2 className="text-zinc-900 dark:text-zinc-100">Invite New User</h2>
-              <button onClick={() => setShowInvite(false)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowInvite(false)}>
+          <div className="bg-white rounded-2xl shadow-xl w-[480px] overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
+              <h2 className="text-zinc-900">Invite New User</h2>
+              <button onClick={() => setShowInvite(false)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1.5 block">Email Address *</label>
+                <label className="text-[12px] text-zinc-500 mb-1.5 block">Email Address *</label>
                 <div className="relative">
                   <Email size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                   <input type="email" value={inviteEmail} onChange={e => setInviteEmail(e.target.value)} placeholder="user@organization.com"
-                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
                 </div>
               </div>
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1.5 block">Role *</label>
+                <label className="text-[12px] text-zinc-500 mb-1.5 block">Role *</label>
                 <select value={inviteRole} onChange={e => setInviteRole(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 outline-none">
+                  className="w-full px-3 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 outline-none">
                   {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1.5 block">Department</label>
+                <label className="text-[12px] text-zinc-500 mb-1.5 block">Department</label>
                 <input type="text" value={inviteDept} onChange={e => setInviteDept(e.target.value)} placeholder="e.g. Clinical Operations"
-                  className="w-full px-4 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-[14px] text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/10" />
+                  className="w-full px-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-[14px] text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-zinc-900/10" />
               </div>
-              <p className="text-[12px] text-zinc-400 dark:text-zinc-500">An invitation email will be sent with a link to set up their account and configure MFA.</p>
+              <p className="text-[12px] text-zinc-400">An invitation email will be sent with a link to set up their account and configure MFA.</p>
             </div>
-            <div className="p-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-end gap-3">
-              <button onClick={() => setShowInvite(false)} className="px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-[14px]">Cancel</button>
-              <button onClick={handleInvite} className="px-4 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors text-[14px] flex items-center gap-2">
+            <div className="p-6 border-t border-zinc-200 flex justify-end gap-3">
+              <button onClick={() => setShowInvite(false)} className="px-4 py-2.5 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-100 transition-colors text-[14px]">Cancel</button>
+              <button onClick={handleInvite} className="px-4 py-2.5 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors text-[14px] flex items-center gap-2">
                 <Email size={16} /> Send Invitation
               </button>
             </div>
@@ -334,33 +334,33 @@ export function UserManagement() {
 
       {/* User Detail Panel */}
       {selected && (
-        <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[600px] bg-white dark:bg-zinc-900 h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
+          <div className="w-[600px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
             {/* Header */}
-            <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex items-start justify-between">
+            <div className="p-6 border-b border-zinc-200 flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-[16px] text-zinc-600 dark:text-zinc-300">
+                <div className="w-12 h-12 rounded-full bg-zinc-200 flex items-center justify-center text-[16px] text-zinc-600">
                   {selected.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                 </div>
                 <div>
-                  <h2 className="text-zinc-900 dark:text-zinc-100">{selected.name}</h2>
-                  <p className="text-[13px] text-zinc-500 dark:text-zinc-400">{selected.email}</p>
+                  <h2 className="text-zinc-900">{selected.name}</h2>
+                  <p className="text-[13px] text-zinc-500">{selected.email}</p>
                 </div>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
+              <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-zinc-200 dark:border-zinc-800">
+            <div className="flex border-b border-zinc-200">
               {([['info', 'Profile'], ['audit', 'Audit Trail'], ['queries', 'Shared Queries']] as const).map(([key, label]) => (
                 <button key={key} onClick={() => setDetailTab(key)}
                   className={`px-5 py-3 text-[13px] border-b-2 transition-colors ${detailTab === key
-                    ? 'border-zinc-900 dark:border-zinc-100 text-zinc-900 dark:text-zinc-100'
-                    : 'border-transparent text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300'
+                    ? 'border-zinc-900 text-zinc-900'
+                    : 'border-transparent text-zinc-400 hover:text-zinc-600'
                   }`}>
                   {label}
-                  {key === 'audit' && <span className="ml-1.5 text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-full">{selected.auditTrail.length}</span>}
-                  {key === 'queries' && <span className="ml-1.5 text-[11px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-full">{selected.sharedQueries.length}</span>}
+                  {key === 'audit' && <span className="ml-1.5 text-[11px] bg-zinc-100 px-1.5 py-0.5 rounded-full">{selected.auditTrail.length}</span>}
+                  {key === 'queries' && <span className="ml-1.5 text-[11px] bg-zinc-100 px-1.5 py-0.5 rounded-full">{selected.sharedQueries.length}</span>}
                 </button>
               ))}
             </div>
@@ -372,7 +372,7 @@ export function UserManagement() {
                   <div className="flex gap-2 flex-wrap mb-4">
                     <span className={`text-[11px] px-2.5 py-1 rounded-full ${roleColors[selected.role] || 'bg-zinc-200 text-zinc-600'}`}>{selected.role}</span>
                     <span className={`text-[11px] px-2.5 py-1 rounded-full ${statusColors[selected.status]}`}>{selected.status}</span>
-                    {selected.mfaEnabled && <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">MFA Enabled</span>}
+                    {selected.mfaEnabled && <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">MFA Enabled</span>}
                   </div>
                   {[
                     { label: 'Email', value: selected.email },
@@ -383,21 +383,21 @@ export function UserManagement() {
                     { label: 'MFA', value: selected.mfaEnabled ? 'Enabled (Authenticator App)' : 'Not configured' },
                   ].map(f => (
                     <div key={f.label}>
-                      <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mb-1">{f.label}</p>
-                      <p className="text-[14px] text-zinc-900 dark:text-zinc-100">{f.value}</p>
+                      <p className="text-[12px] text-zinc-500 mb-1">{f.label}</p>
+                      <p className="text-[14px] text-zinc-900">{f.value}</p>
                     </div>
                   ))}
 
-                  <div className="flex gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-                    <button className="flex-1 px-3 py-2 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-[13px] flex items-center justify-center gap-2">
+                  <div className="flex gap-3 pt-4 border-t border-zinc-200">
+                    <button className="flex-1 px-3 py-2 border border-zinc-300 text-zinc-700 rounded-lg hover:bg-zinc-100 transition-colors text-[13px] flex items-center justify-center gap-2">
                       <Edit size={14} /> Edit User
                     </button>
                     {selected.status === 'Active' ? (
-                      <button className="flex-1 px-3 py-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-[13px] flex items-center justify-center gap-2">
+                      <button className="flex-1 px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors text-[13px] flex items-center justify-center gap-2">
                         Suspend
                       </button>
                     ) : selected.status === 'Suspended' ? (
-                      <button className="flex-1 px-3 py-2 border border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 rounded-lg hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-[13px] flex items-center justify-center gap-2">
+                      <button className="flex-1 px-3 py-2 border border-emerald-300 text-emerald-600 rounded-lg hover:bg-emerald-50 transition-colors text-[13px] flex items-center justify-center gap-2">
                         Reactivate
                       </button>
                     ) : null}
@@ -410,14 +410,14 @@ export function UserManagement() {
                   {selected.auditTrail.length === 0 && <p className="text-[14px] text-zinc-400 text-center py-8">No audit trail recorded yet</p>}
                   {selected.auditTrail.map((a, i) => (
                     <div key={i} className="flex gap-3 items-start">
-                      <div className="w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-600 mt-2 shrink-0" />
-                      <div className="flex-1 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg p-3 border border-zinc-100 dark:border-zinc-800">
+                      <div className="w-2 h-2 rounded-full bg-zinc-300 mt-2 shrink-0" />
+                      <div className="flex-1 bg-zinc-50 rounded-lg p-3 border border-zinc-100">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-mono text-[13px] text-zinc-900 dark:text-zinc-100">{a.action}</span>
+                          <span className="font-mono text-[13px] text-zinc-900">{a.action}</span>
                           <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${sevColors[a.severity]}`}>{a.severity}</span>
                         </div>
-                        <p className="text-[13px] text-zinc-600 dark:text-zinc-400">{a.resource}</p>
-                        <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-1 flex items-center gap-1"><Time size={12} />{a.timestamp}</p>
+                        <p className="text-[13px] text-zinc-600">{a.resource}</p>
+                        <p className="text-[11px] text-zinc-400 mt-1 flex items-center gap-1"><Time size={12} />{a.timestamp}</p>
                       </div>
                     </div>
                   ))}
@@ -428,20 +428,20 @@ export function UserManagement() {
                 <div className="space-y-3">
                   {selected.sharedQueries.length === 0 && <p className="text-[14px] text-zinc-400 text-center py-8">No queries shared with this user</p>}
                   {selected.sharedQueries.map(q => (
-                    <div key={q.id} className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 rounded-lg p-4">
+                    <div key={q.id} className="bg-zinc-50 border border-zinc-100 rounded-lg p-4">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <p className="text-[14px] text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                          <p className="text-[14px] text-zinc-900 flex items-center gap-2">
                             <Query size={14} className="text-zinc-400 shrink-0" />
                             {q.name}
                           </p>
-                          <p className="text-[12px] text-zinc-500 dark:text-zinc-400 mt-1">
-                            Shared by <span className="text-zinc-700 dark:text-zinc-300">{q.sharedBy}</span> on {q.sharedAt}
+                          <p className="text-[12px] text-zinc-500 mt-1">
+                            Shared by <span className="text-zinc-700">{q.sharedBy}</span> on {q.sharedAt}
                           </p>
                         </div>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full shrink-0 ${q.sharedVia === 'Role'
-                          ? 'bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300'
-                          : 'bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300'
+                          ? 'bg-violet-100 text-violet-800'
+                          : 'bg-sky-100 text-sky-800'
                         }`}>
                           {q.sharedVia === 'Role' ? `Via role: ${q.roleName}` : 'Direct'}
                         </span>

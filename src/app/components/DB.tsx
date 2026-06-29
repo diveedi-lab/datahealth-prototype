@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, CheckCircle2, Clock, AlertCircle, XCircle, ChevronRight, Database, Search, Pencil, FileText, Layers, HardDrive } from 'lucide-react';
+import { getSavedStage } from './ingestor/state/persistence';
+import { STAGE_BADGE } from './ingestor/badges';
 
 interface DataSource {
   id: string;
@@ -20,10 +22,10 @@ interface DataSource {
 }
 
 const STATUS_CONFIG = {
-  draft: { icon: Pencil, cls: 'text-zinc-500 dark:text-zinc-400', bg: 'bg-zinc-100 dark:bg-zinc-800', label: 'Draft' },
-  'in-progress': { icon: Clock, cls: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-950/30', label: 'In Progress' },
-  completed: { icon: CheckCircle2, cls: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-950/30', label: 'Completed' },
-  failed: { icon: XCircle, cls: 'text-red-500 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-950/30', label: 'Failed' },
+  draft: { icon: Pencil, cls: 'text-zinc-500', bg: 'bg-zinc-100', label: 'Draft' },
+  'in-progress': { icon: Clock, cls: 'text-blue-600', bg: 'bg-blue-50', label: 'In Progress' },
+  completed: { icon: CheckCircle2, cls: 'text-emerald-600', bg: 'bg-emerald-50', label: 'Completed' },
+  failed: { icon: XCircle, cls: 'text-red-500', bg: 'bg-red-50', label: 'Failed' },
 };
 
 const DB_COLORS: Record<string, string> = {
@@ -45,7 +47,7 @@ const MOCK_SOURCES: DataSource[] = [
   { id: 'DS-0002', name: 'Baseline ECG Data', targetDatabase: 'CARDIO-2024', status: 'draft', filesTotal: 0, filesIngested: 0, sizeGB: 0, entities: 0, variables: 0, createdAt: '2026-04-10T16:00:00', updatedAt: '2026-04-10T16:00:00', createdBy: 'Dr. P. Marino', description: 'Baseline electrocardiogram recordings and automated measurements.' },
 ];
 
-export function DB() {
+export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => void }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
@@ -73,22 +75,25 @@ export function DB() {
     <div className="flex flex-col gap-4 h-full w-full min-h-0">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Database</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Create and manage database packages. Completed packages become full databases.</p>
+          <h2 className="text-2xl font-bold text-zinc-900">Collections</h2>
+          <p className="text-sm text-zinc-500 mt-1">Crea e gestisci le collection di dati. Aprine una per modellare il flusso di ingestione e conversione.</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm">
-          <Plus className="w-4 h-4" /> New Database
+        <button
+          onClick={() => onOpenCollection?.(`new-${Date.now()}`)}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm"
+        >
+          <Plus className="w-4 h-4" /> New Collection
         </button>
       </div>
 
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[200px] max-w-md">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
-          <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search databases..."
-            className="w-full pl-9 pr-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:text-zinc-200" />
+          <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search collections..."
+            className="w-full pl-9 pr-4 py-2 bg-white border border-zinc-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
         </div>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-          className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 pr-8 py-2 text-sm text-zinc-700 dark:text-zinc-300 outline-none appearance-none"
+          className="bg-white border border-zinc-200 rounded-xl px-3 pr-8 py-2 text-sm text-zinc-700 outline-none appearance-none"
           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2371717a' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center' }}>
           <option value="all">All statuses</option>
           <option value="draft">Draft</option>
@@ -96,7 +101,7 @@ export function DB() {
           <option value="completed">Completed</option>
           <option value="failed">Failed</option>
         </select>
-        <span className="text-xs text-zinc-400">{filtered.length} databases</span>
+        <span className="text-xs text-zinc-400">{filtered.length} collections</span>
       </div>
 
       <div className="flex-1 overflow-auto">
@@ -105,8 +110,13 @@ export function DB() {
             const stCfg = STATUS_CONFIG[src.status];
             const StIcon = stCfg.icon;
             const progress = src.filesTotal > 0 ? (src.filesIngested / src.filesTotal) * 100 : 0;
+            const savedStage = getSavedStage(src.id);
             return (
-              <div key={src.id} className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group">
+              <div
+                key={src.id}
+                onClick={() => onOpenCollection?.(src.id)}
+                className="bg-white border border-zinc-200 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group"
+              >
                 <div className="flex items-start gap-4">
                   <div className={`p-2.5 rounded-xl ${stCfg.bg} shrink-0`}>
                     <StIcon className={`w-5 h-5 ${stCfg.cls}`} />
@@ -116,16 +126,21 @@ export function DB() {
                       <span className="text-xs font-mono text-zinc-400">{src.id}</span>
                       <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${stCfg.bg} ${stCfg.cls}`}>{stCfg.label}</span>
                       {src.status === 'completed' && (
-                        <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                        <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 flex items-center gap-1">
                           <Database className="w-3 h-3" /> Database ready
                         </span>
                       )}
+                      {savedStage && (
+                        <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${STAGE_BADGE[savedStage].cls} flex items-center gap-1`}>
+                          <Pencil className="w-3 h-3" /> Editor · {STAGE_BADGE[savedStage].label}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-sm font-semibold text-zinc-900 dark:text-white truncate">{src.name}</p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-1">{src.description}</p>
+                    <p className="text-sm font-semibold text-zinc-900 truncate">{src.name}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5 line-clamp-1">{src.description}</p>
 
                     <div className="flex items-center gap-4 mt-2.5 flex-wrap">
-                      <span className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                      <span className="flex items-center gap-1.5 text-xs text-zinc-500">
                         <span className={`w-2 h-2 rounded-full ${DB_COLORS[src.targetDatabase] || 'bg-zinc-400'}`} />{src.targetDatabase}
                       </span>
                       {src.filesTotal > 0 && (
@@ -152,25 +167,25 @@ export function DB() {
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-[11px] text-zinc-400">{Math.round(progress)}% ingested</span>
                         </div>
-                        <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
                           <div className="h-full rounded-full bg-blue-500 transition-all" style={{ width: `${progress}%` }} />
                         </div>
                       </div>
                     )}
 
                     {src.errorMessage && (
-                      <p className="text-xs text-red-500 dark:text-red-400 mt-2 flex items-start gap-1">
+                      <p className="text-xs text-red-500 mt-2 flex items-start gap-1">
                         <AlertCircle className="w-3 h-3 shrink-0 mt-0.5" />{src.errorMessage}
                       </p>
                     )}
                   </div>
-                  <ChevronRight className="w-4 h-4 text-zinc-300 dark:text-zinc-600 shrink-0 mt-1 group-hover:text-zinc-500 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-zinc-300 shrink-0 mt-1 group-hover:text-zinc-500 transition-colors" />
                 </div>
               </div>
             );
           })}
           {filtered.length === 0 && (
-            <div className="py-16 flex flex-col items-center text-zinc-400 dark:text-zinc-600 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl">
+            <div className="py-16 flex flex-col items-center text-zinc-400 border-2 border-dashed border-zinc-200 rounded-2xl">
               <Database className="w-8 h-8 mb-2 opacity-50" />
               <p className="text-sm">No databases match your filters</p>
             </div>

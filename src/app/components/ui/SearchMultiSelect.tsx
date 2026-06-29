@@ -53,14 +53,14 @@ export function SearchMultiSelect({
     <div ref={ref} className="relative">
       <button
         onClick={() => { setOpen(!open); setSearch(''); }}
-        className="flex items-center gap-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors min-w-[160px]"
+        className="flex items-center gap-2 bg-white border border-zinc-200 rounded-xl px-3 py-2 text-sm text-zinc-700 hover:border-zinc-300 transition-colors min-w-[160px]"
       >
         <span className="flex-1 text-left truncate">{displayText}</span>
         <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute left-0 top-full mt-1 w-64 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl shadow-xl z-50 overflow-hidden">
-          <div className="p-2 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="absolute left-0 top-full mt-1 w-64 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="p-2 border-b border-zinc-100">
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
               <input
@@ -68,21 +68,21 @@ export function SearchMultiSelect({
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder={placeholder}
-                className="w-full pl-8 pr-3 py-1.5 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 text-zinc-700 dark:text-zinc-300"
+                className="w-full pl-8 pr-3 py-1.5 bg-zinc-50 border border-zinc-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 text-zinc-700"
                 autoFocus
               />
             </div>
           </div>
-          <div className="p-1 border-b border-zinc-100 dark:border-zinc-800 flex gap-1">
+          <div className="p-1 border-b border-zinc-100 flex gap-1">
             <button
               onClick={() => onChange(options.map(o => o.id))}
-              className="flex-1 text-xs py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-950/40 transition-colors"
+              className="flex-1 text-xs py-1.5 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
             >
               All
             </button>
             <button
               onClick={() => onChange([])}
-              className="flex-1 text-xs py-1.5 rounded-md bg-zinc-50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+              className="flex-1 text-xs py-1.5 rounded-md bg-zinc-50 text-zinc-500 hover:bg-zinc-100 transition-colors"
             >
               Clear
             </button>
@@ -96,8 +96,8 @@ export function SearchMultiSelect({
                   onClick={() => toggle(o.id)}
                   className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors text-left ${
                     isChecked
-                      ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-zinc-700 hover:bg-zinc-50'
                   }`}
                 >
                   {o.color && <span className={`w-2 h-2 rounded-full shrink-0 ${o.color}`} />}

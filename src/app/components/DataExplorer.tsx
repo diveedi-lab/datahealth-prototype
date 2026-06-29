@@ -233,7 +233,7 @@ export function DataExplorer() {
             <select
               value={selectedDb}
               onChange={e => { setSelectedDb(e.target.value); setSelectedTable(null); }}
-              className="appearance-none bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl pl-9 pr-8 py-2 text-sm text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-blue-500/50 outline-none"
+              className="appearance-none bg-white border border-zinc-200 rounded-xl pl-9 pr-8 py-2 text-sm text-zinc-700 focus:ring-2 focus:ring-blue-500/50 outline-none"
             >
               {AVAILABLE_DBS.map(db => (
                 <option key={db.id} value={db.id}>{db.name}</option>
@@ -243,28 +243,28 @@ export function DataExplorer() {
             <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
           </div>
           {schema && (
-            <span className="text-xs text-zinc-400 dark:text-zinc-500">
+            <span className="text-xs text-zinc-400">
               {schema.tables.length} entities · {schema.relationships.length} relationships · {schema.tables.reduce((s, t) => s + t.columns.length, 0)} variables
             </span>
           )}
           <div className="flex-1" />
-          <div className="flex items-center gap-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-lg overflow-hidden">
-            <button onClick={() => setZoom(z => Math.min(2, z + 0.15))} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+          <div className="flex items-center gap-1 bg-white border border-zinc-200 rounded-lg overflow-hidden">
+            <button onClick={() => setZoom(z => Math.min(2, z + 0.15))} className="p-1.5 hover:bg-zinc-100 transition-colors">
               <ZoomIn className="w-4 h-4 text-zinc-500" />
             </button>
             <span className="text-xs text-zinc-400 w-10 text-center">{Math.round(zoom * 100)}%</span>
-            <button onClick={() => setZoom(z => Math.max(0.4, z - 0.15))} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+            <button onClick={() => setZoom(z => Math.max(0.4, z - 0.15))} className="p-1.5 hover:bg-zinc-100 transition-colors">
               <ZoomOut className="w-4 h-4 text-zinc-500" />
             </button>
-            <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-700" />
-            <button onClick={resetView} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+            <div className="w-px h-5 bg-zinc-200" />
+            <button onClick={resetView} className="p-1.5 hover:bg-zinc-100 transition-colors">
               <Maximize2 className="w-4 h-4 text-zinc-500" />
             </button>
           </div>
         </div>
 
         {/* SVG Graph */}
-        <div className="flex-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden relative">
+        <div className="flex-1 bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden relative">
           {schema ? (
             <svg
               ref={svgRef}
@@ -276,7 +276,7 @@ export function DataExplorer() {
             >
               <defs>
                 <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                  <polygon points="0 0, 8 3, 0 6" className="fill-zinc-300 dark:fill-zinc-600" />
+                  <polygon points="0 0, 8 3, 0 6" className="fill-zinc-300" />
                 </marker>
                 <marker id="arrowhead-hl" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
                   <polygon points="0 0, 8 3, 0 6" className="fill-blue-400" />
@@ -294,7 +294,7 @@ export function DataExplorer() {
                     <g key={i}>
                       <line
                         x1={pts.x1} y1={pts.y1} x2={pts.x2} y2={pts.y2}
-                        className={isHighlighted ? 'stroke-blue-400' : 'stroke-zinc-200 dark:stroke-zinc-700'}
+                        className={isHighlighted ? 'stroke-blue-400' : 'stroke-zinc-200'}
                         strokeWidth={isHighlighted ? 2.5 : 1.5}
                         strokeDasharray={rel.type === 'N:M' ? '6 3' : undefined}
                         markerEnd={isHighlighted ? 'url(#arrowhead-hl)' : 'url(#arrowhead)'}
@@ -334,10 +334,10 @@ export function DataExplorer() {
                         rx={12}
                         className={`transition-colors ${
                           isSelected
-                            ? 'fill-blue-50 dark:fill-blue-950/40 stroke-blue-400 dark:stroke-blue-500'
+                            ? 'fill-blue-50 stroke-blue-400'
                             : isHovered
-                            ? 'fill-zinc-50 dark:fill-zinc-900 stroke-zinc-300 dark:stroke-zinc-600'
-                            : 'fill-white dark:fill-zinc-950 stroke-zinc-200 dark:stroke-zinc-800'
+                            ? 'fill-zinc-50 stroke-zinc-300'
+                            : 'fill-white stroke-zinc-200'
                         }`}
                         strokeWidth={isSelected ? 2 : 1}
                       />
@@ -348,10 +348,10 @@ export function DataExplorer() {
                         <Table2 className="w-[18px] h-[18px]" style={{ color: table.color }} />
                       </foreignObject>
                       {/* Label */}
-                      <text x={pos.x + 38} y={pos.y + pos.h / 2 - 4} className="text-[13px] fill-zinc-800 dark:fill-zinc-200 font-medium">
+                      <text x={pos.x + 38} y={pos.y + pos.h / 2 - 4} className="text-[13px] fill-zinc-800 font-medium">
                         {table.label}
                       </text>
-                      <text x={pos.x + 38} y={pos.y + pos.h / 2 + 12} className="text-[10px] fill-zinc-400 dark:fill-zinc-500">
+                      <text x={pos.x + 38} y={pos.y + pos.h / 2 + 12} className="text-[10px] fill-zinc-400">
                         {table.columns.length} cols · {table.rowCount.toLocaleString()} rows
                       </text>
                     </g>
@@ -366,10 +366,10 @@ export function DataExplorer() {
           )}
 
           {/* Legend */}
-          <div className="absolute bottom-3 left-3 bg-white/90 dark:bg-zinc-950/90 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 flex items-center gap-4 text-[11px] text-zinc-500 dark:text-zinc-400 backdrop-blur-sm">
-            <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-zinc-300 dark:bg-zinc-600 inline-block" /> 1:N</span>
-            <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-zinc-300 dark:bg-zinc-600 inline-block border-dashed border-t border-zinc-400" style={{ borderStyle: 'dashed' }} /> N:M</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-100 dark:bg-blue-900/30 border border-blue-400 inline-block" /> Selected</span>
+          <div className="absolute bottom-3 left-3 bg-white/90 border border-zinc-200 rounded-lg px-3 py-2 flex items-center gap-4 text-[11px] text-zinc-500 backdrop-blur-sm">
+            <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-zinc-300 inline-block" /> 1:N</span>
+            <span className="flex items-center gap-1.5"><span className="w-4 h-0.5 bg-zinc-300 inline-block border-dashed border-t border-zinc-400" style={{ borderStyle: 'dashed' }} /> N:M</span>
+            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded bg-blue-100 border border-blue-400 inline-block" /> Selected</span>
             <span>Click node to inspect · Scroll to zoom · Drag to pan</span>
           </div>
         </div>
@@ -377,19 +377,19 @@ export function DataExplorer() {
 
       {/* Detail Panel */}
       {selectedTableData && (
-        <div className="w-full lg:w-[380px] shrink-0 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors">
+        <div className="w-full lg:w-[380px] shrink-0 bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors">
           {/* Header */}
-          <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+          <div className="p-4 border-b border-zinc-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: selectedTableData.color + '20' }}>
                 <Table2 className="w-4 h-4" style={{ color: selectedTableData.color }} />
               </div>
               <div>
-                <p className="text-sm font-semibold text-zinc-900 dark:text-white">{selectedTableData.label}</p>
+                <p className="text-sm font-semibold text-zinc-900">{selectedTableData.label}</p>
                 <p className="text-[11px] text-zinc-400">{selectedTableData.name} · {selectedTableData.rowCount.toLocaleString()} rows</p>
               </div>
             </div>
-            <button onClick={() => setSelectedTable(null)} className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800">
+            <button onClick={() => setSelectedTable(null)} className="p-1 text-zinc-400 hover:text-zinc-600 rounded-md hover:bg-zinc-100">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -397,21 +397,21 @@ export function DataExplorer() {
           {/* Columns */}
           <div className="flex-1 overflow-y-auto">
             <div className="px-4 pt-3 pb-1">
-              <p className="text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              <p className="text-[11px] uppercase tracking-wider text-zinc-400">
                 Variables ({selectedTableData.columns.length})
               </p>
             </div>
             <div className="px-2 pb-4">
               {selectedTableData.columns.map(col => (
-                <div key={col.name} className="px-2 py-2.5 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+                <div key={col.name} className="px-2 py-2.5 rounded-lg hover:bg-zinc-50 transition-colors">
                   <div className="flex items-center gap-2 mb-0.5">
                     {TYPE_ICONS[col.type] || <Hash className="w-3 h-3 text-zinc-400" />}
-                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200 font-mono">{col.name}</span>
+                    <span className="text-sm font-medium text-zinc-800 font-mono">{col.name}</span>
                     {col.pk && (
-                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 uppercase">PK</span>
+                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-amber-100 text-amber-600 uppercase">PK</span>
                     )}
                     {col.fk && (
-                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 uppercase flex items-center gap-0.5">
+                      <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-blue-100 text-blue-600 uppercase flex items-center gap-0.5">
                         FK <ArrowRight className="w-2 h-2" /> {col.fk.table}
                       </span>
                     )}
@@ -419,7 +419,7 @@ export function DataExplorer() {
                       <span className="text-[9px] text-zinc-400 italic">nullable</span>
                     )}
                   </div>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 ml-5">{col.description}</p>
+                  <p className="text-[11px] text-zinc-500 ml-5">{col.description}</p>
                 </div>
               ))}
             </div>
@@ -427,7 +427,7 @@ export function DataExplorer() {
             {/* Relationships */}
             {highlightedRels.length > 0 && selectedTable && (
               <div className="px-4 pb-4">
-                <p className="text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2">
+                <p className="text-[11px] uppercase tracking-wider text-zinc-400 mb-2">
                   Relationships ({highlightedRels.length})
                 </p>
                 <div className="space-y-1.5">
@@ -436,15 +436,15 @@ export function DataExplorer() {
                     const otherTable = isOutgoing ? rel.to.table : rel.from.table;
                     const otherData = schema?.tables.find(t => t.name === otherTable);
                     return (
-                      <div key={i} className="flex items-center gap-2 px-2 py-2 bg-zinc-50 dark:bg-zinc-900/50 rounded-lg text-xs">
+                      <div key={i} className="flex items-center gap-2 px-2 py-2 bg-zinc-50 rounded-lg text-xs">
                         <Link2 className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                        <span className="text-zinc-600 dark:text-zinc-400">
+                        <span className="text-zinc-600">
                           {isOutgoing ? rel.from.column : rel.to.column}
                         </span>
                         <ArrowRight className="w-3 h-3 text-zinc-400 shrink-0" />
                         <button
                           onClick={() => setSelectedTable(otherTable)}
-                          className="font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                          className="font-medium text-blue-600 hover:underline"
                         >
                           {otherData?.label || otherTable}
                         </button>
