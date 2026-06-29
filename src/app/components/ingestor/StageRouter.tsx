@@ -4,6 +4,14 @@ import { useEditor } from './state/EditorContext';
 import { LeftPanel } from './LeftPanel';
 import { FlowCanvas } from './canvas/FlowCanvas';
 import { FileDrillDown } from './panels/FileDrillDown';
+import { AiChat } from './AiChat';
+import type { EditorNode } from './types';
+
+function chatSuggestions(node: EditorNode): string[] {
+  if (node.type === 'tabularFile') return ['Cosa rappresenta questo file?', 'Ci sono problemi di qualità?', 'Come va convertito?'];
+  if (node.type === 'fileCollection') return ['Come sono collegate le immagini?', 'Cosa faccio con gli orfani?'];
+  return ['A cosa serve questo file di contesto?'];
+}
 
 export function StageRouter() {
   const { state } = useEditor();
@@ -15,7 +23,13 @@ function CanvasWorkspace() {
   const { state } = useEditor();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [panelW, setPanelW] = useState(560);
+  const [drawerChat, setDrawerChat] = useState(false);
   const selectedNode = state.nodes.find((n) => n.id === selectedId) ?? null;
+
+  const select = (id: string | null) => {
+    setSelectedId(id);
+    if (id === null) setDrawerChat(false);
+  };
 
   const startResize = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -34,10 +48,10 @@ function CanvasWorkspace() {
 
   return (
     <div className="flex-1 flex min-h-0">
-      <LeftPanel selectedId={selectedId} onSelect={setSelectedId} />
+      <LeftPanel selectedId={selectedId} onSelect={select} />
 
       <div className="flex-1 min-w-0 relative">
-        <FlowCanvas selectedNodeId={selectedNode ? selectedId : null} onSelectNode={setSelectedId} />
+        <FlowCanvas selectedNodeId={selectedNode ? selectedId : null} onSelectNode={select} />
         {state.stage === 'source' && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-zinc-200 rounded-full shadow-sm text-xs text-zinc-600">
@@ -47,6 +61,19 @@ function CanvasWorkspace() {
           </div>
         )}
       </div>
+
+      {/* secondo drawer: chat AI sull'elemento, affiancata a SINISTRA del drawer di dettaglio */}
+      {selectedNode && drawerChat && (
+        <div className="w-[340px] shrink-0 border-l border-zinc-200 animate-in slide-in-from-right duration-200">
+          <AiChat
+            key={selectedNode.id}
+            scope={`${selectedNode.data.label} · ${selectedNode.data.fileName}`}
+            hint="Chiedimi di questo elemento: variabili, valori, anomalie o cosa farci."
+            suggestions={chatSuggestions(selectedNode)}
+            onClose={() => setDrawerChat(false)}
+          />
+        </div>
+      )}
 
       {selectedNode && (
         <div className="shrink-0 flex animate-in slide-in-from-right duration-200" style={{ width: panelW }}>
@@ -59,7 +86,9 @@ function CanvasWorkspace() {
             <FileDrillDown
               node={selectedNode}
               showAnalysis={state.stage !== 'source' && selectedNode.data.analyzed}
-              onClose={() => setSelectedId(null)}
+              chatOpen={drawerChat}
+              onToggleChat={() => setDrawerChat((c) => !c)}
+              onClose={() => select(null)}
             />
           </div>
         </div>

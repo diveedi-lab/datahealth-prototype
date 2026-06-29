@@ -5,7 +5,6 @@ import {
 } from 'lucide-react';
 import type { EditorNode, Variable, VarType } from '../types';
 import { DistributionChart } from './DistributionChart';
-import { AiChat } from '../AiChat';
 
 const TYPE_ICON: Record<VarType, React.ReactNode> = {
   id: <Key className="w-3.5 h-3.5 text-amber-500" />,
@@ -18,38 +17,21 @@ const TYPE_ICON: Record<VarType, React.ReactNode> = {
 };
 
 export function FileDrillDown({
-  node, showAnalysis, onClose,
+  node, showAnalysis, chatOpen, onToggleChat, onClose,
 }: {
   node: EditorNode;
   showAnalysis: boolean;
+  chatOpen: boolean;
+  onToggleChat: () => void;
   onClose: () => void;
 }) {
-  const [chat, setChat] = useState(false);
-  const d = node.data;
   return (
     <div className="flex flex-col h-full bg-white border-l border-zinc-200">
-      <Header node={node} chatOpen={chat} onToggleChat={() => setChat((c) => !c)} onClose={onClose} />
+      <Header node={node} chatOpen={chatOpen} onToggleChat={onToggleChat} onClose={onClose} />
       <div className="flex-1 overflow-auto min-h-0">
-        {chat ? (
-          <AiChat
-            scope={`${d.label} · ${d.fileName}`}
-            hint="Chiedimi di questo elemento: variabili, valori, anomalie o cosa farci."
-            suggestions={
-              node.type === 'tabularFile'
-                ? ['Cosa rappresenta questo file?', 'Ci sono problemi di qualità?', 'Come va convertito?']
-                : node.type === 'fileCollection'
-                  ? ['Come sono collegate le immagini?', 'Cosa faccio con gli orfani?']
-                  : ['A cosa serve questo file di contesto?']
-            }
-            onClose={() => setChat(false)}
-          />
-        ) : (
-          <>
-            {node.type === 'tabularFile' && <TabularBody node={node} showAnalysis={showAnalysis} />}
-            {node.type === 'fileCollection' && <CollectionBody node={node} showAnalysis={showAnalysis} />}
-            {node.type === 'contextNode' && <ContextBody node={node} />}
-          </>
-        )}
+        {node.type === 'tabularFile' && <TabularBody node={node} showAnalysis={showAnalysis} />}
+        {node.type === 'fileCollection' && <CollectionBody node={node} showAnalysis={showAnalysis} />}
+        {node.type === 'contextNode' && <ContextBody node={node} />}
       </div>
     </div>
   );

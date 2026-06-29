@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import {
   Table2, Images, BookOpen, Plus, X, Terminal, PanelLeftClose, PanelLeftOpen,
-  Database, FileUp, Network, ListChecks, AlertTriangle, Link2,
+  Database, FileUp, Network, ListChecks, AlertTriangle, Link2, GitBranch,
 } from 'lucide-react';
 import { useEditor } from './state/EditorContext';
 import { DEMO_FILES } from './mock/mockData';
-import { STAGE_ORDER } from './types';
-import type { FileBucket } from './types';
+import { STAGE_LABEL } from './types';
+import type { FileBucket, FlowStage } from './types';
 
 const GROUPS: { bucket: FileBucket; title: string; icon: React.ComponentType<{ className?: string }>; cli?: boolean }[] = [
   { bucket: 'datafeed', title: 'Tabelle (datafeed)', icon: Table2 },
@@ -14,8 +14,15 @@ const GROUPS: { bucket: FileBucket; title: string; icon: React.ComponentType<{ c
   { bucket: 'context', title: 'File di contesto', icon: BookOpen },
 ];
 
-type LeftTab = 'source' | 'analysis';
+const STAGE_ICON: Record<FlowStage, React.ComponentType<{ className?: string }>> = {
+  source: FileUp,
+  analyzed: Network,
+  conversion: GitBranch,
+  validation: ListChecks,
+  finalized: Database,
+};
 
+// La colonna sinistra cambia contenuto in base allo step corrente (non è uno switcher manuale).
 export function LeftPanel({
   selectedId, onSelect,
 }: {
@@ -24,15 +31,8 @@ export function LeftPanel({
 }) {
   const { state } = useEditor();
   const [collapsed, setCollapsed] = useState(false);
-  const [tab, setTab] = useState<LeftTab>('source');
-
-  // Tab disponibili in base allo step raggiunto (context step-dependent)
-  const analysisReached = STAGE_ORDER.indexOf(state.maxStageReached) >= STAGE_ORDER.indexOf('analyzed');
-  const tabs: { id: LeftTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { id: 'source', label: 'Source', icon: FileUp },
-    ...(analysisReached ? [{ id: 'analysis' as LeftTab, label: 'Analisi', icon: Network }] : []),
-  ];
-  const activeTab: LeftTab = tabs.some((t) => t.id === tab) ? tab : 'source';
+  const stage = state.stage;
+  const Icon = STAGE_ICON[stage];
 
   if (collapsed) {
     return (
@@ -40,40 +40,25 @@ export function LeftPanel({
         <button onClick={() => setCollapsed(false)} className="p-1.5 text-zinc-500 hover:bg-zinc-100 rounded-lg" aria-label="Apri pannello">
           <PanelLeftOpen className="w-4 h-4" />
         </button>
-        <Database className="w-4 h-4 text-zinc-300" />
-        <span className="text-[10px] text-zinc-400 [writing-mode:vertical-rl] rotate-180 mt-1">Source data</span>
+        <Icon className="w-4 h-4 text-zinc-300" />
+        <span className="text-[10px] text-zinc-400 [writing-mode:vertical-rl] rotate-180 mt-1">{STAGE_LABEL[stage]}</span>
       </div>
     );
   }
 
   return (
     <div className="w-72 shrink-0 border-r border-zinc-200 bg-white flex flex-col">
-      {/* tab bar step-dependent */}
-      <div className="h-11 shrink-0 flex items-center gap-1 px-2 border-b border-zinc-200">
-        {tabs.map((t) => {
-          const Icon = t.icon;
-          return (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                activeTab === t.id ? 'bg-blue-50 text-blue-700' : 'text-zinc-500 hover:bg-zinc-50'
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" /> {t.label}
-            </button>
-          );
-        })}
+      <div className="h-11 shrink-0 flex items-center gap-2 px-3 border-b border-zinc-200">
+        <Icon className="w-4 h-4 text-blue-600" />
+        <span className="text-sm font-semibold text-zinc-800">{STAGE_LABEL[stage]}</span>
         <button onClick={() => setCollapsed(true)} className="ml-auto p-1 text-zinc-400 hover:bg-zinc-100 rounded-lg" aria-label="Comprimi">
           <PanelLeftClose className="w-4 h-4" />
         </button>
       </div>
 
-      {activeTab === 'source' ? (
-        <SourceTab selectedId={selectedId} onSelect={onSelect} />
-      ) : (
-        <AnalysisTab onSelect={onSelect} />
-      )}
+      {stage === 'source' && <SourceTab selectedId={selectedId} onSelect={onSelect} />}
+      {stage === 'analyzed' && <AnalysisTab onSelect={onSelect} />}
+      {(stage === 'conversion' || stage === 'validation' || stage === 'finalized') && <PlaceholderTab stage={stage} />}
     </div>
   );
 }
@@ -205,6 +190,17 @@ function AnalysisTab({ onSelect }: { onSelect: (id: string | null) => void }) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function PlaceholderTab({ stage }: { stage: FlowStage }) {
+  return (
+    <div className="flex-1 overflow-auto p-4">
+      <p className="text-sm text-zinc-500">
+        Il pannello <strong>{STAGE_LABEL[stage]}</strong> sarà disponibile nella prossima fase
+        (selezione formati, transformer e validazione).
+      </p>
     </div>
   );
 }
