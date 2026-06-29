@@ -124,6 +124,9 @@ const TOOLS = [
 
 function buildSystem(scope, catalog) {
   const scopeNames = scope?.names?.length ? scope.names.join(', ') : '(vuoto)';
+  const activeQuery = scope?.activeQueryTitle
+    ? `Query attiva (salvabile con save_query): «${scope.activeQueryTitle}».`
+    : 'Nessuna query attiva ancora.';
   const cat = catalog
     ? JSON.stringify(catalog).slice(0, 6000)
     : '{}';
@@ -141,7 +144,7 @@ Regole:
 - Usa SOLO gli id di collection e i nomi di variabile presenti nel CATALOGO. Non inventare id.
 - Per domande generiche o chiarimenti usa answer. Tieni i testi MOLTO brevi (1-2 frasi), in italiano.
 
-Scope corrente: ${scopeNames}.
+Scope corrente: ${scopeNames}. ${activeQuery}
 CATALOGO (usa solo questi id/nomi): ${cat}`;
 }
 
