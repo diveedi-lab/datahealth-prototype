@@ -2,8 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Clock, Search, Eye, Download, Copy, Check, Table2, Code2, X,
   Database, Play, ChevronRight, AlertCircle, CheckCircle2, XCircle,
-  User, ChevronDown
+  User, ChevronDown, Compass
 } from 'lucide-react';
+
+export interface OpenInExplore {
+  (q: { id: string; prompt: string; databases: string[]; title: string }): void;
+}
 
 // ─── Types & Mock Data ───
 
@@ -112,7 +116,7 @@ function SearchSelect({ value, onChange, options, placeholder, allLabel }: {
 
 // ─── Main Component ───
 
-export function QueryHistory() {
+export function QueryHistory({ onOpen }: { onOpen?: OpenInExplore }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAuthor, setFilterAuthor] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -216,7 +220,12 @@ export function QueryHistory() {
                         <div className="flex items-center gap-1.5 text-xs text-zinc-500"><User className="w-3.5 h-3.5" />{entry.author.name}</div>
                         <div className="flex items-center gap-1.5 text-xs text-zinc-500"><Clock className="w-3.5 h-3.5" />{new Date(entry.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
                         <div className="flex-1" />
-                        <button className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors"><Play className="w-3 h-3" /> Re-run</button>
+                        <button
+                          onClick={() => onOpen?.({ id: entry.id, prompt: entry.prompt, databases: entry.databases, title: entry.prompt.slice(0, 40) })}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors"
+                        >
+                          <Compass className="w-3 h-3" /> Apri in Explore
+                        </button>
                         <button className="flex items-center gap-1.5 px-3 py-1.5 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600 hover:bg-zinc-100 transition-colors"><Download className="w-3 h-3" /> Export</button>
                       </div>
                     </div>

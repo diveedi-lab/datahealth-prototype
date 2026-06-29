@@ -353,10 +353,9 @@ function getSidebarContent(
       title: "Query Tool",
       sections: [
         {
-          title: "Data Explorer",
+          title: "Explore",
           items: [
-            { icon: <Search size={16} className="text-neutral-50" />, label: "New Query" },
-            { icon: <DataViewAlt size={16} className="text-neutral-50" />, label: "Data Explorer" },
+            { icon: <DataViewAlt size={16} className="text-neutral-50" />, label: "Explore" },
             { icon: <Report size={16} className="text-neutral-50" />, label: "Saved Queries" },
             { icon: <Time size={16} className="text-neutral-50" />, label: "History" },
           ],

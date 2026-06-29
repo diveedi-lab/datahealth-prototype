@@ -4,12 +4,13 @@ import { TwoLevelSidebar } from './components/SidebarDemo';
 import { DataLakeReport } from './components/DataLakeReport';
 import { SharingSummary } from './components/SharingSummary';
 import { DataDashboard } from './components/DataDashboard';
-import { QueryTool } from './components/QueryTool';
 import { QueryHistory } from './components/QueryHistory';
 import { SavedQueries } from './components/SavedQueries';
-import { DataExplorer } from './components/DataExplorer';
 import { DB } from './components/DB';
 import { CollectionEditor } from './components/ingestor/CollectionEditor';
+import { ExploreWorkspace } from './components/explore/ExploreWorkspace';
+import { buildExploreFromSaved } from './components/explore/mock/mockLibrary';
+import type { ExploreState } from './components/explore/types';
 import { Connectors } from './components/Connectors';
 import { FileUploader } from './components/FileUploader';
 import { ProjectsStudies } from './components/dm/ProjectsStudies';
@@ -41,7 +42,7 @@ const TAB_LABELS: Record<string, string> = {
 // Default sub-items for each main section
 const DEFAULT_SUB_ITEMS: Record<string, string> = {
   dashboard: 'Data Lake Report',
-  querytool: 'New Query',
+  querytool: 'Saved Queries',
   ingestor: 'Collections',
   datamanager: 'Projects & Studies',
   audit: 'Operation Logs',
@@ -53,6 +54,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [activeSubItem, setActiveSubItem] = useState('Data Lake Report');
   const [openCollectionId, setOpenCollectionId] = useState<string | null>(null);
+  const [openExploration, setOpenExploration] = useState<{ id: string; seed?: ExploreState } | null>(null);
 
   const handleSectionChange = (section: string) => {
     setActiveTab(section);
@@ -60,7 +62,18 @@ export default function App() {
   };
 
   const handleSubItemClick = (label: string) => {
+    if (activeTab === 'querytool' && label === 'Explore') {
+      setActiveSubItem('Explore');
+      setOpenExploration({ id: 'main' });
+      return;
+    }
     setActiveSubItem(label);
+  };
+
+  // Apertura del workspace Explore da Saved Queries / History (popolato da un seed)
+  const openExploreFrom = (kind: 'sq' | 'h', q: { id: string; prompt: string; databases: string[]; title: string }) => {
+    const id = `${kind}-${q.id}`;
+    setOpenExploration({ id, seed: buildExploreFromSaved(id, { prompt: q.prompt, databases: q.databases, title: q.title }) });
   };
 
   const renderContent = () => {
@@ -74,11 +87,9 @@ export default function App() {
     }
     if (activeTab === 'querytool') {
       switch (activeSubItem) {
-        case 'New Query': return <QueryTool />;
-        case 'Data Explorer': return <DataExplorer />;
-        case 'Saved Queries': return <SavedQueries />;
-        case 'History': return <QueryHistory />;
-        default: return <QueryTool />;
+        case 'Saved Queries': return <SavedQueries onOpen={(q) => openExploreFrom('sq', q)} />;
+        case 'History': return <QueryHistory onOpen={(q) => openExploreFrom('h', q)} />;
+        default: return <SavedQueries onOpen={(q) => openExploreFrom('sq', q)} />;
       }
     }
     if (activeTab === 'ingestor') {
@@ -140,6 +151,17 @@ export default function App() {
       <CollectionEditor
         collectionId={openCollectionId}
         onClose={() => setOpenCollectionId(null)}
+      />
+    );
+  }
+
+  // Full-screen Explore workspace (query/esplorazione chat-driven) — bypasses sidebar + topbar
+  if (openExploration) {
+    return (
+      <ExploreWorkspace
+        explorationId={openExploration.id}
+        seed={openExploration.seed}
+        onClose={() => { setOpenExploration(null); setActiveSubItem('Saved Queries'); }}
       />
     );
   }

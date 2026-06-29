@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import {
   Search, Eye, Download, Copy, Check, Table2, Code2, X, Database, Play,
   Lock, Globe, Users, Shield, ShieldCheck, Star, StarOff, Pencil, Trash2,
-  Clock, MoreHorizontal, Share2
+  Clock, MoreHorizontal, Share2, Compass
 } from 'lucide-react';
+
+export interface OpenInExplore {
+  (q: { id: string; prompt: string; databases: string[]; title: string }): void;
+}
 
 // ─── Types ───
 
@@ -119,7 +123,7 @@ const MOCK_SAVED: SavedQuery[] = [
 
 // ─── Detail Panel ───
 
-function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => void }) {
+function DetailPanel({ query, onClose, onOpen }: { query: SavedQuery; onClose: () => void; onOpen?: OpenInExplore }) {
   const [sqlCopied, setSqlCopied] = useState(false);
   const vis = VIS_CONFIG[query.visibility];
   const VisIcon = vis.icon;
@@ -242,8 +246,11 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
       </div>
 
       <div className="p-3 border-t border-zinc-100 flex items-center gap-2 shrink-0">
-        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors">
-          <Play className="w-3.5 h-3.5" /> Run
+        <button
+          onClick={() => onOpen?.({ id: query.id, prompt: query.prompt, databases: query.databases, title: query.name })}
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors"
+        >
+          <Compass className="w-3.5 h-3.5" /> Apri in Explore
         </button>
         <button className="flex items-center justify-center gap-1.5 px-3 py-2 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600 hover:bg-zinc-50 transition-colors">
           <Share2 className="w-3.5 h-3.5" /> Share
@@ -258,7 +265,7 @@ function DetailPanel({ query, onClose }: { query: SavedQuery; onClose: () => voi
 
 // ─── Main ───
 
-export function SavedQueries() {
+export function SavedQueries({ onOpen }: { onOpen?: OpenInExplore }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterVis, setFilterVis] = useState('all');
   const [queries, setQueries] = useState(MOCK_SAVED);
@@ -319,12 +326,21 @@ export function SavedQueries() {
                       </div>
                       <p className="text-xs text-zinc-500 line-clamp-2">{q.description}</p>
                     </div>
-                    <button
-                      onClick={e => { e.stopPropagation(); toggleStar(q.id); }}
-                      className="shrink-0 p-1 rounded-md hover:bg-zinc-100 transition-colors"
-                    >
-                      {q.starred ? <Star className="w-4 h-4 text-amber-500 fill-amber-500" /> : <StarOff className="w-4 h-4 text-zinc-300" />}
-                    </button>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={e => { e.stopPropagation(); onOpen?.({ id: q.id, prompt: q.prompt, databases: q.databases, title: q.name }); }}
+                        className="p-1 rounded-md hover:bg-blue-50 text-zinc-400 hover:text-blue-600 transition-colors"
+                        title="Apri in Explore"
+                      >
+                        <Compass className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={e => { e.stopPropagation(); toggleStar(q.id); }}
+                        className="p-1 rounded-md hover:bg-zinc-100 transition-colors"
+                      >
+                        {q.starred ? <Star className="w-4 h-4 text-amber-500 fill-amber-500" /> : <StarOff className="w-4 h-4 text-zinc-300" />}
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-3 mt-3 flex-wrap">
@@ -358,7 +374,7 @@ export function SavedQueries() {
         </div>
       </div>
 
-      {selected && <DetailPanel query={selected} onClose={() => setSelected(null)} />}
+      {selected && <DetailPanel query={selected} onClose={() => setSelected(null)} onOpen={onOpen} />}
     </div>
   );
 }
