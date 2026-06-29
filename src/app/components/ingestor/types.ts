@@ -124,19 +124,56 @@ export interface EditorEdge {
   label?: string;
 }
 
-// ─── Forward-compat: conversione N:N (Fase 2) ───
-export interface TransformerIO { nodeId: string; columns: string[]; }
+// ─── Conversione N:N (Fase 2) ───
 export type TransformerKind = '1:1' | 'split' | 'merge' | 'complex' | 'drop';
+export type CodeLang = 'sql' | 'python' | 'pseudo';
+
+export interface TransformerInput { fileId: string; columns: string[]; }
+export interface TransformerOutput { targetId: string; columns: string[]; }
+
 export interface Transformer {
   id: string;
   position: XYPosition;
   title: string;
   kind: TransformerKind;
   description: string;
+  codeLang: CodeLang;
   code: string;
-  inputs: TransformerIO[];
-  outputs: TransformerIO[];
+  inputs: TransformerInput[];
+  outputs: TransformerOutput[];
   validation: ValidationStatus;
+  validationMessage?: string;
+  rowEffect?: { inputRows: number; outputRows: number; note?: string };
+}
+
+export interface TargetColumn {
+  name: string;
+  type: VarType;
+  required: boolean;
+  description: string;
+  mappedFrom?: string;   // es. "DEMOG.AGE"
+}
+
+export interface TargetTable {
+  id: string;
+  name: string;          // es. "IE", "DM", "person"
+  format: TargetFormat;
+  label: string;
+  color: string;
+  position: XYPosition;
+  columns: TargetColumn[];
+  estRowCount: number;
+}
+
+export interface VirtualCollection {
+  createdAt: number;
+  sourceFormat: SourceFormat;
+  targetFormat: TargetFormat;
+  tables: { targetId: string; name: string; rowCount: number }[];
+  unmapped: { file: string; columns: string[] }[];
+  passed: number;
+  warnings: number;
+  errors: number;
 }
 
 // ─── Meta della Collection ───
@@ -160,6 +197,8 @@ export interface EditorState {
   nodes: EditorNode[];
   edges: EditorEdge[];
   transformers: Transformer[];
+  targetTables: TargetTable[];
+  virtual: VirtualCollection | null;
   viewport?: { x: number; y: number; zoom: number };
   busy: null | 'analyzing' | 'converting' | 'finalizing';
   // Tracciamento analisi per il banner + staleness dello stepper
@@ -167,4 +206,4 @@ export interface EditorState {
   analyzedSignature: string | null;   // firma dei dati sorgente al momento dell'analisi
 }
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import {
-  ReactFlow, Background, Controls, MiniMap,
+  ReactFlow, Background, Controls, MiniMap, MarkerType,
   type Node, type Edge, type NodeChange, type NodeMouseHandler,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -13,68 +13,122 @@ interface FlowCanvasProps {
   onSelectNode: (id: string | null) => void;
 }
 
+const CONVERSION_STAGES = ['conversion', 'validation', 'finalized'];
+
 export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
   const { state, dispatch } = useEditor();
+  const stage = state.stage;
+  const conversionMode = CONVERSION_STAGES.includes(stage);
+  const showAnalysis = stage !== 'source'; // in Source data niente relazioni/analisi
 
-  // In "Source data" non si mostrano relazioni né analisi (vista grezza)
-  const showAnalysis = state.stage !== 'source';
+  // ─── edge logici (dipendono dallo stadio) ───
+  const logicalEdges = useMemo(() => {
+    if (conversionMode) {
+      const es: { id: string; source: string; target: string; kind: string; label?: string }[] = [];
+      const nodeIds = new Set(state.nodes.map((n) => n.id));
+      const targetIds = new Set(state.targetTables.map((t) => t.id));
+      for (const t of state.transformers) {
+        // edge solo verso nodi realmente renderizzati (simmetria input/output)
+        for (const inp of t.inputs) {
+          if (nodeIds.has(inp.fileId)) es.push({ id: `e-${t.id}-in-${inp.fileId}`, source: inp.fileId, target: t.id, kind: 'flow' });
+        }
+        for (const out of t.outputs) {
+          if (targetIds.has(out.targetId)) es.push({ id: `e-${t.id}-out-${out.targetId}`, source: t.id, target: out.targetId, kind: 'flow' });
+        }
+      }
+      return es;
+    }
+    if (stage === 'source') return [];
+    return state.edges.map((e) => ({ id: e.id, source: e.source, target: e.target, kind: e.kind, label: e.label }));
+  }, [conversionMode, stage, state.edges, state.nodes, state.transformers, state.targetTables]);
 
-  // Insieme dei nodi connessi al selezionato (per il dimming degli altri)
+  // ─── dimming dei nodi non connessi al selezionato ───
   const connectedIds = useMemo(() => {
-    if (!selectedNodeId || !showAnalysis) return null;
+    if (!selectedNodeId || (stage === 'source' && !conversionMode)) return null;
     const set = new Set<string>([selectedNodeId]);
-    for (const e of state.edges) {
+    for (const e of logicalEdges) {
       if (e.source === selectedNodeId) set.add(e.target);
       if (e.target === selectedNodeId) set.add(e.source);
     }
     return set;
-  }, [selectedNodeId, state.edges, showAnalysis]);
+  }, [selectedNodeId, logicalEdges, stage, conversionMode]);
 
-  const rfNodes: Node[] = useMemo(
-    () => state.nodes
-      .filter((n) => n.type !== 'contextNode') // i file di contesto vivono nel Source data, non nel canvas
+  // ─── posizioni delle sorgenti in modalità conversione (corsia sinistra) ───
+  const convSources = useMemo(() => {
+    if (!conversionMode) return [];
+    const ids = new Set<string>();
+    state.transformers.forEach((t) => t.inputs.forEach((i) => ids.add(i.fileId)));
+    return Array.from(ids);
+  }, [conversionMode, state.transformers]);
+
+  // ─── nodi ───
+  const rfNodes: Node[] = useMemo(() => {
+    if (conversionMode) {
+      const sources: Node[] = convSources.map((fid, i) => {
+        const n = state.nodes.find((x) => x.id === fid);
+        if (!n) return null;
+        return {
+          id: n.id, type: 'tabularFile', position: { x: 40, y: 60 + i * 150 }, draggable: false,
+          selected: n.id === selectedNodeId,
+          data: { ...n.data, analyzed: true, _dimmed: connectedIds ? !connectedIds.has(n.id) : false },
+        };
+      }).filter(Boolean) as Node[];
+
+      const transformers: Node[] = state.transformers.map((t) => ({
+        id: t.id, type: 'transformerNode', position: t.position, selected: t.id === selectedNodeId,
+        data: { ...t, _dimmed: connectedIds ? !connectedIds.has(t.id) : false },
+      }));
+
+      const targets: Node[] = state.targetTables.map((t) => ({
+        id: t.id, type: 'targetTable', position: t.position, selected: t.id === selectedNodeId,
+        data: { ...t, _mapped: t.columns.filter((c) => c.mappedFrom).length, _dimmed: connectedIds ? !connectedIds.has(t.id) : false },
+      }));
+
+      return [...sources, ...transformers, ...targets];
+    }
+
+    return state.nodes
+      .filter((n) => n.type !== 'contextNode')
       .map((n) => ({
-        id: n.id,
-        type: n.type,
-        position: n.position,
-        selected: n.id === selectedNodeId,
+        id: n.id, type: n.type, position: n.position, selected: n.id === selectedNodeId,
         data: { ...n.data, analyzed: n.data.analyzed && showAnalysis, _dimmed: connectedIds ? !connectedIds.has(n.id) : false },
-      })),
-    [state.nodes, connectedIds, selectedNodeId, showAnalysis],
-  );
+      }));
+  }, [conversionMode, convSources, state.nodes, state.transformers, state.targetTables, connectedIds, selectedNodeId, showAnalysis]);
 
+  // ─── edge render ───
   const rfEdges: Edge[] = useMemo(
-    () => (showAnalysis ? state.edges : []).map((e) => ({
+    () => logicalEdges.map((e) => ({
       id: e.id,
       source: e.source,
       target: e.target,
       label: e.label,
-      animated: e.kind === 'id-match',
+      animated: e.kind === 'id-match' || e.kind === 'flow',
+      markerEnd: e.kind === 'flow' ? { type: MarkerType.ArrowClosed, color: '#818cf8' } : undefined,
       style: e.kind === 'context-link'
         ? { stroke: '#d97706', strokeDasharray: '5 4' }
-        : { stroke: '#94a3b8' },
+        : e.kind === 'flow'
+          ? { stroke: '#818cf8', strokeWidth: 1.5 }
+          : { stroke: '#94a3b8' },
       labelStyle: { fontSize: 10, fill: '#71717a' },
       labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
     })),
-    [state.edges, showAnalysis],
+    [logicalEdges],
   );
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       for (const ch of changes) {
         if (ch.type === 'position' && ch.position) {
-          dispatch({ type: 'NODE_MOVE', id: ch.id, position: ch.position });
+          if (state.transformers.some((t) => t.id === ch.id)) dispatch({ type: 'MOVE_TRANSFORMER', id: ch.id, position: ch.position });
+          else if (state.targetTables.some((t) => t.id === ch.id)) dispatch({ type: 'MOVE_TARGET', id: ch.id, position: ch.position });
+          else dispatch({ type: 'NODE_MOVE', id: ch.id, position: ch.position });
         }
       }
     },
-    [dispatch],
+    [dispatch, state.transformers, state.targetTables],
   );
 
-  // Sempre cliccabile: apre il drill-down (anteprima nei file grezzi, analisi se disponibile)
-  const onNodeClick: NodeMouseHandler = useCallback(
-    (_, node) => onSelectNode(node.id),
-    [onSelectNode],
-  );
+  const onNodeClick: NodeMouseHandler = useCallback((_, node) => onSelectNode(node.id), [onSelectNode]);
 
   return (
     <ReactFlow
@@ -86,8 +140,8 @@ export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
       onPaneClick={() => onSelectNode(null)}
       colorMode="light"
       fitView
-      fitViewOptions={{ padding: 0.25 }}
-      minZoom={0.3}
+      fitViewOptions={{ padding: 0.2 }}
+      minZoom={0.25}
       maxZoom={1.75}
       proOptions={{ hideAttribution: false }}
     >
@@ -96,7 +150,7 @@ export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
       <MiniMap
         pannable
         zoomable
-        nodeColor={(n) => (n.data as FileNodeData)?.color ?? '#94a3b8'}
+        nodeColor={(n) => (n.data as FileNodeData)?.color ?? '#818cf8'}
         nodeStrokeWidth={2}
         maskColor="rgba(244,244,245,0.7)"
       />

@@ -5,8 +5,11 @@ import {
 } from 'lucide-react';
 import { useEditor } from './state/EditorContext';
 import { DEMO_FILES } from './mock/mockData';
+import { generateConversion } from './mock/mockConversion';
+import { SOURCE_FORMATS, TARGET_FORMATS } from './formatCatalog';
 import { STAGE_LABEL } from './types';
-import type { FileBucket, FlowStage } from './types';
+import type { FileBucket, FlowStage, SourceFormat, TargetFormat, ValidationStatus } from './types';
+import { Wand2, CheckCircle2, Clock, XCircle, RotateCcw, Sparkles } from 'lucide-react';
 
 const GROUPS: { bucket: FileBucket; title: string; icon: React.ComponentType<{ className?: string }>; cli?: boolean }[] = [
   { bucket: 'datafeed', title: 'Tabelle (datafeed)', icon: Table2 },
@@ -58,7 +61,148 @@ export function LeftPanel({
 
       {stage === 'source' && <SourceTab selectedId={selectedId} onSelect={onSelect} />}
       {stage === 'analyzed' && <AnalysisTab onSelect={onSelect} />}
-      {(stage === 'conversion' || stage === 'validation' || stage === 'finalized') && <PlaceholderTab stage={stage} />}
+      {stage === 'conversion' && <ConversionTab selectedId={selectedId} onSelect={onSelect} />}
+      {stage === 'validation' && <ValidationTab selectedId={selectedId} onSelect={onSelect} />}
+      {stage === 'finalized' && <FinalizedTab />}
+    </div>
+  );
+}
+
+const VAL_ICON: Record<ValidationStatus, { Icon: React.ComponentType<{ className?: string }>; cls: string }> = {
+  pending: { Icon: Clock, cls: 'text-amber-500' },
+  validated: { Icon: CheckCircle2, cls: 'text-emerald-500' },
+  rejected: { Icon: XCircle, cls: 'text-rose-500' },
+  'needs-review': { Icon: RotateCcw, cls: 'text-orange-500' },
+};
+
+function ConversionTab({ selectedId, onSelect }: { selectedId: string | null; onSelect: (id: string | null) => void }) {
+  const { state, dispatch } = useEditor();
+  const src = (state.meta.sourceFormat ?? 'redcap') as SourceFormat;
+  const tgt = (state.meta.targetFormat ?? 'cdisc') as TargetFormat;
+
+  // Il mapping demo è precalcolato per i file di esempio (DEMOG/VS/LB/INCL)
+  const canConvert = state.uploads.some((u) => ['f-demog', 'f-vs', 'f-lb', 'f-incl'].includes(u.id));
+  const setFormats = (s: SourceFormat, t: TargetFormat) => dispatch({ type: 'SET_FORMATS', source: s, target: t });
+  const generate = () => {
+    if (!canConvert) return;
+    setFormats(src, tgt);
+    const conv = generateConversion(tgt);
+    dispatch({ type: 'SET_CONVERSION', transformers: conv.transformers, targetTables: conv.targetTables });
+  };
+
+  return (
+    <div className="flex-1 overflow-auto p-3 space-y-4">
+      <div className="space-y-2">
+        <Field label="Formato di origine">
+          <select value={src} onChange={(e) => setFormats(e.target.value as SourceFormat, tgt)} className="w-full text-xs border border-zinc-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:ring-2 focus:ring-blue-500/40">
+            {SOURCE_FORMATS.map((f) => <option key={f.id} value={f.id}>{f.label}</option>)}
+          </select>
+        </Field>
+        <Field label="Formato di destinazione">
+          <select value={tgt} onChange={(e) => setFormats(src, e.target.value as TargetFormat)} className="w-full text-xs border border-zinc-200 rounded-lg px-2 py-1.5 bg-white outline-none focus:ring-2 focus:ring-blue-500/40">
+            {TARGET_FORMATS.map((f) => <option key={f.id} value={f.id}>{f.label}</option>)}
+          </select>
+        </Field>
+      </div>
+
+      <button
+        onClick={generate}
+        disabled={!canConvert}
+        className="w-full flex items-center justify-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-xs font-medium"
+      >
+        <Sparkles className="w-3.5 h-3.5" /> {state.transformers.length ? 'Rigenera mapping' : 'Genera mapping'}
+      </button>
+      {!canConvert && (
+        <p className="text-[10px] text-zinc-400">
+          Il mapping di esempio è disponibile per la collection demo (DEMOG/VS/LB/INCL).
+        </p>
+      )}
+
+      {state.transformers.length > 0 && (
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500 mb-1.5 flex items-center gap-1.5">
+            <Wand2 className="w-3.5 h-3.5" /> Transformer ({state.transformers.length})
+          </p>
+          <div className="space-y-1">
+            {state.transformers.map((t) => {
+              const vi = VAL_ICON[t.validation];
+              return (
+                <button key={t.id} onClick={() => onSelect(t.id)} className={`w-full text-left flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors ${selectedId === t.id ? 'bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-zinc-50'}`}>
+                  <vi.Icon className={`w-3.5 h-3.5 shrink-0 ${vi.cls}`} />
+                  <span className="text-xs text-zinc-700 truncate flex-1">{t.title}</span>
+                  <span className="text-[9px] uppercase text-zinc-400">{t.kind}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ValidationTab({ selectedId, onSelect }: { selectedId: string | null; onSelect: (id: string | null) => void }) {
+  const { state } = useEditor();
+  const total = state.transformers.length;
+  const done = state.transformers.filter((t) => t.validation === 'validated').length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+
+  return (
+    <div className="flex-1 overflow-auto p-3 space-y-4">
+      <div>
+        <div className="flex items-center justify-between text-xs mb-1">
+          <span className="text-zinc-500">Validazione transformer</span>
+          <span className="font-medium text-zinc-700">{done}/{total}</span>
+        </div>
+        <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
+          <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${pct}%` }} />
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        {state.transformers.map((t) => {
+          const vi = VAL_ICON[t.validation];
+          return (
+            <button key={t.id} onClick={() => onSelect(t.id)} className={`w-full text-left flex items-center gap-2 px-2 py-2 rounded-lg transition-colors ${selectedId === t.id ? 'bg-blue-50 ring-1 ring-blue-200' : 'hover:bg-zinc-50'}`}>
+              <vi.Icon className={`w-4 h-4 shrink-0 ${vi.cls}`} />
+              <span className="text-xs text-zinc-700 truncate flex-1">{t.title}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {done === total && total > 0 ? (
+        <p className="text-[11px] text-emerald-600 flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" /> Tutti i transformer sono validati: puoi generare la Virtual Collection.</p>
+      ) : (
+        <p className="text-[11px] text-zinc-400">Apri ogni transformer e confermalo (Valida) per abilitare la generazione.</p>
+      )}
+    </div>
+  );
+}
+
+function FinalizedTab() {
+  const { state } = useEditor();
+  const v = state.virtual;
+  return (
+    <div className="flex-1 overflow-auto p-3 space-y-3">
+      <p className="text-[11px] text-emerald-600 flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5" /> Virtual Collection generata.</p>
+      {v && (
+        <div className="grid grid-cols-3 gap-2">
+          <Mini label="tabelle" value={v.tables.length} />
+          <Mini label="validati" value={v.passed} />
+          <Mini label="warning" value={v.warnings} />
+        </div>
+      )}
+      <p className="text-[10px] text-zinc-400">Il riepilogo completo è nell'area centrale.</p>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="text-[11px] font-medium text-zinc-500 mb-1">{label}</p>
+      {children}
     </div>
   );
 }
@@ -190,17 +334,6 @@ function AnalysisTab({ onSelect }: { onSelect: (id: string | null) => void }) {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function PlaceholderTab({ stage }: { stage: FlowStage }) {
-  return (
-    <div className="flex-1 overflow-auto p-4">
-      <p className="text-sm text-zinc-500">
-        Il pannello <strong>{STAGE_LABEL[stage]}</strong> sarà disponibile nella prossima fase
-        (selezione formati, transformer e validazione).
-      </p>
     </div>
   );
 }

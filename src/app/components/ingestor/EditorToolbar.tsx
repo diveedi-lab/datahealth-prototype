@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ArrowRight, Sparkles, Loader2, Database } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sparkles, Loader2, Database, ShieldCheck } from 'lucide-react';
 import { useEditor } from './state/EditorContext';
 import { useRunAnalysis } from './hooks/useAnalysis';
 import { Stepper } from './Stepper';
@@ -17,6 +17,15 @@ export function EditorToolbar({
 
   const hasDatafeed = state.uploads.some((u) => u.bucket === 'datafeed');
 
+  const allValidated = state.transformers.length > 0 && state.transformers.every((t) => t.validation === 'validated');
+
+  const finalize = () => {
+    dispatch({ type: 'SET_BUSY', busy: 'finalizing' });
+    setTimeout(() => {
+      dispatch({ type: 'FINALIZE', at: Date.now() });
+    }, 1000);
+  };
+
   let cta: { label: string; icon: React.ReactNode; onClick: () => void; disabled?: boolean } | null = null;
   if (stage === 'source') {
     cta = busy === 'analyzing'
@@ -24,6 +33,12 @@ export function EditorToolbar({
       : { label: 'Generate Analysis', icon: <Sparkles className="w-4 h-4" />, onClick: runAnalysis, disabled: !hasDatafeed };
   } else if (stage === 'analyzed') {
     cta = { label: 'Generate Conversion', icon: <ArrowRight className="w-4 h-4" />, onClick: () => dispatch({ type: 'ADVANCE', to: 'conversion' }) };
+  } else if (stage === 'conversion') {
+    cta = { label: 'Vai alla validazione', icon: <ArrowRight className="w-4 h-4" />, onClick: () => dispatch({ type: 'ADVANCE', to: 'validation' }), disabled: state.transformers.length === 0 };
+  } else if (stage === 'validation') {
+    cta = busy === 'finalizing'
+      ? { label: 'Generazione…', icon: <Loader2 className="w-4 h-4 animate-spin" />, onClick: () => {}, disabled: true }
+      : { label: 'Generate Virtual Collection', icon: <ShieldCheck className="w-4 h-4" />, onClick: finalize, disabled: !allValidated };
   }
 
   return (
