@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.107.0",
     "@carbon/icons-react": "^11.82.0",
     "@emotion/react": "11.14.0",
     "@emotion/react@11.14.0": "npm:@emotion/react@11.14.0",

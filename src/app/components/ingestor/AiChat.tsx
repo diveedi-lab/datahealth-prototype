@@ -6,8 +6,8 @@ interface ChatMsg { id: string; role: 'user' | 'assistant'; text: string; }
 let seq = 0;
 const nextId = () => `m${seq++}`;
 
-// Risposta simulata, sensibile al contesto (scope) e a parole chiave.
-function mockReply(text: string, scope: string): string {
+// Risposta di fallback (usata se la serverless function non è raggiungibile, es. in dev locale).
+function fallbackReply(text: string, scope: string): string {
   const q = text.toLowerCase();
   const pick = (s: string) => s;
   if (q.includes('incl') || q.includes('inclusion') || q.includes('criteri'))
@@ -42,16 +42,32 @@ export function AiChat({
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [msgs, typing]);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     const t = text.trim();
     if (!t || typing) return;
-    setMsgs((m) => [...m, { id: nextId(), role: 'user', text: t }]);
+    const userMsg: ChatMsg = { id: nextId(), role: 'user', text: t };
+    const history = [...msgs, userMsg].map((m) => ({ role: m.role, text: m.text }));
+    setMsgs((m) => [...m, userMsg]);
     setInput('');
     setTyping(true);
-    setTimeout(() => {
-      setMsgs((m) => [...m, { id: nextId(), role: 'assistant', text: mockReply(t, scope) }]);
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ messages: history, scope }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const reply = data && typeof data.reply === 'string' && data.reply.trim()
+        ? data.reply
+        : fallbackReply(t, scope);
+      setMsgs((m) => [...m, { id: nextId(), role: 'assistant', text: reply }]);
+    } catch {
+      // backend non disponibile (es. dev locale senza serverless) → risposta simulata
+      setMsgs((m) => [...m, { id: nextId(), role: 'assistant', text: fallbackReply(t, scope) }]);
+    } finally {
       setTyping(false);
-    }, 800);
+    }
   };
 
   return (
