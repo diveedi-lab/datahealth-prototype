@@ -28,13 +28,15 @@ export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
   }, [selectedNodeId, state.edges]);
 
   const rfNodes: Node[] = useMemo(
-    () => state.nodes.map((n) => ({
-      id: n.id,
-      type: n.type,
-      position: n.position,
-      selected: n.id === selectedNodeId,
-      data: { ...n.data, _dimmed: connectedIds ? !connectedIds.has(n.id) : false },
-    })),
+    () => state.nodes
+      .filter((n) => n.type !== 'contextNode') // i file di contesto vivono nel Source data, non nel canvas
+      .map((n) => ({
+        id: n.id,
+        type: n.type,
+        position: n.position,
+        selected: n.id === selectedNodeId,
+        data: { ...n.data, _dimmed: connectedIds ? !connectedIds.has(n.id) : false },
+      })),
     [state.nodes, connectedIds, selectedNodeId],
   );
 

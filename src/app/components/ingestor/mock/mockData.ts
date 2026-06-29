@@ -106,6 +106,11 @@ function vsVars(): Variable[] {
         distribution: { kind: 'date', min: '2025-01-10', max: '2026-01-15', bins: [
           { name: 'Q1', count: 2600 }, { name: 'Q2', count: 3100 }, { name: 'Q3', count: 3000 }, { name: 'Q4', count: 2660 },
         ] } } }),
+    v({ name: 'IMGREF', label: 'Image reference (file name)', type: 'string', completeness: 0.37,
+      description: 'Nome del file immagine DICOM associato alla visita — è la variabile che collega questa tabella al set "imaging/". Valorizzata solo nelle visite con imaging.',
+      issues: ['63% mancante (solo le visite con imaging)', '119 riferimenti senza file immagine corrispondente'],
+      stats: { missingPct: 63, uniqueCount: 4180, sampleValues: ['IMG_S0001_Baseline.dcm', 'IMG_S0002_Week12.dcm', 'IMG_S0017_Screening.dcm'],
+        topValues: [], distribution: { kind: 'none' } } }),
   ];
 }
 
@@ -185,13 +190,13 @@ const IMAGING_MATCH: FileMatch = {
     'IMG_S0118_V9.dcm — visita V9 non nella codelist VISIT',
     'IMG_UNKNOWN_BL.dcm — nome file malformato',
   ],
-  note: '119 immagini orfane: 71 subject inesistente, 38 visita ignota, 10 nome malformato.',
+  note: 'Match per nome file con la colonna VS.IMGREF. 119 immagini orfane: 71 subject inesistente, 38 visita ignota, 10 nome malformato.',
 };
 
 // ─── File di input (stadio upload) ───
 export const DEMO_FILES: CollectionFileInput[] = [
   { id: 'f-demog', bucket: 'datafeed', name: 'DEMOG.csv', sizeLabel: '0.4 MB', meta: '1.420 righe · 6 colonne' },
-  { id: 'f-vs', bucket: 'datafeed', name: 'VS.csv', sizeLabel: '2.1 MB', meta: '11.360 righe · 5 colonne' },
+  { id: 'f-vs', bucket: 'datafeed', name: 'VS.csv', sizeLabel: '2.1 MB', meta: '11.360 righe · 6 colonne' },
   { id: 'f-lb', bucket: 'datafeed', name: 'LB.csv', sizeLabel: '1.6 MB', meta: '8.560 righe · 5 colonne' },
   { id: 'f-incl', bucket: 'datafeed', name: 'INCL.csv', sizeLabel: '0.2 MB', meta: '1.420 righe · 7 colonne (wide)' },
   { id: 'f-img', bucket: 'file-collection', name: 'imaging/', sizeLabel: '38.6 GB', meta: '4.180 file DICOM', uploadedVia: 'cli' },
@@ -278,7 +283,7 @@ export function buildNodesFromFiles(files: CollectionFileInput[]): EditorNode[] 
   });
 }
 
-// ─── Edge generati dall'analisi (id-match + context-link) ───
+// ─── Edge generati dall'analisi (solo tra file dati; il contesto sta nel Source data) ───
 export function buildEdges(nodes: EditorNode[]): EditorEdge[] {
   const has = (id: string) => nodes.some((n) => n.id === id);
   const edges: EditorEdge[] = [];
@@ -288,17 +293,10 @@ export function buildEdges(nodes: EditorNode[]): EditorEdge[] {
       edges.push({ id: `e-subjid-${tgt}`, source: 'f-demog', target: tgt, kind: 'id-match', label: 'SUBJID' });
     }
   }
-  // imaging referenziato dai metadati VS (per nome file)
+  // imaging referenziato dalla colonna IMGREF di VS (per nome file)
   if (has('f-vs') && has('f-img')) {
     edges.push({ id: 'e-img-vs', source: 'f-vs', target: 'f-img', kind: 'id-match', label: 'IMGREF' });
   }
-  // context links (tratteggiati)
-  if (has('f-map')) {
-    if (has('f-incl')) edges.push({ id: 'e-ctx-map-incl', source: 'f-map', target: 'f-incl', kind: 'context-link', label: 'mapping' });
-    if (has('f-demog')) edges.push({ id: 'e-ctx-map-demog', source: 'f-map', target: 'f-demog', kind: 'context-link', label: 'mapping' });
-  }
-  if (has('f-proto') && has('f-incl')) edges.push({ id: 'e-ctx-proto-incl', source: 'f-proto', target: 'f-incl', kind: 'context-link', label: 'context' });
-  if (has('f-ecrf') && has('f-demog')) edges.push({ id: 'e-ctx-ecrf-demog', source: 'f-ecrf', target: 'f-demog', kind: 'context-link', label: 'context' });
   return edges;
 }
 
@@ -319,13 +317,15 @@ export function createDemoState(id: string): EditorState {
   return {
     schemaVersion: SCHEMA_VERSION,
     meta: { ...DEMO_META, id },
-    stage: 'base',
-    maxStageReached: 'base',
+    stage: 'source',
+    maxStageReached: 'source',
     uploads: DEMO_FILES,
     nodes,
     edges: [],
     transformers: [],
     busy: null,
+    analyzedAt: null,
+    analyzedSignature: null,
   };
 }
 
@@ -336,12 +336,19 @@ export function createEmptyState(id: string): EditorState {
       id, name: 'New Collection', description: 'Nuova collection — carica i file per iniziare.',
       targetDatabase: '—', createdBy: 'You',
     },
-    stage: 'upload',
-    maxStageReached: 'upload',
+    stage: 'source',
+    maxStageReached: 'source',
     uploads: [],
     nodes: [],
     edges: [],
     transformers: [],
     busy: null,
+    analyzedAt: null,
+    analyzedSignature: null,
   };
+}
+
+// Firma dei dati sorgente: cambia quando aggiungi/rimuovi file → marca l'analisi come "stale"
+export function sourceSignature(uploads: { id: string }[]): string {
+  return uploads.map((u) => u.id).sort().join('|');
 }

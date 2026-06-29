@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ArrowLeft, GitBranch, Sparkles } from 'lucide-react';
 import { useEditor } from './state/EditorContext';
-import { UploadStage } from './upload/UploadStage';
+import { SourceDataPanel } from './SourceDataPanel';
 import { FlowCanvas } from './canvas/FlowCanvas';
 import { FileDrillDown } from './panels/FileDrillDown';
 
 export function StageRouter() {
   const { state } = useEditor();
-  if (state.stage === 'upload') return <UploadStage />;
-  if (state.stage === 'base' || state.stage === 'analyzed') return <CanvasView />;
+  if (state.stage === 'source' || state.stage === 'analyzed') return <CanvasWorkspace />;
   return <ComingSoon />;
 }
 
-function CanvasView() {
+function CanvasWorkspace() {
   const { state } = useEditor();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [panelW, setPanelW] = useState(560);
   const selectedNode = state.nodes.find((n) => n.id === selectedId) ?? null;
+
+  const startResize = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startW = panelW;
+    const onMove = (ev: MouseEvent) => setPanelW(Math.min(920, Math.max(400, startW + (startX - ev.clientX))));
+    const onUp = () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      document.body.style.userSelect = '';
+    };
+    document.body.style.userSelect = 'none';
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  }, [panelW]);
 
   return (
     <div className="flex-1 flex min-h-0">
+      <SourceDataPanel selectedId={selectedId} onSelect={setSelectedId} />
+
       <div className="flex-1 min-w-0 relative">
         <FlowCanvas selectedNodeId={selectedNode ? selectedId : null} onSelectNode={setSelectedId} />
-        {state.stage === 'base' && (
+        {state.stage === 'source' && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-zinc-200 rounded-full shadow-sm text-xs text-zinc-600">
               <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-              Esegui <strong className="font-medium">Generate Analysis</strong> per attivare il drill-down dei file
+              Esegui <strong className="font-medium">Generate Analysis</strong> per collegare i file e attivare il drill-down
             </div>
           </div>
         )}
       </div>
+
       {selectedNode && (
-        <div className="w-[380px] shrink-0 animate-in slide-in-from-right duration-200">
-          <FileDrillDown node={selectedNode} onClose={() => setSelectedId(null)} />
+        <div className="shrink-0 flex animate-in slide-in-from-right duration-200" style={{ width: panelW }}>
+          <div
+            onMouseDown={startResize}
+            className="w-1.5 shrink-0 cursor-col-resize bg-transparent hover:bg-blue-200 transition-colors"
+            title="Trascina per ridimensionare"
+          />
+          <div className="flex-1 min-w-0">
+            <FileDrillDown node={selectedNode} onClose={() => setSelectedId(null)} />
+          </div>
         </div>
       )}
     </div>
@@ -46,7 +71,9 @@ function ComingSoon() {
       <div className="p-4 rounded-2xl bg-blue-50 mb-4">
         <GitBranch className="w-8 h-8 text-blue-600" />
       </div>
-      <h2 className="text-xl font-bold text-zinc-900 mb-1">Conversione verso standard — in arrivo</h2>
+      <h2 className="text-xl font-bold text-zinc-900 mb-1">
+        {state.stage === 'conversion' ? 'Conversione verso standard' : 'Fase'} — in arrivo
+      </h2>
       <p className="text-sm text-zinc-500 max-w-md mb-6">
         Qui sceglierai formato di origine e target (OMOP / CDISC / FHIR) e vedrai la mappa N:N con i
         nodi <strong>transformer</strong> (input a sinistra, output a destra, descrizione + codice) e la

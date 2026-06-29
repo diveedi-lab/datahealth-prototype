@@ -2,16 +2,23 @@ import type { XYPosition } from '@xyflow/react';
 
 // ─── Stadi del flusso ───
 export type FlowStage =
-  | 'upload'
-  | 'base'
+  | 'source'
   | 'analyzed'
   | 'conversion'
   | 'validation'
   | 'finalized';
 
 export const STAGE_ORDER: FlowStage[] = [
-  'upload', 'base', 'analyzed', 'conversion', 'validation', 'finalized',
+  'source', 'analyzed', 'conversion', 'validation', 'finalized',
 ];
+
+export const STAGE_LABEL: Record<FlowStage, string> = {
+  source: 'Source data',
+  analyzed: 'Analisi',
+  conversion: 'Conversione',
+  validation: 'Validazione',
+  finalized: 'Virtual Collection',
+};
 
 // ─── Categorie file e formati ───
 export type FileBucket = 'datafeed' | 'file-collection' | 'context';
@@ -150,6 +157,9 @@ export interface EditorState {
   transformers: Transformer[];
   viewport?: { x: number; y: number; zoom: number };
   busy: null | 'analyzing' | 'converting' | 'finalizing';
+  // Tracciamento analisi per il banner + staleness dello stepper
+  analyzedAt: number | null;          // timestamp dell'ultima analisi
+  analyzedSignature: string | null;   // firma dei dati sorgente al momento dell'analisi
 }
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
