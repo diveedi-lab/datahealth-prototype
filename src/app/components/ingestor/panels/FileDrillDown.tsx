@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import {
   X, Key, Type, Hash, Calendar, ToggleLeft, List as ListIcon,
-  AlertTriangle, CheckCircle2, Images, BookOpen, Search, Table, Lock,
+  AlertTriangle, CheckCircle2, Images, BookOpen, Search, Table, Lock, Sparkles,
 } from 'lucide-react';
 import type { EditorNode, Variable, VarType } from '../types';
 import { DistributionChart } from './DistributionChart';
+import { AiChat } from '../AiChat';
 
 const TYPE_ICON: Record<VarType, React.ReactNode> = {
   id: <Key className="w-3.5 h-3.5 text-amber-500" />,
@@ -23,23 +24,49 @@ export function FileDrillDown({
   showAnalysis: boolean;
   onClose: () => void;
 }) {
+  const [chat, setChat] = useState(false);
+  const d = node.data;
   return (
     <div className="flex flex-col h-full bg-white border-l border-zinc-200">
-      <Header node={node} onClose={onClose} />
-      <div className="flex-1 overflow-auto">
-        {node.type === 'tabularFile' && <TabularBody node={node} showAnalysis={showAnalysis} />}
-        {node.type === 'fileCollection' && <CollectionBody node={node} showAnalysis={showAnalysis} />}
-        {node.type === 'contextNode' && <ContextBody node={node} />}
+      <Header node={node} chatOpen={chat} onToggleChat={() => setChat((c) => !c)} onClose={onClose} />
+      <div className="flex-1 overflow-auto min-h-0">
+        {chat ? (
+          <AiChat
+            scope={`${d.label} · ${d.fileName}`}
+            hint="Chiedimi di questo elemento: variabili, valori, anomalie o cosa farci."
+            suggestions={
+              node.type === 'tabularFile'
+                ? ['Cosa rappresenta questo file?', 'Ci sono problemi di qualità?', 'Come va convertito?']
+                : node.type === 'fileCollection'
+                  ? ['Come sono collegate le immagini?', 'Cosa faccio con gli orfani?']
+                  : ['A cosa serve questo file di contesto?']
+            }
+            onClose={() => setChat(false)}
+          />
+        ) : (
+          <>
+            {node.type === 'tabularFile' && <TabularBody node={node} showAnalysis={showAnalysis} />}
+            {node.type === 'fileCollection' && <CollectionBody node={node} showAnalysis={showAnalysis} />}
+            {node.type === 'contextNode' && <ContextBody node={node} />}
+          </>
+        )}
       </div>
     </div>
   );
 }
 
-function Header({ node, onClose }: { node: EditorNode; onClose: () => void }) {
+function Header({
+  node, chatOpen, onToggleChat, onClose,
+}: {
+  node: EditorNode;
+  chatOpen: boolean;
+  onToggleChat: () => void;
+  onClose: () => void;
+}) {
   const d = node.data;
   const Icon = node.type === 'fileCollection' ? Images : node.type === 'contextNode' ? BookOpen : Table;
   return (
-    <div className="flex items-start gap-3 px-4 py-3 border-b border-zinc-200 shrink-0">
+    <div className="flex items-start gap-2 px-4 py-3 border-b border-zinc-200 shrink-0">
       <span className="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0" style={{ background: d.color }} />
       <div className="flex-1 min-w-0">
         <p className="font-mono text-sm font-semibold text-zinc-900 truncate flex items-center gap-1.5">
@@ -47,6 +74,15 @@ function Header({ node, onClose }: { node: EditorNode; onClose: () => void }) {
         </p>
         <p className="text-xs text-zinc-400 truncate">{d.fileName}</p>
       </div>
+      <button
+        onClick={onToggleChat}
+        className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-lg shrink-0 border transition-colors ${
+          chatOpen ? 'bg-violet-600 text-white border-violet-600' : 'text-violet-700 border-violet-200 hover:bg-violet-50'
+        }`}
+        title="Chat AI su questo elemento"
+      >
+        <Sparkles className="w-3.5 h-3.5" /> AI
+      </button>
       <button onClick={onClose} className="p-1 text-zinc-400 hover:text-zinc-700 rounded shrink-0" aria-label="Chiudi">
         <X className="w-4 h-4" />
       </button>

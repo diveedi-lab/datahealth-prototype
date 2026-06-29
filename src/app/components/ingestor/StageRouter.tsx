@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { ArrowLeft, GitBranch, Sparkles } from 'lucide-react';
 import { useEditor } from './state/EditorContext';
-import { SourceDataPanel } from './SourceDataPanel';
+import { LeftPanel } from './LeftPanel';
 import { FlowCanvas } from './canvas/FlowCanvas';
 import { FileDrillDown } from './panels/FileDrillDown';
 
@@ -34,7 +34,7 @@ function CanvasWorkspace() {
 
   return (
     <div className="flex-1 flex min-h-0">
-      <SourceDataPanel selectedId={selectedId} onSelect={setSelectedId} />
+      <LeftPanel selectedId={selectedId} onSelect={setSelectedId} />
 
       <div className="flex-1 min-w-0 relative">
         <FlowCanvas selectedNodeId={selectedNode ? selectedId : null} onSelectNode={setSelectedId} />
