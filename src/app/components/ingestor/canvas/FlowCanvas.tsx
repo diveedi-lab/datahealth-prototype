@@ -16,16 +16,19 @@ interface FlowCanvasProps {
 export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
   const { state, dispatch } = useEditor();
 
+  // In "Source data" non si mostrano relazioni né analisi (vista grezza)
+  const showAnalysis = state.stage !== 'source';
+
   // Insieme dei nodi connessi al selezionato (per il dimming degli altri)
   const connectedIds = useMemo(() => {
-    if (!selectedNodeId) return null;
+    if (!selectedNodeId || !showAnalysis) return null;
     const set = new Set<string>([selectedNodeId]);
     for (const e of state.edges) {
       if (e.source === selectedNodeId) set.add(e.target);
       if (e.target === selectedNodeId) set.add(e.source);
     }
     return set;
-  }, [selectedNodeId, state.edges]);
+  }, [selectedNodeId, state.edges, showAnalysis]);
 
   const rfNodes: Node[] = useMemo(
     () => state.nodes
@@ -35,13 +38,13 @@ export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
         type: n.type,
         position: n.position,
         selected: n.id === selectedNodeId,
-        data: { ...n.data, _dimmed: connectedIds ? !connectedIds.has(n.id) : false },
+        data: { ...n.data, analyzed: n.data.analyzed && showAnalysis, _dimmed: connectedIds ? !connectedIds.has(n.id) : false },
       })),
-    [state.nodes, connectedIds, selectedNodeId],
+    [state.nodes, connectedIds, selectedNodeId, showAnalysis],
   );
 
   const rfEdges: Edge[] = useMemo(
-    () => state.edges.map((e) => ({
+    () => (showAnalysis ? state.edges : []).map((e) => ({
       id: e.id,
       source: e.source,
       target: e.target,
@@ -53,7 +56,7 @@ export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
       labelStyle: { fontSize: 10, fill: '#71717a' },
       labelBgStyle: { fill: '#ffffff', fillOpacity: 0.8 },
     })),
-    [state.edges],
+    [state.edges, showAnalysis],
   );
 
   const onNodesChange = useCallback(
@@ -67,11 +70,9 @@ export function FlowCanvas({ selectedNodeId, onSelectNode }: FlowCanvasProps) {
     [dispatch],
   );
 
+  // Sempre cliccabile: apre il drill-down (anteprima nei file grezzi, analisi se disponibile)
   const onNodeClick: NodeMouseHandler = useCallback(
-    (_, node) => {
-      const d = node.data as FileNodeData;
-      if (d.analyzed) onSelectNode(node.id);
-    },
+    (_, node) => onSelectNode(node.id),
     [onSelectNode],
   );
 

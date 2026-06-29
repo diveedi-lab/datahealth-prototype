@@ -42,7 +42,7 @@ function CanvasWorkspace() {
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-zinc-200 rounded-full shadow-sm text-xs text-zinc-600">
               <Sparkles className="w-3.5 h-3.5 text-blue-500" />
-              Esegui <strong className="font-medium">Generate Analysis</strong> per collegare i file e attivare il drill-down
+              Clicca un file per l'anteprima · esegui <strong className="font-medium">Generate Analysis</strong> per relazioni, distribuzioni e qualità
             </div>
           </div>
         )}
@@ -56,7 +56,11 @@ function CanvasWorkspace() {
             title="Trascina per ridimensionare"
           />
           <div className="flex-1 min-w-0">
-            <FileDrillDown node={selectedNode} onClose={() => setSelectedId(null)} />
+            <FileDrillDown
+              node={selectedNode}
+              showAnalysis={state.stage !== 'source' && selectedNode.data.analyzed}
+              onClose={() => setSelectedId(null)}
+            />
           </div>
         </div>
       )}

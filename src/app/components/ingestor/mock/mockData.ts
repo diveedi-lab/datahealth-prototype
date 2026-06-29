@@ -193,6 +193,77 @@ const IMAGING_MATCH: FileMatch = {
   note: 'Match per nome file con la colonna VS.IMGREF. 119 immagini orfane: 71 subject inesistente, 38 visita ignota, 10 nome malformato.',
 };
 
+// ─── Anteprime dei dati grezzi (per esplorare i file originali nel Source data) ───
+const DEMOG_PREVIEW: Array<Record<string, string | number>> = [
+  { SUBJID: 'S0001', AGE: 62, SEX: 'F', RACE: 'White', ENROLDT: '2025-02-14', SITE_FREETEXT: 'Milano - Niguarda' },
+  { SUBJID: 'S0002', AGE: 57, SEX: 'M', RACE: 'White', ENROLDT: '2025-02-18', SITE_FREETEXT: 'Roma Gemelli' },
+  { SUBJID: 'S0003', AGE: 71, SEX: 'F', RACE: 'Asian', ENROLDT: '2025-03-02', SITE_FREETEXT: 'Site 12' },
+  { SUBJID: 'S0004', AGE: 34, SEX: 'M', RACE: 'Black', ENROLDT: '2025-03-09', SITE_FREETEXT: '' },
+  { SUBJID: 'S0005', AGE: 49, SEX: 'F', RACE: 'White', ENROLDT: '2025-03-15', SITE_FREETEXT: 'Napoli Federico II' },
+  { SUBJID: 'S0006', AGE: 66, SEX: 'M', RACE: 'Other', ENROLDT: '2025-03-21', SITE_FREETEXT: 'Milano - Niguarda' },
+];
+
+const VS_PREVIEW: Array<Record<string, string | number>> = [
+  { SUBJID: 'S0001', VSTESTCD: 'SYSBP', VSORRES: 128, VISIT: 'Baseline', VSDT: '2025-02-20', IMGREF: 'IMG_S0001_Baseline.dcm' },
+  { SUBJID: 'S0001', VSTESTCD: 'DIABP', VSORRES: 82, VISIT: 'Baseline', VSDT: '2025-02-20', IMGREF: '' },
+  { SUBJID: 'S0001', VSTESTCD: 'HR', VSORRES: 72, VISIT: 'Baseline', VSDT: '2025-02-20', IMGREF: '' },
+  { SUBJID: 'S0002', VSTESTCD: 'SYSBP', VSORRES: 141, VISIT: 'Screening', VSDT: '2025-02-19', IMGREF: 'IMG_S0002_Screening.dcm' },
+  { SUBJID: 'S0002', VSTESTCD: 'TEMP', VSORRES: 36.7, VISIT: 'Week 12', VSDT: '2025-05-14', IMGREF: 'IMG_S0002_Week12.dcm' },
+  { SUBJID: 'S0003', VSTESTCD: 'HR', VSORRES: 88, VISIT: 'Baseline', VSDT: '2025-03-10', IMGREF: '' },
+];
+
+const LB_PREVIEW: Array<Record<string, string | number>> = [
+  { SUBJID: 'S0001', LBTESTCD: 'GLUC', LBORRES: 98, LBORRESU: 'mg/dL', custom_biomarker: 1.24 },
+  { SUBJID: 'S0001', LBTESTCD: 'CHOL', LBORRES: 187, LBORRESU: 'mg/dL', custom_biomarker: '' },
+  { SUBJID: 'S0002', LBTESTCD: 'HDL', LBORRES: 54, LBORRESU: 'mg/dL', custom_biomarker: 0.88 },
+  { SUBJID: 'S0002', LBTESTCD: 'TROP', LBORRES: 0.04, LBORRESU: 'ng/mL', custom_biomarker: 2.05 },
+  { SUBJID: 'S0003', LBTESTCD: 'LDL', LBORRES: 122, LBORRESU: 'mg/dL', custom_biomarker: '' },
+  { SUBJID: 'S0004', LBTESTCD: 'GLUC', LBORRES: 110, LBORRESU: 'mg/dL', custom_biomarker: 1.51 },
+];
+
+const INCL_PREVIEW: Array<Record<string, string | number>> = [
+  { SUBJID: 'S0001', INCL01: 'Y', INCL02: 'Y', INCL03: 'Y', INCL04: 'Y', INCL05: 'Y', INCL06: 'Y' },
+  { SUBJID: 'S0002', INCL01: 'Y', INCL02: 'Y', INCL03: 'Y', INCL04: 'N', INCL05: 'Y', INCL06: 'Y' },
+  { SUBJID: 'S0003', INCL01: 'Y', INCL02: 'Y', INCL03: 'N', INCL04: 'Y', INCL05: 'Y', INCL06: 'N' },
+  { SUBJID: 'S0004', INCL01: 'N', INCL02: 'Y', INCL03: 'Y', INCL04: 'Y', INCL05: 'N', INCL06: 'Y' },
+  { SUBJID: 'S0005', INCL01: 'Y', INCL02: 'Y', INCL03: 'Y', INCL04: 'Y', INCL05: 'Y', INCL06: 'Y' },
+  { SUBJID: 'S0006', INCL01: 'Y', INCL02: 'Y', INCL03: 'Y', INCL04: 'N', INCL05: 'Y', INCL06: 'Y' },
+];
+
+const IMAGING_FILES: string[] = [
+  'IMG_S0001_Baseline.dcm', 'IMG_S0001_Week12.dcm', 'IMG_S0002_Screening.dcm',
+  'IMG_S0002_Week12.dcm', 'IMG_S0003_Baseline.dcm', 'IMG_S0005_Baseline.dcm',
+  'IMG_S0412_V3.dcm  (orfano)', 'IMG_UNKNOWN_BL.dcm  (malformato)',
+];
+
+const MAPPING_PREVIEW = {
+  headers: ['source_col', 'target_var', 'target_table', 'note'],
+  rows: [
+    ['INCL01', 'IETESTCD=INCL01', 'CDISC IE', 'wide→long'],
+    ['SEX', 'SEX', 'CDISC DM', 'codelist M/F'],
+    ['RACE', 'race_concept_id', 'OMOP person', 'map a concept'],
+    ['AGE', 'year_of_birth', 'OMOP person', 'derivata'],
+    ['SITE_FREETEXT', '—', '—', 'drop (non normalizzato)'],
+  ],
+};
+
+const PROTOCOL_PREVIEW = `PROTOCOLLO CARDIO-2024 v3 — Criteri di inclusione
+INCL01  Età ≥ 18 anni
+INCL02  Consenso informato firmato
+INCL03  Diagnosi confermata di coronaropatia (CAD)
+INCL04  Frazione di eiezione (LVEF) ≥ 40%
+INCL05  Nessun infarto miocardico nei 30 giorni precedenti
+INCL06  Capacità di partecipare a tutte le visite
+
+Codelist VISIT: Screening, Baseline, Week 4, Week 12 …`;
+
+const ECRF_PREVIEW = `eCRF annotato — modulo Demografia (pag. 2)
+[ Subject ID ] → variabile SUBJID (identificativo univoco)
+[ Date of birth / Age ] → AGE (anni compiuti all'arruolamento)
+[ Sex ] → SEX  (M / F)
+[ Race ] → RACE (codelist standard)
+[ Enrollment date ] → ENROLDT (YYYY-MM-DD) …`;
+
 // ─── File di input (stadio upload) ───
 export const DEMO_FILES: CollectionFileInput[] = [
   { id: 'f-demog', bucket: 'datafeed', name: 'DEMOG.csv', sizeLabel: '0.4 MB', meta: '1.420 righe · 6 colonne' },
@@ -216,45 +287,45 @@ const NODE_REGISTRY: Record<string, NodeSpec> = {
   'DEMOG.csv': {
     type: 'tabularFile', position: { x: 60, y: 300 },
     build: (i) => ({ bucket: 'datafeed', label: 'DEMOG', fileName: i.name, color: COLOR.demog, analyzed: false,
-      rowCount: 1420, completeness: 0.97, variables: demogVars() }),
+      rowCount: 1420, completeness: 0.97, variables: demogVars(), previewRows: DEMOG_PREVIEW }),
   },
   'VS.csv': {
     type: 'tabularFile', position: { x: 400, y: 80 },
     build: (i) => ({ bucket: 'datafeed', label: 'VS', fileName: i.name, color: COLOR.vs, analyzed: false,
-      rowCount: 11360, completeness: 0.99, variables: vsVars() }),
+      rowCount: 11360, completeness: 0.99, variables: vsVars(), previewRows: VS_PREVIEW }),
   },
   'LB.csv': {
     type: 'tabularFile', position: { x: 400, y: 300 },
     build: (i) => ({ bucket: 'datafeed', label: 'LB', fileName: i.name, color: COLOR.lb, analyzed: false,
-      rowCount: 8560, completeness: 0.93, variables: lbVars() }),
+      rowCount: 8560, completeness: 0.93, variables: lbVars(), previewRows: LB_PREVIEW }),
   },
   'INCL.csv': {
     type: 'tabularFile', position: { x: 400, y: 520 },
     build: (i) => ({ bucket: 'datafeed', label: 'INCL', fileName: i.name, color: COLOR.incl, analyzed: false,
-      rowCount: 1420, completeness: 1, variables: inclVars() }),
+      rowCount: 1420, completeness: 1, variables: inclVars(), previewRows: INCL_PREVIEW }),
   },
   'imaging/': {
     type: 'fileCollection', position: { x: 760, y: 80 },
     build: (i) => ({ bucket: 'file-collection', label: 'Imaging set', fileName: i.name, color: COLOR.imaging, analyzed: false,
-      memberCount: 4180, totalSizeGB: 38.6, fileKind: 'DICOM', namingPattern: 'IMG_<SUBJID>_<VISIT>.dcm', match: IMAGING_MATCH }),
+      memberCount: 4180, totalSizeGB: 38.6, fileKind: 'DICOM', namingPattern: 'IMG_<SUBJID>_<VISIT>.dcm', match: IMAGING_MATCH, previewFiles: IMAGING_FILES }),
   },
   'var_mapping.xlsx': {
     type: 'contextNode', position: { x: 60, y: 60 },
     build: (i) => ({ bucket: 'context', label: 'Variable mapping', fileName: i.name, color: COLOR.context, analyzed: false,
       contextType: 'variable-mapping', role: 'Mappa le colonne origine REDCap verso le variabili CDISC IE/DM.',
-      helps: 'INCL, DEMOG' }),
+      helps: 'INCL, DEMOG', previewTable: MAPPING_PREVIEW }),
   },
   'clinical_protocol_v3.pdf': {
     type: 'contextNode', position: { x: 60, y: 560 },
     build: (i) => ({ bucket: 'context', label: 'Clinical protocol', fileName: i.name, color: COLOR.context, analyzed: false,
       contextType: 'clinical-context', role: 'Definizione testuale dei 6 criteri di inclusione e della codelist VISIT.',
-      helps: 'INCL, VS' }),
+      helps: 'INCL, VS', previewText: PROTOCOL_PREVIEW }),
   },
   'annotated_eCRF.pdf': {
     type: 'contextNode', position: { x: 760, y: 320 },
     build: (i) => ({ bucket: 'context', label: 'Annotated eCRF', fileName: i.name, color: COLOR.context, analyzed: false,
       contextType: 'annotated-ecrf', role: 'eCRF annotato che lega i campi del form ai nomi variabile.',
-      helps: 'DEMOG, VS, LB' }),
+      helps: 'DEMOG, VS, LB', previewText: ECRF_PREVIEW }),
   },
 };
 

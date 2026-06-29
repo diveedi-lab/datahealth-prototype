@@ -88,6 +88,11 @@ export interface FileNodeData {
   contextType?: string;
   role?: string;
   helps?: string;
+  // anteprima dei dati grezzi (disponibile anche prima dell'analisi, nello stadio Source data)
+  previewRows?: Array<Record<string, string | number>>;  // righe d'esempio per i file tabulari
+  previewFiles?: string[];                                 // nomi file d'esempio per le file-collection
+  previewText?: string;                                    // estratto testuale per i file di contesto
+  previewTable?: { headers: string[]; rows: string[][] };  // tabella d'esempio (es. mapping)
 }
 
 // ─── File "caricato" (stadio upload, prima di diventare nodo) ───
