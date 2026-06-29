@@ -1,44 +1,46 @@
 import React, { useState } from 'react';
-import { X, Sparkles, Search, Loader2, BarChart3, Table2 } from 'lucide-react';
+import { Loader2, BarChart3, Table2, Bookmark, BookmarkCheck, Network } from 'lucide-react';
 import type { ExploreQuery } from '../types';
 import { SqlBlock, ResultTableView } from '../../shared/query';
 import { getCollection } from '../mock/mockCatalog';
 
-export function QueryDrillDown({
-  query, chatOpen, onToggleChat, onClose, onVisualize,
+export function QueryArtifactView({
+  query, saved, onVisualize, onSave, onOpenStructure,
 }: {
   query: ExploreQuery;
-  chatOpen: boolean;
-  onToggleChat: () => void;
-  onClose: () => void;
+  saved?: boolean;
   onVisualize: (variable: string) => void;
+  onSave: () => void;
+  onOpenStructure: () => void;
 }) {
   const [activeTab, setActiveTab] = useState(0);
   const safeTab = Math.min(activeTab, Math.max(0, query.results.length - 1));
   const result = query.results[safeTab];
 
-  // variabili suggerite per la visualizzazione (dalle collection della query)
   const suggested = query.collections
     .flatMap((cid) => getCollection(cid)?.richVariables ?? [])
     .slice(0, 6);
 
   return (
-    <div className="flex flex-col h-full bg-white border-l border-zinc-200">
-      <div className="flex items-start gap-2 px-4 py-3 border-b border-zinc-200 shrink-0">
-        <Search className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-zinc-900 truncate">{query.title}</p>
-          <p className="text-xs text-zinc-400 truncate">
-            {query.collections.map((c) => getCollection(c)?.name ?? c).join(', ')}
-          </p>
-        </div>
+    <div className="flex flex-col h-full min-h-0">
+      <div className="px-3 pt-3 pb-2 flex items-center gap-2 shrink-0 border-b border-zinc-100">
+        <p className="text-xs text-zinc-400 truncate flex-1">
+          {query.collections.map((c) => getCollection(c)?.name ?? c).join(', ')}
+        </p>
         <button
-          onClick={onToggleChat}
-          className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-lg shrink-0 border transition-colors ${chatOpen ? 'bg-violet-600 text-white border-violet-600' : 'text-violet-700 border-violet-200 hover:bg-violet-50'}`}
+          onClick={onOpenStructure}
+          className="flex items-center gap-1 text-[11px] font-medium text-zinc-600 border border-zinc-200 hover:bg-zinc-50 px-2 py-1 rounded-lg"
         >
-          <Sparkles className="w-3.5 h-3.5" /> AI
+          <Network className="w-3.5 h-3.5" /> Struttura
         </button>
-        <button onClick={onClose} className="p-1 text-zinc-400 hover:text-zinc-700 rounded shrink-0"><X className="w-4 h-4" /></button>
+        <button
+          onClick={onSave}
+          disabled={saved}
+          className={`flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-lg border transition-colors ${saved ? 'text-emerald-600 border-emerald-200 bg-emerald-50' : 'text-blue-700 border-blue-200 hover:bg-blue-50'}`}
+        >
+          {saved ? <BookmarkCheck className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}
+          {saved ? 'Salvata' : 'Salva'}
+        </button>
       </div>
 
       <div className="flex-1 overflow-auto min-h-0 p-3 space-y-3">
@@ -57,7 +59,7 @@ export function QueryDrillDown({
         ) : query.status === 'empty' ? (
           <p className="text-xs text-amber-600 text-center py-8">La query non ha restituito risultati.</p>
         ) : (
-          <div className="border border-zinc-200 rounded-xl overflow-hidden flex flex-col" style={{ maxHeight: 360 }}>
+          <div className="border border-zinc-200 rounded-xl overflow-hidden flex flex-col" style={{ maxHeight: 380 }}>
             {query.results.length > 1 && (
               <div className="flex items-center overflow-x-auto border-b border-zinc-200 shrink-0">
                 {query.results.map((t, i) => (

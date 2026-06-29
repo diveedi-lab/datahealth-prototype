@@ -1,13 +1,12 @@
-import type { XYPosition } from '@xyflow/react';
 import type { Variable } from '../ingestor/types';
 import type { ResultTable } from '../shared/query';
 
-export const EXPLORE_SCHEMA_VERSION = 1;
+export const EXPLORE_SCHEMA_VERSION = 2;
 
 // ─── Scope: l'insieme di lavoro (collection + opzionale query di partenza) ───
 export interface ScopeState {
   collections: string[];   // id delle collection (es. 'cardio-2024')
-  queryId: string | null;  // id di una query nel workspace usata come base
+  queryId: string | null;  // id di una query-artifact usata come base
 }
 
 // ─── Catalogo collection ───
@@ -41,7 +40,7 @@ export interface ExploreCollection {
   id: string;
   name: string;
   description: string;
-  color: string;        // hex per il canvas
+  color: string;        // hex per i grafici/ERD
   dotClass: string;     // classe tailwind per il pallino (riuso DB_COLORS)
   targetDB: string;
   tableCount: number;
@@ -69,14 +68,28 @@ export interface ExploreQuery {
 }
 
 // ─── Chart / analisi ───
-export type ChartType = 'bar' | 'line' | 'pie' | 'histogram' | 'kpi';
+export type ChartType =
+  | 'bar' | 'line' | 'pie' | 'histogram' | 'kpi'                 // monovariati
+  | 'grouped' | 'stacked' | 'multiline' | 'scatter' | 'crosstab'; // multi-serie / incroci
 export type AnalysisType = 'summary_stats' | 'missingness' | 'correlation' | 'crosstab' | 'outliers';
 
 export interface ChartDatum { name: string; value: number; }
+// riga multi-serie: { name: 'Site A', F: 120, M: 100 }
+export interface SeriesRow { name: string; [series: string]: string | number; }
+export interface ScatterPoint { x: number; y: number; label?: string; group?: string; }
 
 export interface ChartSpec {
   chartType: ChartType;
+  // monovariato (sempre valorizzato per retro-compatibilità):
   data: ChartDatum[];
+  // multi-serie (grouped/stacked/multiline/crosstab):
+  series?: string[];          // es. ['F','M'] o ['Mild','Moderate','Severe']
+  rows?: SeriesRow[];         // es. [{name:'18–30', F:80, M:60}, …]
+  stacked?: boolean;
+  // scatter / correlazione:
+  points?: ScatterPoint[];
+  xLabel?: string;
+  yLabel?: string;
   unit?: string;
   kpi?: { value: string; label: string; sub?: string };
 }
@@ -92,12 +105,43 @@ export interface ExploreChart {
   chartType: ChartType;
   variable?: string;
   groupBy?: string;
+  secondVariable?: string;
   analysis?: AnalysisType;
   source: ChartSource;
   spec: ChartSpec;
-  altSpecs?: Record<ChartType, ChartSpec>;  // varianti per i toggle
+  altSpecs?: Partial<Record<ChartType, ChartSpec>>;  // varianti per i toggle
   insight: string;
   createdAt: number;
+}
+
+// ─── Artifact (unione discriminata: grafico | query) ───
+export type ArtifactKind = 'chart' | 'query';
+
+export interface ChartArtifact {
+  id: string;
+  kind: 'chart';
+  title: string;
+  createdAt: number;
+  chart: ExploreChart;
+}
+
+export interface QueryArtifact {
+  id: string;
+  kind: 'query';
+  title: string;
+  createdAt: number;
+  query: ExploreQuery;
+  saved?: boolean;
+  savedId?: string;
+}
+
+export type Artifact = ChartArtifact | QueryArtifact;
+
+// Riferimento leggero (per switcher e card)
+export interface ArtifactRef {
+  id: string;
+  kind: ArtifactKind;
+  title: string;
 }
 
 // ─── Chat ───
@@ -106,6 +150,7 @@ export interface ExploreChatMsg {
   role: 'user' | 'assistant';
   text: string;
   actionsSummary?: string;
+  artifactIds?: string[];   // artifact creati da questo messaggio (card inline)
 }
 
 // ─── Stato completo (serializzato in localStorage) ───
@@ -113,13 +158,14 @@ export interface ExploreState {
   schemaVersion: number;
   id: string;
   scope: ScopeState;
-  queries: Record<string, ExploreQuery>;
-  charts: Record<string, ExploreChart>;
-  positions: Record<string, XYPosition>;  // id nodo → posizione (collection/query/chart)
+  artifacts: Record<string, Artifact>;
+  artifactOrder: string[];
+  currentArtifactId: string | null;
   chatLog: ExploreChatMsg[];
-  selectedId: string | null;
   busy: boolean;
 }
 
-// Tipo del nodo logico sul canvas (derivato dallo stato)
-export type ExploreNodeKind = 'collection' | 'query' | 'chart';
+// Richiesta di apertura dello Structure Explorer
+export type StructureRequest =
+  | { mode: 'collection'; collectionId: string }
+  | { mode: 'query'; queryId: string };

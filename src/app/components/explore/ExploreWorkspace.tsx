@@ -1,16 +1,14 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { Compass } from 'lucide-react';
-import type { ExploreState, ChartType } from './types';
+import React, { useState, useCallback, useEffect } from 'react';
+import type { ExploreState, ChartType, StructureRequest, ArtifactRef } from './types';
 import { ExploreProvider, useExplore } from './state/ExploreContext';
-import { ExploreToolbar } from './ExploreToolbar';
-import { ExploreCanvas } from './canvas/ExploreCanvas';
-import { SourcesPanel } from './panels/SourcesPanel';
-import { CollectionDrillDown } from './panels/CollectionDrillDown';
-import { QueryDrillDown } from './panels/QueryDrillDown';
-import { ChartDrillDown } from './panels/ChartDrillDown';
+import { ExploreTopBar } from './ExploreToolbar';
 import { ExploreChat } from './chat/ExploreChat';
+import { ArtifactPanel } from './artifacts/ArtifactPanel';
+import { ScopePicker } from './ScopePicker';
+import { StructureExplorer } from './structure/StructureExplorer';
 import { getCollection } from './mock/mockCatalog';
-import { makeChartFromVariable } from './factory';
+import { makeChartFromVariable, makeChartArtifact } from './factory';
+import { saveQueryArtifact } from './saveQuery';
 
 export function ExploreWorkspace({
   explorationId, seed, onClose,
@@ -26,30 +24,41 @@ export function ExploreWorkspace({
   );
 }
 
+function useIsNarrow() {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const mq = window.matchMedia('(max-width: 900px)');
+    const apply = () => setNarrow(mq.matches);
+    apply();
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
+  return narrow;
+}
+
 function WorkspaceShell({ onClose }: { onClose: () => void }) {
   const { state, dispatch } = useExplore();
-  const empty = state.scope.collections.length === 0 && Object.keys(state.queries).length === 0;
-  const [chatOpen, setChatOpen] = useState(empty);
-  const [panelW, setPanelW] = useState(560);
+  const needsScope = state.scope.collections.length === 0;
+  const narrow = useIsNarrow();
 
-  const selectedId = state.selectedId;
-  const select = useCallback((id: string | null) => dispatch({ type: 'SELECT_NODE', id }), [dispatch]);
+  const [panelW, setPanelW] = useState(620);
+  const [structure, setStructure] = useState<StructureRequest | null>(null);
+  const [scopeDialog, setScopeDialog] = useState(false);
 
-  const sel = useMemo(() => {
-    const id = selectedId;
-    if (!id) return null;
-    if (state.queries[id]) return { kind: 'query' as const, query: state.queries[id] };
-    if (state.charts[id]) return { kind: 'chart' as const, chart: state.charts[id] };
-    const c = getCollection(id);
-    if (c && state.scope.collections.includes(id)) return { kind: 'collection' as const, collection: c };
-    return null;
-  }, [selectedId, state.queries, state.charts, state.scope.collections]);
+  const active = state.currentArtifactId ? state.artifacts[state.currentArtifactId] : null;
+  const list: ArtifactRef[] = state.artifactOrder
+    .map((id) => state.artifacts[id])
+    .filter(Boolean)
+    .map((a) => ({ id: a.id, kind: a.kind, title: a.title }));
+
+  const select = useCallback((id: string | null) => dispatch({ type: 'SELECT_ARTIFACT', id }), [dispatch]);
 
   const startResize = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
     const startW = panelW;
-    const onMove = (ev: MouseEvent) => setPanelW(Math.min(920, Math.max(400, startW + (startX - ev.clientX))));
+    const onMove = (ev: MouseEvent) => setPanelW(Math.min(960, Math.max(420, startW + (startX - ev.clientX))));
     const onUp = () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
@@ -60,99 +69,79 @@ function WorkspaceShell({ onClose }: { onClose: () => void }) {
     window.addEventListener('mouseup', onUp);
   }, [panelW]);
 
-  // Crea un grafico da una variabile e lo seleziona
-  const visualizeFromCollection = (collectionId: string, variable: string) => {
-    const chart = makeChartFromVariable({
-      title: '', variable, source: { kind: 'collection', collectionId }, collections: [collectionId],
-    });
-    if (chart) { dispatch({ type: 'CREATE_CHART', chart }); select(chart.id); }
+  // azioni sull'artifact attivo
+  const onChangeType = (type: ChartType) => {
+    if (active?.kind !== 'chart') return;
+    const spec = active.chart.altSpecs?.[type];
+    if (spec) dispatch({ type: 'SET_CHART_SPEC', id: active.id, chartType: type, spec });
   };
-  const visualizeFromQuery = (queryId: string, collections: string[], variable: string) => {
+  const onVisualize = (variable: string) => {
+    if (active?.kind !== 'query') return;
     const chart = makeChartFromVariable({
-      title: '', variable, source: { kind: 'query', queryId }, collections,
+      title: '', variable, source: { kind: 'query', queryId: active.id }, collections: active.query.collections,
     });
-    if (chart) { dispatch({ type: 'CREATE_CHART', chart }); select(chart.id); }
+    if (chart) dispatch({ type: 'CREATE_ARTIFACT', artifact: makeChartArtifact(chart) });
+  };
+  const onSave = () => {
+    if (active?.kind !== 'query' || active.saved) return;
+    const saved = saveQueryArtifact(active);
+    dispatch({ type: 'MARK_SAVED', id: active.id, savedId: saved.id });
   };
 
-  const chartSourceLabel = (s: typeof sel) => {
-    if (s?.kind !== 'chart') return '';
-    const src = s.chart.source;
-    if (src.kind === 'query') return state.queries[src.queryId]?.title ?? 'query';
+  const sourceLabel = (() => {
+    if (active?.kind !== 'chart') return '';
+    const src = active.chart.source;
+    if (src.kind === 'query') return state.artifacts[src.queryId]?.title ?? 'query';
     return getCollection(src.collectionId)?.name ?? 'collection';
-  };
+  })();
 
   return (
     <div className="h-screen w-screen flex flex-col bg-zinc-50 overflow-hidden">
-      <ExploreToolbar onClose={onClose} chatOpen={chatOpen} onToggleChat={() => setChatOpen((o) => !o)} />
+      <ExploreTopBar onClose={onClose} onOpenStructure={setStructure} onEditScope={() => setScopeDialog(true)} />
 
-      <div className="flex-1 flex min-h-0">
-        <SourcesPanel onSelectCollection={select} />
-
-        <div className="flex-1 min-w-0 relative">
-          <ExploreCanvas selectedId={selectedId} onSelect={select} />
-          {empty && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center max-w-sm px-6">
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
-                  <Compass className="w-7 h-7 text-blue-500" />
-                </div>
-                <p className="text-sm font-semibold text-zinc-700 mb-1">Inizia da una conversazione</p>
-                <p className="text-xs text-zinc-400">
-                  Scegli le collection dal pannello a sinistra oppure chiedi all’AI di impostare lo scope, creare query e grafici sul canvas.
-                </p>
-              </div>
-            </div>
+      {needsScope ? (
+        <ScopePicker
+          variant="landing"
+          selected={state.scope.collections}
+          onConfirm={(collections) => dispatch({ type: 'SET_SCOPE', collections })}
+          onExploreStructure={(collectionId) => setStructure({ mode: 'collection', collectionId })}
+        />
+      ) : (
+        <div className="relative flex-1 min-h-0 flex">
+          <div className="flex-1 min-w-0 h-full">
+            <ExploreChat onOpenArtifact={select} />
+          </div>
+          {active && (
+            <ArtifactPanel
+              list={list}
+              active={active}
+              width={panelW}
+              fullScreen={narrow}
+              onStartResize={startResize}
+              onSelect={select}
+              onClose={() => select(null)}
+              sourceLabel={sourceLabel}
+              onChangeType={onChangeType}
+              onVisualize={onVisualize}
+              onSave={onSave}
+              onOpenStructure={setStructure}
+            />
           )}
         </div>
+      )}
 
-        {chatOpen && (
-          <div className="w-[360px] shrink-0 border-l border-zinc-200 animate-in slide-in-from-right duration-200">
-            <ExploreChat onClose={() => setChatOpen(false)} />
-          </div>
-        )}
+      {scopeDialog && (
+        <ScopePicker
+          variant="dialog"
+          open={scopeDialog}
+          onOpenChange={setScopeDialog}
+          selected={state.scope.collections}
+          onConfirm={(collections) => { dispatch({ type: 'SET_SCOPE', collections }); setScopeDialog(false); }}
+          onExploreStructure={(collectionId) => { setScopeDialog(false); setStructure({ mode: 'collection', collectionId }); }}
+        />
+      )}
 
-        {sel && (
-          <div className="shrink-0 flex animate-in slide-in-from-right duration-200" style={{ width: panelW }}>
-            <div onMouseDown={startResize} className="w-1.5 shrink-0 cursor-col-resize bg-transparent hover:bg-blue-200 transition-colors" title="Trascina per ridimensionare" />
-            <div className="flex-1 min-w-0">
-              {sel.kind === 'collection' && (
-                <CollectionDrillDown
-                  key={sel.collection.id}
-                  collection={sel.collection}
-                  chatOpen={chatOpen}
-                  onToggleChat={() => setChatOpen((c) => !c)}
-                  onClose={() => select(null)}
-                  onVisualize={(v) => visualizeFromCollection(sel.collection.id, v)}
-                />
-              )}
-              {sel.kind === 'query' && (
-                <QueryDrillDown
-                  key={sel.query.id}
-                  query={sel.query}
-                  chatOpen={chatOpen}
-                  onToggleChat={() => setChatOpen((c) => !c)}
-                  onClose={() => select(null)}
-                  onVisualize={(v) => visualizeFromQuery(sel.query.id, sel.query.collections, v)}
-                />
-              )}
-              {sel.kind === 'chart' && (
-                <ChartDrillDown
-                  key={sel.chart.id}
-                  chart={sel.chart}
-                  sourceLabel={chartSourceLabel(sel)}
-                  chatOpen={chatOpen}
-                  onToggleChat={() => setChatOpen((c) => !c)}
-                  onClose={() => select(null)}
-                  onChangeType={(type: ChartType) => {
-                    const spec = sel.chart.altSpecs?.[type];
-                    if (spec) dispatch({ type: 'UPDATE_CHART', id: sel.chart.id, patch: { chartType: type, spec } });
-                  }}
-                />
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+      {structure && <StructureExplorer request={structure} onClose={() => setStructure(null)} />}
     </div>
   );
 }

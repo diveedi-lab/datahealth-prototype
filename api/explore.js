@@ -3,7 +3,7 @@
 // La API key resta lato server (env ANTHROPIC_API_KEY). I dati restano mock lato client.
 import Anthropic from '@anthropic-ai/sdk';
 
-const CHART_TYPES = ['bar', 'line', 'pie', 'histogram', 'kpi'];
+const CHART_TYPES = ['bar', 'line', 'pie', 'histogram', 'kpi', 'grouped', 'stacked', 'multiline', 'scatter', 'crosstab'];
 const ANALYSIS_TYPES = ['summary_stats', 'missingness', 'correlation', 'crosstab', 'outliers'];
 
 const SOURCE_SCHEMA = {
@@ -61,14 +61,15 @@ const TOOLS = [
   },
   {
     name: 'create_chart',
-    description: 'Crea un grafico per una variabile (distribuzione/conteggio). Usala per richieste come "distribuzione dell’età", "conteggio per sesso".',
+    description: 'Crea un grafico. Monovariato (bar/line/pie/histogram/kpi) per "distribuzione dell’età". Per confronti tra DUE variabili usa groupBy (serie categoriale: grouped/stacked/multiline/crosstab, es. "età per sito") oppure secondVariable (asse numerico per scatter/correlazione, es. "correlazione età e valore lab"). Usa SOLO le coppie elencate in crossPairs del catalogo.',
     input_schema: {
       type: 'object', additionalProperties: false,
       properties: {
         title: { type: 'string' },
         chartType: { type: 'string', enum: CHART_TYPES },
         variable: { type: 'string', description: 'Nome variabile dal catalogo (es. age, gender, severity, site_id, lab_value)' },
-        groupBy: { type: 'string' },
+        groupBy: { type: 'string', description: 'Seconda variabile categoriale per grouped/stacked/multiline/crosstab' },
+        secondVariable: { type: 'string', description: 'Seconda variabile numerica per scatter/correlazione' },
         source: SOURCE_SCHEMA,
       },
       required: ['chartType', 'variable'],
@@ -89,8 +90,21 @@ const TOOLS = [
     },
   },
   {
+    name: 'save_query',
+    description: 'Salva una query come artefatto persistente nella sezione Saved Queries. Usa quando l’utente dice "salva"/"save". Se non specifica quale, salva l’ultima query creata (ometti targetId).',
+    input_schema: {
+      type: 'object', additionalProperties: false,
+      properties: {
+        targetId: { type: 'string' },
+        name: { type: 'string' },
+        visibility: { type: 'string', enum: ['private', 'team', 'public'] },
+      },
+      required: [],
+    },
+  },
+  {
     name: 'answer',
-    description: 'Rispondi a una domanda o chiedi un chiarimento, senza modificare il canvas.',
+    description: 'Rispondi a una domanda o chiedi un chiarimento, senza creare artefatti.',
     input_schema: {
       type: 'object', additionalProperties: false,
       properties: { text: { type: 'string' } },
@@ -119,8 +133,11 @@ Interpreti i messaggi dell'utente e AGISCI sempre tramite i tool forniti (non ri
 Regole:
 - Per impostare/cambiare le collection di lavoro usa set_scope / add_to_scope / remove_from_scope.
 - Per interrogare/filtrare/elencare dati usa create_query (genera SQL+risultati mock).
-- Per "distribuzione/conteggio/grafico di <variabile>" usa create_chart. Per analisi (mancanti, statistiche) usa create_analysis.
-- Puoi combinare più tool in una sola risposta (es. set_scope + create_query).
+- Per "distribuzione/conteggio/grafico di <variabile>" usa create_chart monovariato. Per confronti tra DUE variabili
+  usa create_chart con groupBy (grouped/stacked/multiline/crosstab) o secondVariable (scatter/correlazione): scegli
+  le variabili SOLO tra le coppie elencate in crossPairs del catalogo. Per analisi (mancanti, statistiche) usa create_analysis.
+- Per "salva/save (la query)" usa save_query (ometti targetId per l'ultima query creata).
+- Puoi combinare più tool in una sola risposta (es. set_scope + create_query, oppure create_query + save_query).
 - Usa SOLO gli id di collection e i nomi di variabile presenti nel CATALOGO. Non inventare id.
 - Per domande generiche o chiarimenti usa answer. Tieni i testi MOLTO brevi (1-2 frasi), in italiano.
 

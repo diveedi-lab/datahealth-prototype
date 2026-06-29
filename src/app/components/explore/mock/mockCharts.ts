@@ -1,8 +1,22 @@
 import type { Distribution } from '../../ingestor/types';
 import type {
-  ChartDatum, ChartSpec, ChartType, AnalysisType, RichVariable,
+  ChartDatum, ChartSpec, ChartType, AnalysisType, RichVariable, SeriesRow,
 } from '../types';
 import { getCollection, EXPLORE_COLLECTIONS } from './mockCatalog';
+import { getCrossDist, SCATTER_AGE_LAB } from './mockCrossDist';
+
+// Shape di ritorno comune ai builder di grafici
+export interface BuiltChart {
+  ok: boolean;
+  chartType: ChartType;
+  spec: ChartSpec;
+  altSpecs: Partial<Record<ChartType, ChartSpec>>;
+  insight: string;
+  variableLabel: string;
+  resolvedVar?: string;
+  secondVar?: string;
+  collectionId?: string;
+}
 
 // ─── Risoluzione nome variabile → RichVariable nello scope ───
 const ALIASES: Record<string, string> = {
@@ -60,7 +74,7 @@ function defaultChartType(dist: Distribution): ChartType {
   return 'bar';
 }
 
-function buildAltSpecs(data: ChartDatum[], unit?: string): Record<ChartType, ChartSpec> {
+function buildAltSpecs(data: ChartDatum[], unit?: string): Partial<Record<ChartType, ChartSpec>> {
   const total = data.reduce((s, d) => s + d.value, 0);
   const top = data.reduce((a, b) => (b.value > a.value ? b : a), data[0] ?? { name: '—', value: 0 });
   return {
@@ -94,10 +108,7 @@ function insightFor(rich: RichVariable, data: ChartDatum[]): string {
 // ─── Costruzione chart da una variabile ───
 export function buildChart(opts: {
   chartType?: ChartType; variable: string; groupBy?: string; collections: string[];
-}): {
-  ok: boolean; chartType: ChartType; spec: ChartSpec; altSpecs: Record<ChartType, ChartSpec>;
-  insight: string; variableLabel: string; resolvedVar?: string; collectionId?: string;
-} | null {
+}): BuiltChart | null {
   const resolved = resolveVariable(opts.variable, opts.collections);
   if (!resolved) return null;
   const dist = resolved.rich.variable.stats!.distribution;
@@ -130,9 +141,19 @@ const ANALYSIS_LABEL: Record<AnalysisType, string> = {
 export function buildAnalysis(opts: {
   analysis: AnalysisType; variables: string[]; collections: string[];
 }): {
-  ok: boolean; chartType: ChartType; spec: ChartSpec; altSpecs: Record<ChartType, ChartSpec>;
+  ok: boolean; chartType: ChartType; spec: ChartSpec; altSpecs: Partial<Record<ChartType, ChartSpec>>;
   insight: string; title: string; resolvedVars: string[]; collectionId?: string;
 } | null {
+  // correlazione / cross-tab → grafici incrociati su due variabili
+  if (opts.analysis === 'correlation' && opts.variables.length >= 2) {
+    const sc = buildScatterChart({ variable: opts.variables[0], secondVariable: opts.variables[1], collections: opts.collections });
+    if (sc) return { ...sc, title: `Correlazione · ${sc.variableLabel}`, resolvedVars: [sc.resolvedVar!, sc.secondVar!].filter(Boolean) };
+  }
+  if (opts.analysis === 'crosstab' && opts.variables.length >= 2) {
+    const cx = buildCrossChart({ variable: opts.variables[0], groupBy: opts.variables[1], family: 'crosstab', collections: opts.collections });
+    if (cx) return { ...cx, title: `Tabella incrociata · ${cx.variableLabel}`, resolvedVars: [cx.resolvedVar!, cx.secondVar!].filter(Boolean) };
+  }
+
   const resolvedList = opts.variables
     .map((v) => resolveVariable(v, opts.collections))
     .filter(Boolean) as { rich: RichVariable; collectionId: string }[];
@@ -177,9 +198,94 @@ export function buildAnalysis(opts: {
   const altSpecs = buildAltSpecs(data);
   const effectiveLabel = opts.analysis === 'summary_stats' && dist.kind !== 'numeric' ? 'Frequenze' : label;
   return {
-    ok: true, chartType: dist.kind === 'numeric' ? 'histogram' : 'bar', spec: altSpecs.bar, altSpecs,
+    ok: true, chartType: dist.kind === 'numeric' ? 'histogram' : 'bar', spec: altSpecs.bar!, altSpecs,
     insight: insightFor(first.rich, data),
     title: `${effectiveLabel} · ${first.rich.variable.label}`,
     resolvedVars: [first.rich.name], collectionId: first.collectionId,
+  };
+}
+
+// ─── Grafici incrociati (grouped/stacked/multiline/crosstab) ───
+export function buildCrossChart(opts: {
+  variable: string; groupBy: string; family?: ChartType; collections: string[];
+}): BuiltChart | null {
+  const r1 = resolveVariable(opts.variable, opts.collections);
+  const r2 = resolveVariable(opts.groupBy, opts.collections);
+  if (!r1 || !r2) return null;
+  const cd = getCrossDist(r1.collectionId, r1.rich.name, r2.rich.name);
+  if (!cd) return null;
+
+  const series = cd.colCats;
+  const rows: SeriesRow[] = cd.rowCats.map((rc, ri) => {
+    const row: SeriesRow = { name: rc };
+    series.forEach((cc, ci) => { row[cc] = cd.matrix[ri][ci]; });
+    return row;
+  });
+  const dataTotals: ChartDatum[] = cd.rowCats.map((rc, ri) => ({
+    name: rc, value: cd.matrix[ri].reduce((s, n) => s + n, 0),
+  }));
+  const colTotals = series.map((_, ci) => cd.rowCats.reduce((s, __, ri) => s + cd.matrix[ri][ci], 0));
+  const grand = colTotals.reduce((s, n) => s + n, 0) || 1;
+  const topIdx = colTotals.reduce((a, b, i) => (b > colTotals[a] ? i : a), 0);
+
+  const specOf = (ft: ChartType): ChartSpec => ({
+    chartType: ft, data: dataTotals, series, rows, stacked: ft === 'stacked',
+  });
+  const altSpecs: Partial<Record<ChartType, ChartSpec>> = {
+    grouped: specOf('grouped'),
+    stacked: specOf('stacked'),
+    multiline: specOf('multiline'),
+    crosstab: specOf('crosstab'),
+    kpi: { chartType: 'kpi', data: dataTotals, kpi: { value: grand.toLocaleString('it-IT'), label: 'totale', sub: `${series[topIdx]} ${Math.round((colTotals[topIdx] / grand) * 100)}%` } },
+  };
+  const isDate = r1.rich.variable.type === 'date';
+  const family = opts.family ?? (isDate ? 'multiline' : 'grouped');
+
+  return {
+    ok: true,
+    chartType: family,
+    spec: altSpecs[family] ?? altSpecs.grouped!,
+    altSpecs,
+    insight: `${r1.rich.variable.label} per ${r2.rich.variable.label}: «${series[topIdx]}» è la serie prevalente (${Math.round((colTotals[topIdx] / grand) * 100)}% del totale).`,
+    variableLabel: `${r1.rich.variable.label} × ${r2.rich.variable.label}`,
+    resolvedVar: r1.rich.name,
+    secondVar: r2.rich.name,
+    collectionId: r1.collectionId,
+  };
+}
+
+// ─── Scatter / correlazione tra due variabili numeriche ───
+export function buildScatterChart(opts: {
+  variable: string; secondVariable: string; collections: string[];
+}): BuiltChart | null {
+  const r1 = resolveVariable(opts.variable, opts.collections);
+  const r2 = resolveVariable(opts.secondVariable, opts.collections);
+  if (!r1 || !r2) return null;
+  // l'unico scatter autorizzato (con dati) è età × valore lab, in qualsiasi ordine
+  const names = new Set([r1.rich.name, r2.rich.name]);
+  if (!(names.has('age') && names.has('lab_value'))) return null;
+
+  // assi coerenti coi dati (x = età, y = valore lab) a prescindere dall'ordine richiesto
+  const ageVar = r1.rich.name === 'age' ? r1 : r2;
+  const labVar = r1.rich.name === 'lab_value' ? r1 : r2;
+  const points = SCATTER_AGE_LAB;
+  const r = 0.41;
+  const spec: ChartSpec = {
+    chartType: 'scatter', data: [], points,
+    xLabel: ageVar.rich.variable.label, yLabel: labVar.rich.variable.label,
+  };
+  return {
+    ok: true,
+    chartType: 'scatter',
+    spec,
+    altSpecs: {
+      scatter: spec,
+      kpi: { chartType: 'kpi', data: [], kpi: { value: `r≈${r.toFixed(2)}`, label: 'correlazione', sub: 'moderata positiva' } },
+    },
+    insight: `Correlazione moderata positiva tra ${ageVar.rich.variable.label} e ${labVar.rich.variable.label} (r≈${r.toFixed(2)}): a età più alta tendono ad accompagnarsi valori di laboratorio più alti.`,
+    variableLabel: `${ageVar.rich.variable.label} × ${labVar.rich.variable.label}`,
+    resolvedVar: r1.rich.name,
+    secondVar: r2.rich.name,
+    collectionId: r1.collectionId,
   };
 }

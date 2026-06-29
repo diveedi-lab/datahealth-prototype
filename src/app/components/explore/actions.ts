@@ -29,7 +29,8 @@ export interface CreateChartAction {
   title: string;
   chartType: ChartType;
   variable: string;
-  groupBy?: string;
+  groupBy?: string;          // serie categoriale (grouped/stacked/multiline/crosstab)
+  secondVariable?: string;   // seconda variabile numerica (scatter/correlazione)
   source?: ChartSource;
 }
 export interface CreateAnalysisAction {
@@ -38,6 +39,12 @@ export interface CreateAnalysisAction {
   analysis: AnalysisType;
   variables: string[];
   source?: ChartSource;
+}
+export interface SaveQueryAction {
+  type: 'save_query';
+  targetId?: string;
+  name?: string;
+  visibility?: 'private' | 'team' | 'public';
 }
 export interface AnswerAction {
   type: 'answer';
@@ -56,10 +63,13 @@ export type ExploreAction =
   | CreateQueryAction
   | CreateChartAction
   | CreateAnalysisAction
+  | SaveQueryAction
   | AnswerAction
   | ExplainAction;
 
-export const CHART_TYPES: ChartType[] = ['bar', 'line', 'pie', 'histogram', 'kpi'];
+export const CHART_TYPES: ChartType[] = [
+  'bar', 'line', 'pie', 'histogram', 'kpi', 'grouped', 'stacked', 'multiline', 'scatter', 'crosstab',
+];
 export const ANALYSIS_TYPES: AnalysisType[] = [
   'summary_stats', 'missingness', 'correlation', 'crosstab', 'outliers',
 ];

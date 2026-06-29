@@ -5,6 +5,8 @@ import {
   Clock, MoreHorizontal, Share2, Compass
 } from 'lucide-react';
 
+import { listSaved } from './savedQueries/savedStore';
+
 export interface OpenInExplore {
   (q: { id: string; prompt: string; databases: string[]; title: string }): void;
 }
@@ -268,7 +270,8 @@ function DetailPanel({ query, onClose, onOpen }: { query: SavedQuery; onClose: (
 export function SavedQueries({ onOpen }: { onOpen?: OpenInExplore }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterVis, setFilterVis] = useState('all');
-  const [queries, setQueries] = useState(MOCK_SAVED);
+  // le query salvate dall'utente (es. dal workspace Explore) precedono i mock statici
+  const [queries, setQueries] = useState<SavedQuery[]>(() => [...(listSaved() as SavedQuery[]), ...MOCK_SAVED]);
   const [selected, setSelected] = useState<SavedQuery | null>(null);
 
   const toggleStar = (id: string) => {
