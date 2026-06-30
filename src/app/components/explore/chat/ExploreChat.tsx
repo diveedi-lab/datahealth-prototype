@@ -21,7 +21,18 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
   const [typing, setTyping] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const taRef = useRef<HTMLTextAreaElement>(null);
   const msgs = state.chatLog;
+
+  const resetComposer = () => {
+    setInput('');
+    if (taRef.current) taRef.current.style.height = 'auto';
+  };
+  const growComposer = (v: string) => {
+    setInput(v);
+    const el = taRef.current;
+    if (el) { el.style.height = 'auto'; el.style.height = `${Math.min(el.scrollHeight, 176)}px`; }
+  };
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [msgs, typing]);
 
@@ -78,7 +89,7 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
     const t = text.trim();
     if (!t || typing) return;
     dispatch({ type: 'APPEND_CHAT', msg: { id: genId('m'), role: 'user', text: t } });
-    setInput('');
+    resetComposer();
     const history: Hist = [...msgs.map((m) => ({ role: m.role, text: m.text })), { role: 'user', text: t }];
     respond(history, t);
   };
@@ -161,8 +172,8 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
         </div>
       </div>
 
-      <div className="shrink-0 border-t border-zinc-200 bg-white">
-        <div className="max-w-3xl mx-auto w-full px-4 py-3">
+      <div className="shrink-0 bg-white">
+        <div className="max-w-3xl mx-auto w-full px-4 pt-2 pb-3">
           {msgs.length <= 2 && (
             <div className="pb-2 flex flex-wrap gap-1.5">
               {SUGGESTIONS.map((s) => (
@@ -172,23 +183,29 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
               ))}
             </div>
           )}
-          <div className="flex items-center gap-2">
-            <input
+          <div className="rounded-2xl border border-zinc-300 bg-white shadow-sm px-3.5 pt-3 pb-2 transition-colors focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500/20">
+            <textarea
+              ref={taRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') send(input); }}
-              placeholder="Chiedi una query, un grafico o un'analisi…"
-              className="flex-1 px-4 py-2.5 text-sm bg-zinc-50 border border-zinc-200 rounded-xl outline-none focus:ring-2 focus:ring-violet-500/40"
+              onChange={(e) => growComposer(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input); } }}
+              rows={1}
+              placeholder="Scrivi un messaggio…"
+              className="w-full resize-none outline-none bg-transparent text-sm text-zinc-800 placeholder:text-zinc-400 leading-relaxed max-h-44"
             />
-            <button
-              onClick={() => send(input)}
-              disabled={!input.trim() || typing}
-              className="p-2.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white rounded-xl"
-              aria-label="Invia"
-            >
-              <Send className="w-4 h-4" />
-            </button>
+            <div className="flex items-center justify-between pt-1.5">
+              <span className="text-[11px] text-zinc-400 select-none">⏎ invia · ⇧⏎ a capo</span>
+              <button
+                onClick={() => send(input)}
+                disabled={!input.trim() || typing}
+                className="w-8 h-8 flex items-center justify-center bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white rounded-full transition-colors"
+                aria-label="Invia"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
           </div>
+          <p className="text-center text-[11px] text-zinc-400 mt-2">L'assistente può commettere errori. Verifica le risposte.</p>
         </div>
       </div>
     </div>
