@@ -729,6 +729,11 @@ export function TwoLevelSidebar({
   const currentSection = onSectionChange ? activeSection : internalSection;
   const handleSectionChange = onSectionChange || setInternalSection;
 
+  // Se la sezione ha una sola pagina (es. Dashboard), niente secondo rail: la pagina resta ampia.
+  const content = getSidebarContent(currentSection);
+  const itemCount = content.sections.reduce((n, s) => n + s.items.length, 0);
+  const singlePage = itemCount <= 1;
+
   return (
     <div
       className="flex flex-row h-full"
@@ -738,11 +743,13 @@ export function TwoLevelSidebar({
         activeSection={currentSection}
         onSectionChange={handleSectionChange}
       />
-      <DetailSidebar 
-        activeSection={currentSection} 
-        onSubItemClick={onSubItemClick}
-        activeSubItem={activeSubItem}
-      />
+      {!singlePage && (
+        <DetailSidebar
+          activeSection={currentSection}
+          onSubItemClick={onSubItemClick}
+          activeSubItem={activeSubItem}
+        />
+      )}
     </div>
   );
 }
