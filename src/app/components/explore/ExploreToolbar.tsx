@@ -23,7 +23,7 @@ export function ExploreTopBar({
           onClick={onClose}
           className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors shrink-0"
         >
-          <ArrowLeft className="w-4 h-4" /> Query Tool
+          <ArrowLeft className="w-4 h-4" /> Chat
         </button>
         <div className="h-6 w-px bg-zinc-200 shrink-0" />
         <div className="min-w-0">

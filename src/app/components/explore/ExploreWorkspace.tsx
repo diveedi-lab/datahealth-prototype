@@ -9,6 +9,7 @@ import { StructureExplorer } from './structure/StructureExplorer';
 import { getCollection } from './mock/mockCatalog';
 import { makeChartFromVariable, makeChartArtifact } from './factory';
 import { saveQueryArtifact } from './saveQuery';
+import { upsertExploration } from './state/registry';
 
 export function ExploreWorkspace({
   explorationId, seed, onClose,
@@ -53,6 +54,16 @@ function WorkspaceShell({ onClose }: { onClose: () => void }) {
     .map((a) => ({ id: a.id, kind: a.kind, title: a.title }));
 
   const select = useCallback((id: string | null) => dispatch({ type: 'SELECT_ARTIFACT', id }), [dispatch]);
+
+  // registra/aggiorna la conversazione nell'indice (lista home), solo se non vuota
+  useEffect(() => {
+    const firstUser = state.chatLog.find((m) => m.role === 'user')?.text;
+    if (state.scope.collections.length === 0 && !firstUser) return;
+    const title = (firstUser && firstUser.slice(0, 60))
+      || state.scope.collections.map((c) => getCollection(c)?.name ?? c).join(', ')
+      || 'Nuova esplorazione';
+    upsertExploration({ id: state.id, title, collections: state.scope.collections, at: Date.now() });
+  }, [state.chatLog, state.scope.collections, state.id]);
 
   const startResize = useCallback((e: React.MouseEvent) => {
     e.preventDefault();

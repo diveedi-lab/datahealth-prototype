@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Send, User, Wand2 } from 'lucide-react';
+import { Sparkles, Send, User, Wand2, Copy, Check, RefreshCw } from 'lucide-react';
 import { useExplore } from '../state/ExploreContext';
 import { genId } from '../ids';
 import { getCollection } from '../mock/mockCatalog';
@@ -13,48 +13,44 @@ const SUGGESTIONS = [
   'Correlazione tra età e valore lab',
 ];
 
+type Hist = { role: 'user' | 'assistant'; text: string }[];
+
 export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) => void }) {
   const { state, dispatch } = useExplore();
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const msgs = state.chatLog;
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [msgs, typing]);
 
-  const send = async (text: string) => {
-    const t = text.trim();
-    if (!t || typing) return;
-    dispatch({ type: 'APPEND_CHAT', msg: { id: genId('m'), role: 'user', text: t } });
-    setInput('');
-    setTyping(true);
+  const finish = (replyText: string, summary: string, artifactIds: string[]) => {
+    dispatch({
+      type: 'APPEND_CHAT',
+      msg: {
+        id: genId('m'), role: 'assistant',
+        text: replyText || (summary ? 'Fatto.' : '…'),
+        actionsSummary: summary || undefined,
+        artifactIds: artifactIds.length ? artifactIds : undefined,
+      },
+    });
+    setTyping(false);
+  };
 
-    const history = [...msgs, { role: 'user', text: t }].map((m) => ({ role: m.role, text: m.text })).slice(-12);
+  const respond = async (history: Hist, fallbackText: string) => {
+    setTyping(true);
     const scope = {
       collections: state.scope.collections,
       names: state.scope.collections.map((c) => getCollection(c)?.name ?? c),
       activeQueryId: state.scope.queryId,
       activeQueryTitle: state.scope.queryId ? state.artifacts[state.scope.queryId]?.title : undefined,
     };
-
-    const finish = (replyText: string, summary: string, artifactIds: string[]) => {
-      dispatch({
-        type: 'APPEND_CHAT',
-        msg: {
-          id: genId('m'), role: 'assistant',
-          text: replyText || (summary ? 'Fatto.' : '…'),
-          actionsSummary: summary || undefined,
-          artifactIds: artifactIds.length ? artifactIds : undefined,
-        },
-      });
-      setTyping(false);
-    };
-
     try {
       const res = await fetch('/api/explore', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ messages: history, scope, catalog: buildAiCatalog() }),
+        body: JSON.stringify({ messages: history.slice(-12), scope, catalog: buildAiCatalog() }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -66,17 +62,43 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
           finish(apiMessage || 'Non ho capito bene la richiesta: puoi indicare la collection o la variabile da usare?', '', []);
           return;
         }
-        const r = applyActions(fallbackActions(t, state.scope.collections), { state, dispatch });
+        const r = applyActions(fallbackActions(fallbackText, state.scope.collections), { state, dispatch });
         finish(apiMessage || r.replyText, r.summary, r.artifactIds);
         return;
       }
       const r = applyActions(actions, { state, dispatch });
       finish(apiMessage || r.replyText, r.summary, r.artifactIds);
     } catch {
-      const r = applyActions(fallbackActions(t, state.scope.collections), { state, dispatch });
+      const r = applyActions(fallbackActions(fallbackText, state.scope.collections), { state, dispatch });
       finish(r.replyText, r.summary, r.artifactIds);
     }
   };
+
+  const send = (text: string) => {
+    const t = text.trim();
+    if (!t || typing) return;
+    dispatch({ type: 'APPEND_CHAT', msg: { id: genId('m'), role: 'user', text: t } });
+    setInput('');
+    const history: Hist = [...msgs.map((m) => ({ role: m.role, text: m.text })), { role: 'user', text: t }];
+    respond(history, t);
+  };
+
+  const retry = () => {
+    if (typing) return;
+    const lastUserIdx = [...msgs].map((m) => m.role).lastIndexOf('user');
+    if (lastUserIdx < 0) return;
+    const lastUser = msgs[lastUserIdx];
+    const history: Hist = msgs.slice(0, lastUserIdx + 1).map((m) => ({ role: m.role, text: m.text }));
+    respond(history, lastUser.text);
+  };
+
+  const copy = (id: string, text: string) => {
+    navigator.clipboard?.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  const lastAssistantId = [...msgs].reverse().find((m) => m.role === 'assistant')?.id;
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -103,14 +125,21 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
                       const art = state.artifacts[aid];
                       if (!art) return null;
                       return (
-                        <ArtifactCard
-                          key={aid}
-                          artifact={art}
-                          active={state.currentArtifactId === aid}
-                          onOpen={onOpenArtifact}
-                        />
+                        <ArtifactCard key={aid} artifact={art} active={state.currentArtifactId === aid} onOpen={onOpenArtifact} />
                       );
                     })}
+                  </div>
+                )}
+                {m.role === 'assistant' && (
+                  <div className="flex items-center gap-1 px-1">
+                    <button onClick={() => copy(m.id, m.text)} className="p-1 text-zinc-400 hover:text-zinc-700 rounded" title="Copia">
+                      {copiedId === m.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                    {m.id === lastAssistantId && (
+                      <button onClick={retry} disabled={typing} className="p-1 text-zinc-400 hover:text-zinc-700 rounded disabled:opacity-40" title="Rigenera">
+                        <RefreshCw className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -137,11 +166,7 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
           {msgs.length <= 2 && (
             <div className="pb-2 flex flex-wrap gap-1.5">
               {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => send(s)}
-                  className="text-[11px] px-2.5 py-1 rounded-full border border-zinc-200 text-zinc-600 hover:bg-zinc-50"
-                >
+                <button key={s} onClick={() => send(s)} className="text-[11px] px-2.5 py-1 rounded-full border border-zinc-200 text-zinc-600 hover:bg-zinc-50">
                   {s}
                 </button>
               ))}
