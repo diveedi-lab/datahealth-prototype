@@ -107,7 +107,7 @@ export function Variables() {
       <p className="text-[13px] text-zinc-500">{filtered.length} variables found</p>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
+      <div className="flex-1 overflow-auto glass-card rounded-2xl">
         <table className="w-full">
           <thead>
             <tr className="border-b border-zinc-200">
@@ -137,7 +137,7 @@ export function Variables() {
       {/* Detail */}
       {selectedVar && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelectedVar(null)}>
-          <div className="w-[500px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[500px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-zinc-900 font-mono">{selectedVar.name}</h2>
@@ -171,7 +171,7 @@ export function Variables() {
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="w-[560px] bg-white rounded-2xl shadow-xl max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[560px] glass rounded-2xl max-h-[80vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200">
               <h2 className="text-zinc-900">Create New Variable</h2>
             </div>

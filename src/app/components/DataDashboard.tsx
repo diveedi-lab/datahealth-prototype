@@ -119,7 +119,7 @@ export function DataDashboard() {
               { icon: <List className="w-4 h-4" />, label: 'Total Rows', value: stats.rows },
               { icon: <HardDrive className="w-4 h-4" />, label: 'Space Occupied', value: stats.space },
             ].map(kpi => (
-              <div key={kpi.label} className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm">
+              <div key={kpi.label} className="glass-card p-5 rounded-2xl transition-colors hover:shadow-md">
                 <div className="flex items-center gap-2 mb-2 text-zinc-500">{kpi.icon}<span className="text-sm font-medium">{kpi.label}</span></div>
                 <p className="text-2xl font-bold text-zinc-900">{kpi.value}</p>
               </div>
@@ -128,7 +128,7 @@ export function DataDashboard() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* File Types Pie */}
-            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+            <div className="glass-card rounded-2xl p-6">
               <h3 className="text-lg font-bold text-zinc-900 mb-1">Files by Type</h3>
               <p className="text-sm text-zinc-500 mb-4">Distribution of stored file formats.</p>
               <div className="flex items-center gap-6">
@@ -156,7 +156,7 @@ export function DataDashboard() {
             </div>
 
             {/* Variables by Type */}
-            <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+            <div className="glass-card rounded-2xl p-6">
               <h3 className="text-lg font-bold text-zinc-900 mb-1">Variables by Type</h3>
               <p className="text-sm text-zinc-500 mb-4">Breakdown of variable data types.</p>
               <div className="h-56">
@@ -174,7 +174,7 @@ export function DataDashboard() {
           </div>
 
           {/* Entity Breakdown */}
-          <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <div className="glass-card rounded-2xl p-6">
             <h3 className="text-lg font-bold text-zinc-900 mb-1">Entity Breakdown</h3>
             <p className="text-sm text-zinc-500 mb-4">Record counts per entity type across selected databases.</p>
             <div className="h-64">
@@ -191,7 +191,7 @@ export function DataDashboard() {
           </div>
 
           {/* Per-DB comparison table */}
-          <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+          <div className="glass-card rounded-2xl p-6">
             <h3 className="text-lg font-bold text-zinc-900 mb-4">Database Comparison</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">

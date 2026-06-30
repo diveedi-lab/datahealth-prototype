@@ -69,7 +69,7 @@ export function FileUploader() {
       </div>
 
       {/* API Keys Section — shown first, since a key is required before using the CLI */}
-      <div className="bg-white border border-zinc-200 rounded-xl">
+      <div className="glass-card rounded-2xl">
         <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center shrink-0">
@@ -133,7 +133,7 @@ export function FileUploader() {
       </div>
 
       {/* CLI Tool Section */}
-      <div className="bg-white border border-zinc-200 rounded-xl">
+      <div className="glass-card rounded-2xl">
         <div className="px-5 py-4 border-b border-zinc-100 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-zinc-900 flex items-center justify-center shrink-0">

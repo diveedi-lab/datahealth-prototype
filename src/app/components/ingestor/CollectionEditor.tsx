@@ -20,7 +20,7 @@ function EditorShell({ onClose }: { onClose: () => void }) {
   const scope = `${STAGE_LABEL[state.stage]} · ${state.meta.name}`;
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-zinc-50 overflow-hidden">
+    <div className="h-screen w-screen flex flex-col app-backdrop overflow-hidden">
       <EditorToolbar onClose={onClose} chatOpen={chatOpen} onToggleChat={() => setChatOpen((o) => !o)} />
       <AnalysisBanner />
       <div className="flex-1 flex min-h-0">

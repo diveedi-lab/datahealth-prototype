@@ -137,7 +137,7 @@ function DetailPanel({ query, onClose, onOpen }: { query: SavedQuery; onClose: (
   };
 
   return (
-    <div className="w-full lg:w-[420px] shrink-0 bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col overflow-hidden transition-colors">
+    <div className="w-full lg:w-[420px] shrink-0 glass rounded-2xl flex flex-col overflow-hidden transition-colors">
       <div className="p-4 border-b border-zinc-100 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -315,8 +315,8 @@ export function SavedQueries({ onOpen }: { onOpen?: OpenInExplore }) {
                 <div
                   key={q.id}
                   onClick={() => setSelected(q)}
-                  className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                    isSelected ? 'border-blue-400 shadow-md ring-1 ring-blue-200' : 'border-zinc-200'
+                  className={`glass-card rounded-2xl p-4 cursor-pointer transition-all hover:shadow-md ${
+                    isSelected ? 'border-blue-400 shadow-md ring-1 ring-blue-200' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">

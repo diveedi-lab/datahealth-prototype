@@ -21,7 +21,7 @@ export function TransformerDrillDown({
   const setStatus = (status: ValidationStatus) => dispatch({ type: 'VALIDATE_TRANSFORMER', id: t.id, status });
 
   return (
-    <div className="flex flex-col h-full bg-white border-l border-zinc-200">
+    <div className="flex flex-col h-full glass">
       <div className="flex items-start gap-2 px-4 py-3 border-b border-zinc-200 shrink-0">
         <Wand2 className="w-4 h-4 text-indigo-500 mt-0.5 shrink-0" />
         <div className="flex-1 min-w-0">

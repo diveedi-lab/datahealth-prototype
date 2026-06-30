@@ -19,7 +19,7 @@ export function TargetDrillDown({
   const t = target;
   const mapped = t.columns.filter((c) => c.mappedFrom).length;
   return (
-    <div className="flex flex-col h-full bg-white border-l border-zinc-200">
+    <div className="flex flex-col h-full glass">
       <div className="flex items-start gap-2 px-4 py-3 border-b border-zinc-200 shrink-0">
         <Table2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: t.color }} />
         <div className="flex-1 min-w-0">

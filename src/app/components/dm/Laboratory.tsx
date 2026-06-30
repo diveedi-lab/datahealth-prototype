@@ -130,19 +130,19 @@ export function Laboratory() {
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Total Labs</p>
           <p className="text-[24px] text-zinc-900 mt-1">{labs.length}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Active</p>
           <p className="text-[24px] text-emerald-600 mt-1">{labs.filter(l => l.status === 'Active').length}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Countries</p>
           <p className="text-[24px] text-zinc-900 mt-1">{new Set(labs.map(l => l.country)).size}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Avg Turnaround</p>
           <p className="text-[24px] text-zinc-900 mt-1">{Math.round(labs.reduce((s, l) => s + l.turnaroundDays, 0) / labs.length)}d</p>
         </div>
@@ -151,7 +151,7 @@ export function Laboratory() {
       {/* Cards Grid */}
       <div className="flex-1 overflow-auto grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 content-start">
         {filtered.map(lab => (
-          <div key={lab.id} className="bg-white border border-zinc-200 rounded-xl p-5 cursor-pointer hover:shadow-md transition-all"
+          <div key={lab.id} className="glass-card rounded-xl p-5 cursor-pointer hover:shadow-md transition-all"
             onClick={() => setSelected(lab)}>
             <div className="flex items-start justify-between mb-3">
               <div className="min-w-0 flex-1">
@@ -192,7 +192,7 @@ export function Laboratory() {
       {/* Detail */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[520px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[520px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-zinc-900">{selected.name}</h2>
@@ -264,7 +264,7 @@ export function Laboratory() {
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="w-[580px] bg-white rounded-2xl shadow-xl max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[580px] glass rounded-2xl max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200">
               <h2 className="text-zinc-900">Add Laboratory</h2>
             </div>

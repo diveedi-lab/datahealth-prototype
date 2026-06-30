@@ -32,7 +32,7 @@ export function ArtifactCard({
   return (
     <button
       onClick={() => onOpen(artifact.id)}
-      className={`w-full text-left rounded-xl border bg-white transition-all hover:shadow-sm ${active ? 'border-blue-400 ring-1 ring-blue-200' : 'border-zinc-200 hover:border-zinc-300'}`}
+      className={`w-full text-left rounded-xl glass-card transition-all hover:shadow-md ${active ? 'border-blue-400 ring-1 ring-blue-200' : 'hover:border-zinc-300'}`}
     >
       <div className="flex items-center gap-2 px-3 py-2">
         <span className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isChart ? 'bg-violet-100 text-violet-600' : 'bg-blue-100 text-blue-600'}`}>

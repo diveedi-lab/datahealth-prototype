@@ -69,7 +69,7 @@ export function Connectors() {
           const StIcon = stCfg.icon;
           const ConnIcon = ICON_MAP[conn.icon];
           return (
-            <div key={conn.id} className="bg-white border border-zinc-200 rounded-xl p-5 hover:shadow-md transition-all">
+            <div key={conn.id} className="glass-card rounded-xl p-5 hover:shadow-md transition-all">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center shrink-0">
                   <ConnIcon className="w-5 h-5 text-zinc-600" />
@@ -122,7 +122,7 @@ export function Connectors() {
 
       {/* Available Connector Types */}
       {showAdd && (
-        <div className="bg-white border border-zinc-200 rounded-xl p-5">
+        <div className="glass-card rounded-xl p-5">
           <h3 className="text-sm font-semibold text-zinc-900 mb-3">Available Connector Types</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {AVAILABLE_TYPES.map(t => {

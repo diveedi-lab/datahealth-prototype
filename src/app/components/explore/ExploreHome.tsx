@@ -43,7 +43,7 @@ export function ExploreHome({
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-zinc-50 overflow-hidden">
+    <div className="h-screen w-screen flex flex-col app-backdrop overflow-hidden">
       <div className="h-12 shrink-0 flex items-center px-4">
         <button onClick={onClose} className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 rounded-lg transition-colors">
           <ArrowLeft className="w-4 h-4" /> Query Tool

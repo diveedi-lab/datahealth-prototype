@@ -112,7 +112,7 @@ export function DataLakeReport() {
           { icon: <FileText className="w-5 h-5" />, label: 'Registered Files', value: totals.files.toLocaleString(), color: 'amber', badge: `+22%` },
           { icon: <HardDrive className="w-5 h-5" />, label: 'Total Storage', value: totals.storage, color: 'rose', badge: `${selectedDbs.length} DBs` },
         ].map(card => (
-          <div key={card.label} className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm flex flex-col justify-between">
+          <div key={card.label} className="glass-card p-5 rounded-2xl flex flex-col justify-between transition-colors hover:shadow-md">
             <div className="flex items-start justify-between mb-4">
               <div className={`bg-${card.color}-100{card.color}-900/30 p-2 rounded-xl text-${card.color}-600{card.color}-400`}>{card.icon}</div>
               <span className="text-xs font-medium text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">{card.badge}</span>
@@ -124,7 +124,7 @@ export function DataLakeReport() {
       </div>
 
       {/* Uptime Chart */}
-      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+      <div className="glass-card rounded-2xl p-6">
         <h3 className="text-lg font-bold text-zinc-900 mb-1">Uptime History</h3>
         <p className="text-sm text-zinc-500 mb-4">System availability over the selected period.</p>
         <div className="h-64">
@@ -148,7 +148,7 @@ export function DataLakeReport() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Ingestion Trend */}
-        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-lg font-bold text-zinc-900 mb-1">Ingestion Trend</h3>
           <p className="text-sm text-zinc-500 mb-4">Monthly file ingestion volume.</p>
           <div className="h-56">
@@ -165,7 +165,7 @@ export function DataLakeReport() {
         </div>
 
         {/* Recent Events */}
-        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-lg font-bold text-zinc-900 mb-1">Recent Events</h3>
           <p className="text-sm text-zinc-500 mb-4">Latest system activity log.</p>
           <div className="flex flex-col gap-3">
@@ -185,7 +185,7 @@ export function DataLakeReport() {
       </div>
 
       {/* Per-Database Table */}
-      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+      <div className="glass-card rounded-2xl p-6">
         <h3 className="text-lg font-bold text-zinc-900 mb-4">Database Breakdown</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

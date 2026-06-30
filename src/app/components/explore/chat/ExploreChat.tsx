@@ -183,7 +183,7 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
               ))}
             </div>
           )}
-          <div className="rounded-2xl border border-zinc-300 bg-white shadow-sm px-4 pt-3.5 pb-2.5 transition-colors focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500/20">
+          <div className="rounded-2xl glass-card px-4 pt-3.5 pb-2.5 transition-colors focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500/20">
             <textarea
               ref={taRef}
               value={input}

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import svgPaths from "../imports/svg-svkvdgwod6";
+import { IconTip } from "./ui/icon-tip";
 import {
   Search,
   Dashboard,
@@ -461,31 +462,33 @@ function getSidebarContent(
   return contentMap[activeSection] || contentMap.dashboard;
 }
 
-function IconNavButton({
-  children,
-  isActive = false,
-  onClick,
-}: {
-  children: React.ReactNode;
-  isActive?: boolean;
-  onClick?: () => void;
-}) {
+const IconNavButton = React.forwardRef<
+  HTMLDivElement,
+  {
+    children: React.ReactNode;
+    isActive?: boolean;
+    onClick?: () => void;
+  } & React.HTMLAttributes<HTMLDivElement>
+>(({ children, isActive = false, onClick, className, ...rest }, ref) => {
   return (
     <div
+      ref={ref}
       className={`box-border content-stretch flex flex-row items-center justify-center overflow-clip p-0 relative rounded-lg shrink-0 size-10 min-w-10 cursor-pointer transition-colors duration-500
         ${
           isActive
             ? "bg-neutral-800 text-neutral-50"
             : "hover:bg-neutral-900 text-neutral-400 hover:text-neutral-300"
-        }`}
+        } ${className ?? ""}`}
       style={{ transitionTimingFunction: softSpringEasing }}
       data-name="Icon Nav Button"
       onClick={onClick}
+      {...rest}
     >
       {children}
     </div>
   );
-}
+});
+IconNavButton.displayName = "IconNavButton";
 
 function IconNavigation({
   activeSection,
@@ -543,25 +546,28 @@ function IconNavigation({
       {/* Navigation Icons */}
       <div className="flex flex-col gap-2 w-full items-center">
         {navItems.map((item) => (
-          <IconNavButton
-            key={item.id}
-            isActive={activeSection === item.id}
-            onClick={() => onSectionChange(item.id)}
-          >
-            {item.icon}
-          </IconNavButton>
+          <IconTip key={item.id} label={item.label} side="right">
+            <IconNavButton
+              isActive={activeSection === item.id}
+              onClick={() => onSectionChange(item.id)}
+            >
+              {item.icon}
+            </IconNavButton>
+          </IconTip>
         ))}
       </div>
 
       {/* Bottom section */}
       <div className="flex-1" />
       <div className="flex flex-col gap-2 w-full items-center">
-        <IconNavButton
-          isActive={activeSection === "settings"}
-          onClick={() => onSectionChange("settings")}
-        >
-          <Settings size={16} />
-        </IconNavButton>
+        <IconTip label="Settings" side="right">
+          <IconNavButton
+            isActive={activeSection === "settings"}
+            onClick={() => onSectionChange("settings")}
+          >
+            <Settings size={16} />
+          </IconNavButton>
+        </IconTip>
         <div className="size-8">
           <Avatar />
         </div>

@@ -49,7 +49,7 @@ export function ChartArtifactView({
       <p className="px-4 pt-3 text-xs text-zinc-400 truncate shrink-0">da {sourceLabel}</p>
 
       <div ref={ref} className="flex-1 min-h-0 px-4 py-2">
-        <div className="h-full border border-zinc-200 rounded-xl p-3">
+        <div className="h-full glass-card rounded-xl p-3">
           <ChartView spec={chart.spec} height={Math.max(220, height - 26)} />
         </div>
       </div>

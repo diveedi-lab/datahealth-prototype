@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TopBar } from './components/TopBar';
 import { TwoLevelSidebar } from './components/SidebarDemo';
+import { TooltipProvider } from './components/ui/tooltip';
 import { HomeDashboard } from './components/HomeDashboard';
 import { DataLakeReport } from './components/DataLakeReport';
 import { SharingSummary } from './components/SharingSummary';
@@ -195,23 +196,25 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen bg-white text-zinc-900 font-sans overflow-hidden">
-      <div className="theme-sidebar-wrapper h-full shrink-0">
-        <TwoLevelSidebar
-          activeSection={activeTab}
-          onSectionChange={handleSectionChange}
-          onSubItemClick={handleSubItemClick}
-          activeSubItem={activeSubItem}
-        />
-      </div>
+    <TooltipProvider delayDuration={200}>
+      <div className="flex h-screen app-backdrop text-zinc-900 font-sans overflow-hidden">
+        <div className="theme-sidebar-wrapper h-full shrink-0">
+          <TwoLevelSidebar
+            activeSection={activeTab}
+            onSectionChange={handleSectionChange}
+            onSubItemClick={handleSubItemClick}
+            activeSubItem={activeSubItem}
+          />
+        </div>
 
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-zinc-50/50">
-        <TopBar currentTabLabel={currentLabel} />
+        <div className="flex-1 flex flex-col h-screen overflow-hidden">
+          <TopBar currentTabLabel={currentLabel} onNavigate={navigate} />
 
-        <main className="flex-1 overflow-auto p-6">
-          {renderContent()}
-        </main>
+          <main className="flex-1 overflow-auto p-6">
+            {renderContent()}
+          </main>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

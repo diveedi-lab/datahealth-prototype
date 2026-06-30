@@ -111,7 +111,7 @@ export function SharingSummary() {
           { icon: <Download className="w-5 h-5" />, label: 'Data Downloads', value: fmt(totals.downloads), color: 'emerald', trend: '+8%', up: true },
           { icon: <Eye className="w-5 h-5" />, label: 'Data Views', value: fmt(totals.views), color: 'amber', trend: '-3%', up: false },
         ].map(card => (
-          <div key={card.label} className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-sm">
+          <div key={card.label} className="glass-card p-5 rounded-2xl transition-colors hover:shadow-md">
             <div className={`bg-${card.color}-100{card.color}-900/30 p-2 rounded-xl text-${card.color}-600{card.color}-400 w-fit mb-3`}>{card.icon}</div>
             <h3 className="text-2xl font-bold text-zinc-900">{card.value}</h3>
             <div className="flex items-center justify-between mt-1">
@@ -126,7 +126,7 @@ export function SharingSummary() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Query Trend */}
-        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-lg font-bold text-zinc-900 mb-1">Query Volume Trend</h3>
           <p className="text-sm text-zinc-500 mb-4">Monthly query execution count.</p>
           <div className="h-56">
@@ -143,7 +143,7 @@ export function SharingSummary() {
         </div>
 
         {/* Access by Role */}
-        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-lg font-bold text-zinc-900 mb-1">Access by Role</h3>
           <p className="text-sm text-zinc-500 mb-4">User distribution across roles.</p>
           <div className="flex items-center gap-6">
@@ -171,7 +171,7 @@ export function SharingSummary() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Sharing Activity */}
-        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-lg font-bold text-zinc-900 mb-4">Recent Activity</h3>
           <div className="flex flex-col gap-3">
             {RECENT_SHARES.map((item, i) => (
@@ -190,7 +190,7 @@ export function SharingSummary() {
         </div>
 
         {/* Top Queriers */}
-        <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
+        <div className="glass-card rounded-2xl p-6">
           <h3 className="text-lg font-bold text-zinc-900 mb-4">Top Queriers</h3>
           <div className="flex flex-col gap-3">
             {TOP_QUERIERS.map((item, i) => (

@@ -107,7 +107,7 @@ function WorkspaceShell({ onClose }: { onClose: () => void }) {
   })();
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-zinc-50 overflow-hidden">
+    <div className="h-screen w-screen flex flex-col app-backdrop overflow-hidden">
       <ExploreTopBar onClose={onClose} onOpenStructure={setStructure} onEditScope={() => setScopeDialog(true)} />
 
       {needsScope ? (

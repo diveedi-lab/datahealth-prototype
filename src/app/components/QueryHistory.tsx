@@ -87,7 +87,7 @@ function SearchSelect({ value, onChange, options, placeholder, allLabel }: {
         <ChevronDown className={`w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-zinc-200 rounded-xl shadow-xl z-50 overflow-hidden">
+        <div className="absolute left-0 top-full mt-1 w-56 glass rounded-xl z-50 overflow-hidden">
           <div className="p-2 border-b border-zinc-100">
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
@@ -170,7 +170,7 @@ export function QueryHistory({ onOpen }: { onOpen?: OpenInExplore }) {
       </div>
 
       {/* Log List */}
-      <div className="flex-1 bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden flex flex-col min-h-0">
+      <div className="flex-1 glass-card rounded-2xl overflow-hidden flex flex-col min-h-0">
         <div className="overflow-auto flex-1">
           <div className="divide-y divide-zinc-100">
             {filtered.map(entry => {

@@ -149,7 +149,7 @@ export function SecurityAlerts() {
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Total Alerts</p>
           <p className="text-[24px] text-zinc-900 mt-1">{alerts.length}</p>
         </div>
@@ -221,7 +221,7 @@ export function SecurityAlerts() {
       {/* Detail */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[560px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[560px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-start justify-between gap-4">
               <div className="flex items-start gap-3">
                 <div className="mt-1 shrink-0">{severityIcon(selected.severity)}</div>

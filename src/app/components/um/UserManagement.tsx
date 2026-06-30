@@ -228,12 +228,12 @@ export function UserManagement() {
       {/* Stats */}
       <div className="grid grid-cols-5 gap-3">
         {(['Active', 'Invited', 'Suspended', 'Deactivated'] as UserStatus[]).map(s => (
-          <div key={s} className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+          <div key={s} className="glass-card rounded-xl px-4 py-3">
             <p className="text-[12px] text-zinc-500">{s}</p>
             <p className="text-[20px] text-zinc-900 mt-0.5">{users.filter(u => u.status === s).length}</p>
           </div>
         ))}
-        <div className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+        <div className="glass-card rounded-xl px-4 py-3">
           <p className="text-[12px] text-zinc-500">Total</p>
           <p className="text-[20px] text-zinc-900 mt-0.5">{users.length}</p>
         </div>
@@ -257,7 +257,7 @@ export function UserManagement() {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
+      <div className="flex-1 overflow-auto glass-card rounded-2xl">
         <table className="w-full">
           <thead>
             <tr className="border-b border-zinc-200">
@@ -294,7 +294,7 @@ export function UserManagement() {
       {/* Invite Modal */}
       {showInvite && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowInvite(false)}>
-          <div className="bg-white rounded-2xl shadow-xl w-[480px] overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="glass rounded-2xl w-[480px] overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <h2 className="text-zinc-900">Invite New User</h2>
               <button onClick={() => setShowInvite(false)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
@@ -335,7 +335,7 @@ export function UserManagement() {
       {/* User Detail Panel */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[600px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[600px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="p-6 border-b border-zinc-200 flex items-start justify-between">
               <div className="flex items-center gap-3">

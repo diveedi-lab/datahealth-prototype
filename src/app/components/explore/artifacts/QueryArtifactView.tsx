@@ -44,7 +44,7 @@ export function QueryArtifactView({
       </div>
 
       <div className="flex-1 overflow-auto min-h-0 p-3 space-y-3">
-        <div className="bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5">
+        <div className="glass-card rounded-xl px-3 py-2.5">
           <p className="text-[11px] uppercase tracking-wide text-zinc-400 mb-1">Richiesta in linguaggio naturale</p>
           <p className="text-sm text-zinc-700 italic">“{query.prompt}”</p>
         </div>
@@ -59,7 +59,7 @@ export function QueryArtifactView({
         ) : query.status === 'empty' ? (
           <p className="text-xs text-amber-600 text-center py-8">La query non ha restituito risultati.</p>
         ) : (
-          <div className="border border-zinc-200 rounded-xl overflow-hidden flex flex-col" style={{ maxHeight: 380 }}>
+          <div className="glass-card rounded-xl overflow-hidden flex flex-col" style={{ maxHeight: 380 }}>
             {query.results.length > 1 && (
               <div className="flex items-center overflow-x-auto border-b border-zinc-200 shrink-0">
                 {query.results.map((t, i) => (

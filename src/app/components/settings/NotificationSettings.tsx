@@ -79,7 +79,7 @@ export function NotificationSettings() {
       </div>
 
       {/* Digest setting */}
-      <div className="bg-white border border-zinc-200 rounded-xl px-6 py-4 flex items-center justify-between">
+      <div className="glass-card rounded-xl px-6 py-4 flex items-center justify-between">
         <div>
           <p className="text-[14px] text-zinc-900">Email Digest Frequency</p>
           <p className="text-[12px] text-zinc-400 mt-0.5">Combine non-critical email notifications into a periodic digest</p>
@@ -93,7 +93,7 @@ export function NotificationSettings() {
       {/* Channel groups */}
       <div className="flex-1 overflow-auto space-y-4 pb-4">
         {CHANNEL_GROUPS.map(group => (
-          <div key={group.title} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+          <div key={group.title} className="glass-card rounded-2xl overflow-hidden">
             <div className="px-6 py-3 border-b border-zinc-100 flex items-center justify-between">
               <h2 className="text-[14px] text-zinc-900">{group.title}</h2>
               <div className="flex gap-8 text-[11px] text-zinc-400">

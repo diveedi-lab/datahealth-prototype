@@ -97,7 +97,7 @@ export function ApiKeys() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
         {(['Active', 'Expired', 'Revoked'] as const).map(s => (
-          <div key={s} className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+          <div key={s} className="glass-card rounded-xl px-4 py-3">
             <p className="text-[12px] text-zinc-500">{s}</p>
             <p className="text-[20px] text-zinc-900 mt-0.5">{keys.filter(k => k.status === s).length}</p>
           </div>
@@ -107,7 +107,7 @@ export function ApiKeys() {
       {/* Key List */}
       <div className="flex-1 overflow-auto space-y-3 pb-4">
         {keys.map(key => (
-          <div key={key.id} className="bg-white border border-zinc-200 rounded-xl p-5">
+          <div key={key.id} className="glass-card rounded-xl p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
@@ -145,7 +145,7 @@ export function ApiKeys() {
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={closeCreate}>
-          <div className="bg-white rounded-2xl shadow-xl w-[520px] max-h-[80vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+          <div className="glass rounded-2xl w-[520px] max-h-[80vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between shrink-0">
               <h2 className="text-zinc-900">{generatedKey ? 'API Key Generated' : 'Generate API Key'}</h2>
               <button onClick={closeCreate} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>

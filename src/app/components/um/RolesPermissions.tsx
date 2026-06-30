@@ -190,7 +190,7 @@ export function RolesPermissions() {
       <div className="flex-1 overflow-auto grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filtered.map(role => (
           <div key={role.id}
-            className="bg-white border border-zinc-200 rounded-xl p-5 hover:shadow-md transition-all cursor-pointer hover:border-zinc-300"
+            className="glass-card rounded-xl p-5 hover:shadow-md transition-all cursor-pointer hover:border-zinc-300"
             onClick={() => { setSelected(role); setDetailTab('permissions'); setExpandedSections(new Set()); }}>
             <div className="flex items-start justify-between mb-3">
               <div>
@@ -228,7 +228,7 @@ export function RolesPermissions() {
       {/* Create Role Modal */}
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="bg-white rounded-2xl shadow-xl w-[640px] max-h-[85vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+          <div className="glass rounded-2xl w-[640px] max-h-[85vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between shrink-0">
               <h2 className="text-zinc-900">Create New Role</h2>
               <button onClick={() => setShowCreate(false)} className="p-1.5 hover:bg-zinc-100 rounded-lg"><Close size={20} className="text-zinc-400" /></button>
@@ -276,7 +276,7 @@ export function RolesPermissions() {
       {/* Role Detail Panel */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[580px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[580px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">

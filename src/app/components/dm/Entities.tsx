@@ -92,7 +92,7 @@ export function Entities() {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
+      <div className="flex-1 overflow-auto glass-card rounded-2xl">
         <table className="w-full">
           <thead>
             <tr className="border-b border-zinc-200">
@@ -124,7 +124,7 @@ export function Entities() {
       {/* Detail Panel */}
       {selectedEntity && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelectedEntity(null)}>
-          <div className="w-[500px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[500px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-zinc-900 font-mono">{selectedEntity.name}</h2>
@@ -161,7 +161,7 @@ export function Entities() {
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="w-[520px] bg-white rounded-2xl shadow-xl" onClick={e => e.stopPropagation()}>
+          <div className="w-[520px] glass rounded-2xl" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200">
               <h2 className="text-zinc-900">Create New Entity</h2>
             </div>

@@ -42,7 +42,7 @@ export function EditorToolbar({
   }
 
   return (
-    <header className="h-14 shrink-0 bg-white border-b border-zinc-200 grid grid-cols-[1fr_auto_1fr] items-center px-4 gap-4">
+    <header className="h-14 shrink-0 glass-card grid grid-cols-[1fr_auto_1fr] items-center px-4 gap-4">
       {/* zona sinistra: back + nome (larghezza flessibile, troncata) */}
       <div className="flex items-center gap-3 min-w-0">
         <button

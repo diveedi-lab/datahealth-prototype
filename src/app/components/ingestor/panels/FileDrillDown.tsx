@@ -26,7 +26,7 @@ export function FileDrillDown({
   onClose: () => void;
 }) {
   return (
-    <div className="flex flex-col h-full bg-white border-l border-zinc-200">
+    <div className="flex flex-col h-full glass">
       <Header node={node} chatOpen={chatOpen} onToggleChat={onToggleChat} onClose={onClose} />
       <div className="flex-1 overflow-auto min-h-0">
         {node.type === 'tabularFile' && <TabularBody node={node} showAnalysis={showAnalysis} />}

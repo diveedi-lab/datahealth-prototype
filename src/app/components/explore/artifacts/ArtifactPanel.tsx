@@ -38,7 +38,7 @@ export function ArtifactPanel({
       {!fullScreen && (
         <div onMouseDown={onStartResize} className="w-1.5 shrink-0 cursor-col-resize bg-transparent hover:bg-blue-200 transition-colors" title="Trascina per ridimensionare" />
       )}
-      <div className="flex-1 min-w-0 flex flex-col bg-white border-l border-zinc-200 shadow-xl">
+      <div className="flex-1 min-w-0 flex flex-col glass">
         {/* header: switcher + nav + close */}
         <div className="h-11 shrink-0 flex items-center gap-1.5 px-2.5 border-b border-zinc-200 relative">
           <button
@@ -62,7 +62,7 @@ export function ArtifactPanel({
           {open && (
             <>
               <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
-              <div className="absolute left-2.5 top-11 w-72 max-h-80 overflow-auto bg-white border border-zinc-200 rounded-xl shadow-xl z-40 p-1.5">
+              <div className="absolute left-2.5 top-11 w-72 max-h-80 overflow-auto glass rounded-xl z-40 p-1.5">
                 {list.length === 0 && <p className="text-xs text-zinc-400 px-2 py-2">Nessun artefatto.</p>}
                 {list.map((a) => (
                   <button

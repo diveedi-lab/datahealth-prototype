@@ -107,7 +107,7 @@ export function MyProfile() {
         {/* Profile Tab */}
         {tab === 'profile' && (
           <div className="space-y-6">
-            <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+            <div className="glass-card rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-zinc-100">
                 <h2 className="text-[15px] text-zinc-900">Personal Information</h2>
               </div>
@@ -147,7 +147,7 @@ export function MyProfile() {
               </div>
             </div>
 
-            <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+            <div className="glass-card rounded-2xl overflow-hidden">
               <div className="px-6 py-4 border-b border-zinc-100">
                 <h2 className="text-[15px] text-zinc-900">Preferences</h2>
               </div>
@@ -169,7 +169,7 @@ export function MyProfile() {
               </div>
             </div>
 
-            <div className="bg-white border border-zinc-200 rounded-xl p-6">
+            <div className="glass-card rounded-2xl p-6">
               <h2 className="text-[15px] text-zinc-900 mb-1">Account Details</h2>
               <div className="grid grid-cols-3 gap-6 mt-4">
                 <div>
@@ -192,7 +192,7 @@ export function MyProfile() {
         {/* Security Tab */}
         {tab === 'security' && (
           <div className="space-y-4">
-            <div className="bg-white border border-zinc-200 rounded-xl p-6">
+            <div className="glass-card rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="text-[15px] text-zinc-900 flex items-center gap-2"><Password size={16} /> Password</h3>
@@ -204,7 +204,7 @@ export function MyProfile() {
               </div>
             </div>
 
-            <div className="bg-white border border-zinc-200 rounded-xl p-6">
+            <div className="glass-card rounded-2xl p-6">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="text-[15px] text-zinc-900 flex items-center gap-2"><Security size={16} /> Multi-Factor Authentication</h3>
@@ -225,7 +225,7 @@ export function MyProfile() {
               </div>
             </div>
 
-            <div className="bg-white border border-zinc-200 rounded-xl p-6">
+            <div className="glass-card rounded-2xl p-6">
               <h3 className="text-[15px] text-zinc-900 mb-3">Login History</h3>
               <div className="space-y-2">
                 {[
@@ -257,7 +257,7 @@ export function MyProfile() {
         {tab === 'sessions' && (
           <div className="space-y-3">
             {sessions.map(session => (
-              <div key={session.id} className="bg-white border border-zinc-200 rounded-xl p-5">
+              <div key={session.id} className="glass-card rounded-xl p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-zinc-100 rounded-lg flex items-center justify-center shrink-0">
@@ -298,7 +298,7 @@ export function MyProfile() {
         {tab === 'activity' && (
           <div className="space-y-2">
             {MOCK_ACTIVITY.map((entry, i) => (
-              <div key={i} className="flex items-center gap-4 px-5 py-3 bg-white border border-zinc-200 rounded-lg">
+              <div key={i} className="flex items-center gap-4 px-5 py-3 glass-card rounded-lg">
                 <div className="w-2 h-2 rounded-full bg-zinc-300 shrink-0" />
                 <span className="font-mono text-[12px] text-zinc-400 w-36 shrink-0">{entry.timestamp}</span>
                 <span className="text-[13px] text-zinc-700 w-36 shrink-0">{entry.action}</span>

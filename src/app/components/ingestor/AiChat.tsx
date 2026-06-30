@@ -71,7 +71,7 @@ export function AiChat({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full glass">
       <div className="h-11 shrink-0 flex items-center gap-2 px-3 border-b border-zinc-200">
         <Sparkles className="w-4 h-4 text-violet-600" />
         <div className="min-w-0 flex-1">

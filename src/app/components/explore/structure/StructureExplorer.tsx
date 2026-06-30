@@ -50,7 +50,7 @@ export function StructureExplorer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 app-backdrop flex flex-col animate-in fade-in duration-150">
       <header className="h-12 shrink-0 flex items-center gap-2 px-4 border-b border-zinc-200">
         {request.mode === 'collection' ? <Database className="w-4 h-4 text-blue-600" /> : <Network className="w-4 h-4 text-violet-600" />}
         <p className="text-sm font-semibold text-zinc-800">{title}</p>
@@ -79,7 +79,7 @@ export function StructureExplorer({
           </ReactFlow>
         </div>
 
-        <aside className="w-[360px] shrink-0 border-l border-zinc-200 overflow-auto bg-white">
+        <aside className="w-[360px] shrink-0 overflow-auto glass">
           {request.mode === 'collection' && collection && (
             <div className="p-4 space-y-4">
               {selectedTable && (
@@ -87,7 +87,7 @@ export function StructureExplorer({
                   <p className="text-sm font-semibold text-zinc-900 flex items-center gap-1.5 mb-2">
                     <Table2 className="w-4 h-4" style={{ color: selectedTable.color }} /> {selectedTable.label}
                   </p>
-                  <div className="border border-zinc-200 rounded-lg divide-y divide-zinc-50">
+                  <div className="glass-card rounded-lg divide-y divide-zinc-50">
                     {selectedTable.columns.map((c) => (
                       <div key={c.name} className="flex items-center gap-1.5 px-2.5 py-1.5">
                         {TYPE_ICON[c.type]}
@@ -108,7 +108,7 @@ export function StructureExplorer({
 
           {request.mode === 'query' && query?.kind === 'query' && (
             <div className="p-4 space-y-3">
-              <div className="bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2.5">
+              <div className="glass-card rounded-xl px-3 py-2.5">
                 <p className="text-[11px] uppercase tracking-wide text-zinc-400 mb-1 flex items-center gap-1"><Search className="w-3 h-3" /> Richiesta</p>
                 <p className="text-sm text-zinc-700 italic">“{query.query.prompt}”</p>
               </div>
@@ -117,7 +117,7 @@ export function StructureExplorer({
                 <div>
                   <p className="text-[11px] uppercase tracking-wide text-zinc-400 mb-1.5">Schema risultato</p>
                   {resultSchema.map((r) => (
-                    <div key={r.name} className="mb-2 border border-zinc-200 rounded-lg overflow-hidden">
+                    <div key={r.name} className="mb-2 glass-card rounded-lg overflow-hidden">
                       <p className="text-xs font-semibold text-zinc-700 bg-zinc-50 px-2.5 py-1.5 border-b border-zinc-100">{r.name}</p>
                       <div className="flex flex-wrap gap-1 p-2">
                         {r.columns.map((c) => (

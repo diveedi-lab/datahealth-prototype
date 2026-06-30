@@ -96,7 +96,7 @@ export function GeneralConfig() {
 
       <div className="flex-1 overflow-auto space-y-6 pb-4">
         {SECTIONS.map(section => (
-          <div key={section.title} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+          <div key={section.title} className="glass-card rounded-2xl overflow-hidden">
             <div className="px-6 py-4 border-b border-zinc-100">
               <h2 className="text-[15px] text-zinc-900">{section.title}</h2>
               <p className="text-[13px] text-zinc-400 mt-0.5">{section.description}</p>

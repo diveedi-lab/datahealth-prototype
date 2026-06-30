@@ -37,7 +37,7 @@ function CollectionList({
           className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-zinc-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/40"
         />
       </div>
-      <div className="border border-zinc-200 rounded-xl overflow-auto divide-y divide-zinc-50" style={{ maxHeight: maxH }}>
+      <div className="glass-card rounded-xl overflow-auto divide-y divide-zinc-50" style={{ maxHeight: maxH }}>
         {filtered.map((c) => {
           const active = selected.has(c.id);
           return (

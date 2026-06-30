@@ -115,7 +115,7 @@ export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => vo
               <div
                 key={src.id}
                 onClick={() => onOpenCollection?.(src.id)}
-                className="bg-white border border-zinc-200 rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group"
+                className="glass-card rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group"
               >
                 <div className="flex items-start gap-4">
                   <div className={`p-2.5 rounded-xl ${stCfg.bg} shrink-0`}>
@@ -185,7 +185,7 @@ export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => vo
             );
           })}
           {filtered.length === 0 && (
-            <div className="py-16 flex flex-col items-center text-zinc-400 border-2 border-dashed border-zinc-200 rounded-2xl">
+            <div className="py-16 flex flex-col items-center text-zinc-400 glass-card rounded-2xl">
               <Database className="w-8 h-8 mb-2 opacity-50" />
               <p className="text-sm">No databases match your filters</p>
             </div>

@@ -39,7 +39,7 @@ export function LeftPanel({
 
   if (collapsed) {
     return (
-      <div className="w-12 shrink-0 border-r border-zinc-200 bg-white flex flex-col items-center py-3 gap-3">
+      <div className="w-12 shrink-0 glass-card flex flex-col items-center py-3 gap-3">
         <button onClick={() => setCollapsed(false)} className="p-1.5 text-zinc-500 hover:bg-zinc-100 rounded-lg" aria-label="Apri pannello">
           <PanelLeftOpen className="w-4 h-4" />
         </button>
@@ -50,7 +50,7 @@ export function LeftPanel({
   }
 
   return (
-    <div className="w-72 shrink-0 border-r border-zinc-200 bg-white flex flex-col">
+    <div className="w-72 shrink-0 glass-card flex flex-col">
       <div className="h-11 shrink-0 flex items-center gap-2 px-3 border-b border-zinc-200">
         <Icon className="w-4 h-4 text-blue-600" />
         <span className="text-sm font-semibold text-zinc-800">{STAGE_LABEL[stage]}</span>

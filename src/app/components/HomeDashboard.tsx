@@ -93,7 +93,7 @@ function Panel({
   title: string; icon: React.ComponentType<{ className?: string }>; action?: string; onAction?: () => void; children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm flex flex-col">
+    <div className="glass-card rounded-2xl flex flex-col">
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-zinc-100">
         <h3 className="text-sm font-semibold text-zinc-800 flex items-center gap-2"><Icon className="w-4 h-4 text-zinc-400" />{title}</h3>
         {action && (
@@ -146,7 +146,7 @@ export function HomeDashboard({ onCreateCollection, onExplore, onOpenCollection,
       {/* KPI */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {KPIS.map((k) => (
-          <div key={k.label} className="bg-white border border-zinc-200 rounded-2xl p-4 shadow-sm">
+          <div key={k.label} className="glass-card rounded-2xl p-4 transition-shadow hover:shadow-md">
             <span className={`w-9 h-9 rounded-xl flex items-center justify-center ${k.tone}`}><k.icon className="w-[18px] h-[18px]" /></span>
             <p className="text-2xl font-bold text-zinc-900 mt-3 tabular-nums">{k.value}</p>
             <p className="text-xs text-zinc-500">{k.label}</p>

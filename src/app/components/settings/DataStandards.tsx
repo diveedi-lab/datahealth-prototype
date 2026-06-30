@@ -58,19 +58,19 @@ export function DataStandards() {
 
       {/* Summary */}
       <div className="grid grid-cols-4 gap-3">
-        <div className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+        <div className="glass-card rounded-xl px-4 py-3">
           <p className="text-[12px] text-zinc-500">Total Standards</p>
           <p className="text-[20px] text-zinc-900 mt-0.5">{standards.length}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+        <div className="glass-card rounded-xl px-4 py-3">
           <p className="text-[12px] text-zinc-500">Enabled</p>
           <p className="text-[20px] text-emerald-600 mt-0.5">{standards.filter(s => s.enabled).length}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+        <div className="glass-card rounded-xl px-4 py-3">
           <p className="text-[12px] text-zinc-500">Disabled</p>
           <p className="text-[20px] text-zinc-400 mt-0.5">{standards.filter(s => !s.enabled).length}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
+        <div className="glass-card rounded-xl px-4 py-3">
           <p className="text-[12px] text-zinc-500">Categories</p>
           <p className="text-[20px] text-zinc-900 mt-0.5">{categories.length}</p>
         </div>
@@ -78,7 +78,7 @@ export function DataStandards() {
 
       <div className="flex-1 overflow-auto space-y-4 pb-4">
         {categories.map(cat => (
-          <div key={cat} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+          <div key={cat} className="glass-card rounded-2xl overflow-hidden">
             <div className="px-6 py-3 border-b border-zinc-100">
               <h2 className="text-[14px] text-zinc-900">{cat}</h2>
             </div>

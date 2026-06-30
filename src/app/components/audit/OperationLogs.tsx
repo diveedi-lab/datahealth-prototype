@@ -100,7 +100,7 @@ export function OperationLogs() {
       <p className="text-[13px] text-zinc-500">{filtered.length} log entries</p>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
+      <div className="flex-1 overflow-auto glass-card rounded-2xl">
         <table className="w-full">
           <thead>
             <tr className="border-b border-zinc-200">
@@ -129,7 +129,7 @@ export function OperationLogs() {
       {/* Detail */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[540px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[540px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-zinc-900 font-mono">{selected.action}</h2>

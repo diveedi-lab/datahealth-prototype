@@ -216,7 +216,7 @@ export function ProjectsStudies() {
       {/* Tree */}
       <div className="flex-1 overflow-auto space-y-3">
         {filtered.map(project => (
-          <div key={project.id} className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+          <div key={project.id} className="glass-card rounded-2xl overflow-hidden">
             <div className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-zinc-50 transition-colors"
               onClick={() => toggle(project.id)}>
               {project.children.length > 0 ? (
@@ -263,7 +263,7 @@ export function ProjectsStudies() {
       {/* Detail Panel */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[520px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[520px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-zinc-900">{selected.name}</h2>
@@ -319,7 +319,7 @@ export function ProjectsStudies() {
       {/* Create Modal */}
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center" onClick={() => setShowCreate(false)}>
-          <div className="w-[580px] bg-white rounded-2xl shadow-xl max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[580px] glass rounded-2xl max-h-[85vh] overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200">
               <h2 className="text-zinc-900">Create New Item</h2>
               <p className="text-[13px] text-zinc-500 mt-1">Add a project, study, registry, or any research item</p>

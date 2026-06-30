@@ -141,7 +141,7 @@ function CanvasWorkspace() {
 function CanvasHint({ children }: { children: React.ReactNode }) {
   return (
     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-zinc-200 rounded-full shadow-sm text-xs text-zinc-600">
+      <div className="flex items-center gap-2 px-3 py-1.5 glass rounded-full text-xs text-zinc-600">
         <Sparkles className="w-3.5 h-3.5 text-blue-500" />{children}
       </div>
     </div>
@@ -174,7 +174,7 @@ function FinalizedView() {
             <h3 className="text-sm font-semibold text-zinc-800 mb-2">Tabelle finali</h3>
             <div className="space-y-2 mb-6">
               {v.tables.map((tb) => (
-                <div key={tb.targetId} className="flex items-center gap-3 bg-white border border-zinc-200 rounded-xl px-4 py-3">
+                <div key={tb.targetId} className="flex items-center gap-3 glass-card rounded-xl px-4 py-3">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                   <span className="font-mono text-sm font-semibold text-zinc-800">{tb.name}</span>
                   <span className="text-[10px] uppercase px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500">{tname(tb.targetId)}</span>

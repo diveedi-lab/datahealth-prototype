@@ -80,7 +80,7 @@ export function SqlBlock({ sql, defaultOpen = true }: { sql: string; defaultOpen
   };
 
   return (
-    <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+    <div className="glass-card rounded-xl overflow-hidden">
       <div className="flex items-center justify-between px-4 py-2.5">
         <button onClick={() => setOpen((o) => !o)} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Code2 className="w-4 h-4 text-violet-500" />

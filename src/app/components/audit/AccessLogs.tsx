@@ -88,19 +88,19 @@ export function AccessLogs() {
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Total Events</p>
           <p className="text-[24px] text-zinc-900 mt-1">{logs.length}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Failed Logins</p>
           <p className="text-[24px] text-red-600 mt-1">{failedCount}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">Blocked</p>
           <p className="text-[24px] text-red-700 mt-1">{blockedCount}</p>
         </div>
-        <div className="bg-white border border-zinc-200 rounded-xl p-4">
+        <div className="glass-card rounded-xl p-4">
           <p className="text-[12px] text-zinc-500">MFA Used</p>
           <p className="text-[24px] text-emerald-600 mt-1">{mfaCount}</p>
         </div>
@@ -124,7 +124,7 @@ export function AccessLogs() {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto bg-white border border-zinc-200 rounded-xl">
+      <div className="flex-1 overflow-auto glass-card rounded-2xl">
         <table className="w-full">
           <thead>
             <tr className="border-b border-zinc-200">
@@ -158,7 +158,7 @@ export function AccessLogs() {
       {/* Detail */}
       {selected && (
         <div className="fixed inset-0 bg-black/30 z-50 flex justify-end" onClick={() => setSelected(null)}>
-          <div className="w-[520px] bg-white h-full shadow-xl overflow-auto" onClick={e => e.stopPropagation()}>
+          <div className="w-[520px] glass h-full overflow-auto" onClick={e => e.stopPropagation()}>
             <div className="p-6 border-b border-zinc-200 flex items-center justify-between">
               <div>
                 <h2 className="text-zinc-900">{selected.type}</h2>

@@ -27,7 +27,7 @@ export function VariableDistributionPanel({ collection }: { collection: ExploreC
       </div>
 
       {current && (
-        <div className="border border-zinc-200 rounded-xl p-3">
+        <div className="glass-card rounded-xl p-3">
           <div className="flex items-center gap-2 mb-1">
             {TYPE_ICON[current.variable.type]}
             <span className="font-mono text-sm font-semibold text-zinc-900">{current.name}</span>
