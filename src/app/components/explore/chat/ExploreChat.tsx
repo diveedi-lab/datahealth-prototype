@@ -183,29 +183,28 @@ export function ExploreChat({ onOpenArtifact }: { onOpenArtifact: (id: string) =
               ))}
             </div>
           )}
-          <div className="rounded-2xl border border-zinc-300 bg-white shadow-sm px-3.5 pt-3 pb-2 transition-colors focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500/20">
+          <div className="rounded-2xl border border-zinc-300 bg-white shadow-sm px-4 pt-3.5 pb-2.5 transition-colors focus-within:border-violet-400 focus-within:ring-2 focus-within:ring-violet-500/20">
             <textarea
               ref={taRef}
               value={input}
               onChange={(e) => growComposer(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input); } }}
-              rows={1}
+              rows={3}
               placeholder="Scrivi un messaggio…"
-              className="w-full resize-none outline-none bg-transparent text-sm text-zinc-800 placeholder:text-zinc-400 leading-relaxed max-h-44"
+              className="w-full resize-none outline-none bg-transparent text-[15px] text-zinc-800 placeholder:text-zinc-400 leading-relaxed min-h-[76px] max-h-60"
             />
-            <div className="flex items-center justify-between pt-1.5">
+            <div className="flex items-center justify-between pt-1">
               <span className="text-[11px] text-zinc-400 select-none">⏎ invia · ⇧⏎ a capo</span>
               <button
                 onClick={() => send(input)}
                 disabled={!input.trim() || typing}
-                className="w-8 h-8 flex items-center justify-center bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white rounded-full transition-colors"
+                className="w-9 h-9 flex items-center justify-center bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white rounded-full transition-colors"
                 aria-label="Invia"
               >
                 <Send className="w-4 h-4" />
               </button>
             </div>
           </div>
-          <p className="text-center text-[11px] text-zinc-400 mt-2">L'assistente può commettere errori. Verifica le risposte.</p>
         </div>
       </div>
     </div>

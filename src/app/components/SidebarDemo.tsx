@@ -342,8 +342,18 @@ function getSidebarContent(
         {
           title: "Overview",
           items: [
+            { icon: <Dashboard size={16} className="text-neutral-50" />, label: "Home", isActive: true },
+          ],
+        },
+      ],
+    },
+    report: {
+      title: "Report",
+      sections: [
+        {
+          title: "Analytics",
+          items: [
             { icon: <Report size={16} className="text-neutral-50" />, label: "Data Lake Report", isActive: true },
-            { icon: <Share size={16} className="text-neutral-50" />, label: "Sharing Summary" },
             { icon: <ChartBar size={16} className="text-neutral-50" />, label: "Data Dashboard" },
           ],
         },
@@ -399,6 +409,12 @@ function getSidebarContent(
             { icon: <Report size={16} className="text-neutral-50" />, label: "Operation Logs" },
             { icon: <Security size={16} className="text-neutral-50" />, label: "Access Logs" },
             { icon: <Flag size={16} className="text-neutral-50" />, label: "Security Alerts" },
+          ],
+        },
+        {
+          title: "Data Governance",
+          items: [
+            { icon: <Share size={16} className="text-neutral-50" />, label: "Sharing Summary" },
           ],
         },
       ],
@@ -494,6 +510,11 @@ function IconNavigation({
       id: "datamanager",
       icon: <FolderOpen size={16} />,
       label: "Data Manager",
+    },
+    {
+      id: "report",
+      icon: <ChartBar size={16} />,
+      label: "Report",
     },
     {
       id: "audit",

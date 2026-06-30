@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TopBar } from './components/TopBar';
 import { TwoLevelSidebar } from './components/SidebarDemo';
+import { HomeDashboard } from './components/HomeDashboard';
 import { DataLakeReport } from './components/DataLakeReport';
 import { SharingSummary } from './components/SharingSummary';
 import { DataDashboard } from './components/DataDashboard';
@@ -36,6 +37,7 @@ const TAB_LABELS: Record<string, string> = {
   querytool: 'Query Tool',
   ingestor: 'Collections',
   datamanager: 'Data Manager',
+  report: 'Report',
   audit: 'Audit',
   usermanager: 'User Management',
   settings: 'General Configuration',
@@ -43,10 +45,11 @@ const TAB_LABELS: Record<string, string> = {
 
 // Default sub-items for each main section
 const DEFAULT_SUB_ITEMS: Record<string, string> = {
-  dashboard: 'Data Lake Report',
+  dashboard: 'Home',
   querytool: 'Saved Queries',
   ingestor: 'Collections',
   datamanager: 'Projects & Studies',
+  report: 'Data Lake Report',
   audit: 'Operation Logs',
   usermanager: 'User Management',
   settings: 'General Configuration',
@@ -54,9 +57,11 @@ const DEFAULT_SUB_ITEMS: Record<string, string> = {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [activeSubItem, setActiveSubItem] = useState('Data Lake Report');
+  const [activeSubItem, setActiveSubItem] = useState('Home');
   const [openCollectionId, setOpenCollectionId] = useState<string | null>(null);
   const [openExplore, setOpenExplore] = useState<ExploreView | null>(null);
+  // da dove è stato aperto Explore, per tornarci all'uscita
+  const [exploreOrigin, setExploreOrigin] = useState<{ tab: string; sub: string }>({ tab: 'querytool', sub: 'Saved Queries' });
 
   const handleSectionChange = (section: string) => {
     setActiveTab(section);
@@ -65,6 +70,7 @@ export default function App() {
 
   const handleSubItemClick = (label: string) => {
     if (activeTab === 'querytool' && label === 'Explore') {
+      setExploreOrigin({ tab: 'querytool', sub: 'Saved Queries' });
       setActiveSubItem('Explore');
       setOpenExplore({ mode: 'home' });
       return;
@@ -75,14 +81,34 @@ export default function App() {
   // Apertura del workspace Explore da Saved Queries / History (popolato da un seed)
   const openExploreFrom = (kind: 'sq' | 'h', q: { id: string; prompt: string; databases: string[]; title: string }) => {
     const id = `${kind}-${q.id}`;
+    setExploreOrigin({ tab: 'querytool', sub: kind === 'sq' ? 'Saved Queries' : 'History' });
     setOpenExplore({ mode: 'workspace', id, seed: buildExploreFromSaved(id, { prompt: q.prompt, databases: q.databases, title: q.title }) });
+  };
+
+  const navigate = (tab: string, sub?: string) => {
+    setActiveTab(tab);
+    setActiveSubItem(sub ?? DEFAULT_SUB_ITEMS[tab] ?? '');
+  };
+
+  const openExploreHome = () => {
+    setExploreOrigin({ tab: 'dashboard', sub: 'Home' });
+    setOpenExplore({ mode: 'home' });
   };
 
   const renderContent = () => {
     if (activeTab === 'dashboard') {
+      return (
+        <HomeDashboard
+          onCreateCollection={() => setOpenCollectionId(`new-${Date.now()}`)}
+          onExplore={openExploreHome}
+          onOpenCollection={setOpenCollectionId}
+          onNavigate={navigate}
+        />
+      );
+    }
+    if (activeTab === 'report') {
       switch (activeSubItem) {
         case 'Data Lake Report': return <DataLakeReport />;
-        case 'Sharing Summary': return <SharingSummary />;
         case 'Data Dashboard': return <DataDashboard />;
         default: return <DataLakeReport />;
       }
@@ -117,6 +143,7 @@ export default function App() {
         case 'Operation Logs': return <OperationLogs />;
         case 'Access Logs': return <AccessLogs />;
         case 'Security Alerts': return <SecurityAlerts />;
+        case 'Sharing Summary': return <SharingSummary />;
         default: return <OperationLogs />;
       }
     }
@@ -162,7 +189,7 @@ export default function App() {
     return (
       <ExploreApp
         initial={openExplore}
-        onExit={() => { setOpenExplore(null); setActiveSubItem('Saved Queries'); }}
+        onExit={() => { setOpenExplore(null); setActiveTab(exploreOrigin.tab); setActiveSubItem(exploreOrigin.sub); }}
       />
     );
   }
