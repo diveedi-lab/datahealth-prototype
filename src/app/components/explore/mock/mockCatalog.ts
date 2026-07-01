@@ -50,6 +50,13 @@ const CARDIO_TABLES: ExploreTable[] = [
       { name: 'weight_kg', type: 'float', nullable: true, description: 'Peso in kg' },
       { name: 'height_cm', type: 'float', nullable: true, description: 'Altezza in cm' },
     ],
+    previewRows: [
+      { patient_id: 'PT-1001', age: 45, gender: 'M', enrollment_date: '2025-01-15', site_id: 'Site A', status: 'Active' },
+      { patient_id: 'PT-1003', age: 58, gender: 'M', enrollment_date: '2025-03-22', site_id: 'Site A', status: 'Active' },
+      { patient_id: 'PT-1005', age: 61, gender: 'F', enrollment_date: '2025-05-18', site_id: 'Site B', status: 'Active' },
+      { patient_id: 'PT-1008', age: 67, gender: 'F', enrollment_date: '2025-08-14', site_id: 'Site B', status: 'Completed' },
+      { patient_id: 'PT-1011', age: 72, gender: 'M', enrollment_date: '2025-09-02', site_id: 'Site C', status: 'Active' },
+    ],
   },
   {
     name: 'lab_results', label: 'Lab Results', color: '#8b5cf6', rowCount: 8560,
@@ -62,6 +69,13 @@ const CARDIO_TABLES: ExploreTable[] = [
       { name: 'collection_date', type: 'date', description: 'Data prelievo' },
       { name: 'flag', type: 'string', nullable: true, description: 'Flag anomalia (Normal, High, Low)' },
     ],
+    previewRows: [
+      { lab_id: 'LB-4401', patient_id: 'PT-1001', test_name: 'Troponin I', value: 0.04, unit: 'ng/mL', flag: 'Normal' },
+      { lab_id: 'LB-4403', patient_id: 'PT-1005', test_name: 'Troponin I', value: 0.12, unit: 'ng/mL', flag: 'High' },
+      { lab_id: 'LB-4404', patient_id: 'PT-1003', test_name: 'CRP', value: 8.5, unit: 'mg/L', flag: 'High' },
+      { lab_id: 'LB-4408', patient_id: 'PT-1011', test_name: 'BNP', value: 410, unit: 'pg/mL', flag: 'High' },
+      { lab_id: 'LB-4410', patient_id: 'PT-1008', test_name: 'LDL', value: 142, unit: 'mg/dL', flag: 'High' },
+    ],
   },
   {
     name: 'adverse_events', label: 'Adverse Events', color: '#f59e0b', rowCount: 470,
@@ -73,6 +87,11 @@ const CARDIO_TABLES: ExploreTable[] = [
       { name: 'start_date', type: 'date', description: 'Data insorgenza' },
       { name: 'resolution_date', type: 'date', nullable: true, description: 'Data risoluzione' },
       { name: 'related', type: 'string', description: 'Correlazione al farmaco' },
+    ],
+    previewRows: [
+      { ae_id: 'AE-201', patient_id: 'PT-1001', event_name: 'Headache', severity: 'Mild', start_date: '2025-01-25', related: 'Unlikely' },
+      { ae_id: 'AE-206', patient_id: 'PT-1014', event_name: 'Arrhythmia', severity: 'Severe', start_date: '2025-02-12', related: 'Probable' },
+      { ae_id: 'AE-209', patient_id: 'PT-1021', event_name: 'Dizziness', severity: 'Mild', start_date: '2025-02-18', related: 'Probable' },
     ],
   },
   {

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import type { ExploreState, ChartType, StructureRequest, ArtifactRef } from './types';
+import type { ExploreState, ChartType, StructureRequest, ArtifactRef, ExploreQuery } from './types';
 import { ExploreProvider, useExplore } from './state/ExploreContext';
 import { ExploreTopBar } from './ExploreToolbar';
 import { ExploreChat } from './chat/ExploreChat';
@@ -152,7 +152,15 @@ function WorkspaceShell({ onClose }: { onClose: () => void }) {
         />
       )}
 
-      {structure && <StructureExplorer request={structure} onClose={() => setStructure(null)} />}
+      {structure && (
+        <StructureExplorer
+          request={structure}
+          query={structure.mode === 'query' && state.artifacts[structure.queryId]?.kind === 'query'
+            ? (state.artifacts[structure.queryId] as { query: ExploreQuery }).query
+            : undefined}
+          onClose={() => setStructure(null)}
+        />
+      )}
     </div>
   );
 }

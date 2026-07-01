@@ -10,11 +10,8 @@ import { QueryHistory } from './components/QueryHistory';
 import { SavedQueries } from './components/SavedQueries';
 import { DB } from './components/DB';
 import { CollectionEditor } from './components/ingestor/CollectionEditor';
-import { ExploreApp } from './components/explore/ExploreApp';
+import { ExploreEntry, type EntryInitial } from './components/explore/ExploreEntry';
 import { buildExploreFromSaved } from './components/explore/mock/mockLibrary';
-import type { ExploreState } from './components/explore/types';
-
-type ExploreView = { mode: 'home' } | { mode: 'workspace'; id: string; seed?: ExploreState };
 import { Connectors } from './components/Connectors';
 import { FileUploader } from './components/FileUploader';
 import { ProjectsStudies } from './components/dm/ProjectsStudies';
@@ -60,7 +57,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [activeSubItem, setActiveSubItem] = useState('Home');
   const [openCollectionId, setOpenCollectionId] = useState<string | null>(null);
-  const [openExplore, setOpenExplore] = useState<ExploreView | null>(null);
+  const [openExplore, setOpenExplore] = useState<EntryInitial | null>(null);
   // da dove è stato aperto Explore, per tornarci all'uscita
   const [exploreOrigin, setExploreOrigin] = useState<{ tab: string; sub: string }>({ tab: 'querytool', sub: 'Saved Queries' });
 
@@ -73,17 +70,17 @@ export default function App() {
     if (activeTab === 'querytool' && label === 'Explore') {
       setExploreOrigin({ tab: 'querytool', sub: 'Saved Queries' });
       setActiveSubItem('Explore');
-      setOpenExplore({ mode: 'home' });
+      setOpenExplore({ kind: 'chooser' });
       return;
     }
     setActiveSubItem(label);
   };
 
-  // Apertura del workspace Explore da Saved Queries / History (popolato da un seed)
+  // Apertura della chat Explore da Saved Queries / History (popolata da un seed)
   const openExploreFrom = (kind: 'sq' | 'h', q: { id: string; prompt: string; databases: string[]; title: string }) => {
     const id = `${kind}-${q.id}`;
     setExploreOrigin({ tab: 'querytool', sub: kind === 'sq' ? 'Saved Queries' : 'History' });
-    setOpenExplore({ mode: 'workspace', id, seed: buildExploreFromSaved(id, { prompt: q.prompt, databases: q.databases, title: q.title }) });
+    setOpenExplore({ kind: 'chat', app: { mode: 'workspace', id, seed: buildExploreFromSaved(id, { prompt: q.prompt, databases: q.databases, title: q.title }) } });
   };
 
   const navigate = (tab: string, sub?: string) => {
@@ -93,7 +90,7 @@ export default function App() {
 
   const openExploreHome = () => {
     setExploreOrigin({ tab: 'dashboard', sub: 'Home' });
-    setOpenExplore({ mode: 'home' });
+    setOpenExplore({ kind: 'chooser' });
   };
 
   const renderContent = () => {
@@ -185,10 +182,10 @@ export default function App() {
     );
   }
 
-  // Full-screen Explore (lista chat + workspace chat-first) — bypasses sidebar + topbar
+  // Full-screen Explore (chooser 3 modalità: chat / query assistite / data explorer) — bypasses sidebar + topbar
   if (openExplore) {
     return (
-      <ExploreApp
+      <ExploreEntry
         initial={openExplore}
         onExit={() => { setOpenExplore(null); setActiveTab(exploreOrigin.tab); setActiveSubItem(exploreOrigin.sub); }}
       />

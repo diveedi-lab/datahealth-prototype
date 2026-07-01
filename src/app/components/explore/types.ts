@@ -27,6 +27,7 @@ export interface ExploreTable {
   color: string;
   rowCount: number;
   columns: ExploreColumn[];
+  previewRows?: Array<Record<string, string | number>>;  // righe d'esempio per l'anteprima nei nodi
 }
 
 // Variabile "ricca" con distribuzione (per le analisi/grafici in NL)
