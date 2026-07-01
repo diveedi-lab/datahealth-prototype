@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Shield, Search, Share2, Users, UserCheck, Eye, Download, Filter, ArrowUpRight, ArrowDownRight, Clock } from 'lucide-react';
+import { Shield, Search, Share2, Users, UserCheck, Eye, Download, Filter, ArrowUpRight, ArrowDownRight, Clock, Database } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { SearchMultiSelect } from './ui/SearchMultiSelect';
+import { listShares } from './sharing/sharesStore';
 
 const MOCK_DATABASES = [
   { id: 'db-alpha', name: 'CARDIO-2024' },
@@ -66,9 +67,10 @@ const TOP_QUERIERS = [
   { user: 'L. Neri', queries: 5600, db: 'RESP-PILOT' },
 ];
 
-export function SharingSummary() {
+export function SharingSummary({ onShare }: { onShare?: () => void }) {
   const [timeRange, setTimeRange] = useState<string>('Last 30 days');
   const [selectedDbs, setSelectedDbs] = useState<string[]>(MOCK_DATABASES.map(d => d.id));
+  const myShares = listShares();
 
   const totals = useMemo(() => {
     let usersWithAccess = 0, queries = 0, collaborations = 0, downloads = 0, views = 0;
@@ -89,6 +91,9 @@ export function SharingSummary() {
           <p className="text-sm text-zinc-500 mt-1">Access metrics, collaboration activity, and query usage across databases.</p>
         </div>
         <div className="flex items-center gap-3">
+          <button onClick={onShare} className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm transition-colors">
+            <Share2 className="w-4 h-4" /> Condividi
+          </button>
           <select value={timeRange} onChange={e => setTimeRange(e.target.value)} className="px-3 py-2 text-sm bg-white border border-zinc-200 rounded-lg text-zinc-700">
             {TIME_RANGES.map(r => <option key={r} value={r}>{r}</option>)}
           </select>
@@ -123,6 +128,32 @@ export function SharingSummary() {
           </div>
         ))}
       </div>
+
+      {myShares.length > 0 && (
+        <div className="glass-card rounded-2xl p-6">
+          <h3 className="text-lg font-bold text-zinc-900 mb-4">Le tue condivisioni</h3>
+          <div className="flex flex-col gap-2">
+            {myShares.map((s) => (
+              <div key={s.id} className="flex items-start gap-3 p-3 bg-zinc-50/70 rounded-xl border border-zinc-100">
+                <div className="bg-emerald-100 p-1.5 rounded-full text-emerald-600 mt-0.5 shrink-0">
+                  <Database className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-zinc-800 font-medium truncate">{s.collectionNames.join(', ')}</p>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    con {s.users.map(u => u.name).join(', ')} · {s.users.length} utenti
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1 justify-end shrink-0 max-w-[45%]">
+                  {s.permissions.map(p => (
+                    <span key={p} className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600">{p}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Query Trend */}

@@ -12,6 +12,11 @@ import { DB } from './components/DB';
 import { CollectionEditor } from './components/ingestor/CollectionEditor';
 import { ExploreEntry, type EntryInitial } from './components/explore/ExploreEntry';
 import { buildExploreFromSaved } from './components/explore/mock/mockLibrary';
+import { QueryTool } from './components/explore/query/QueryTool';
+import { StructureExplorer } from './components/explore/structure/StructureExplorer';
+import { addDerived } from './components/explore/derivedStore';
+import type { ExploreQuery } from './components/explore/types';
+import { ShareWizard } from './components/sharing/ShareWizard';
 import { Connectors } from './components/Connectors';
 import { FileUploader } from './components/FileUploader';
 import { ProjectsStudies } from './components/dm/ProjectsStudies';
@@ -58,6 +63,9 @@ export default function App() {
   const [activeSubItem, setActiveSubItem] = useState('Home');
   const [openCollectionId, setOpenCollectionId] = useState<string | null>(null);
   const [openExplore, setOpenExplore] = useState<EntryInitial | null>(null);
+  const [derivedFlow, setDerivedFlow] = useState(false);
+  const [structureQuery, setStructureQuery] = useState<ExploreQuery | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
   // da dove è stato aperto Explore, per tornarci all'uscita
   const [exploreOrigin, setExploreOrigin] = useState<{ tab: string; sub: string }>({ tab: 'querytool', sub: 'Saved Queries' });
 
@@ -88,6 +96,13 @@ export default function App() {
     setActiveSubItem(sub ?? DEFAULT_SUB_ITEMS[tab] ?? '');
   };
 
+  // Crea una collezione derivata dalla query e torna alla lista Collections
+  const handleCreateDerived = (q: ExploreQuery) => {
+    addDerived({ name: q.title, sourceCollections: q.collections, prompt: q.prompt, sql: q.sql, rowCount: q.rowCount, results: q.results, execMs: q.execMs });
+    setDerivedFlow(false);
+    navigate('ingestor', 'Collections');
+  };
+
   const openExploreHome = () => {
     setExploreOrigin({ tab: 'dashboard', sub: 'Home' });
     setOpenExplore({ kind: 'chooser' });
@@ -101,6 +116,7 @@ export default function App() {
           onExplore={openExploreHome}
           onOpenCollection={setOpenCollectionId}
           onNavigate={navigate}
+          onShare={() => setShareOpen(true)}
         />
       );
     }
@@ -120,10 +136,10 @@ export default function App() {
     }
     if (activeTab === 'ingestor') {
       switch (activeSubItem) {
-        case 'Collections': return <DB onOpenCollection={setOpenCollectionId} />;
+        case 'Collections': return <DB onOpenCollection={setOpenCollectionId} onNewDerived={() => setDerivedFlow(true)} onExploreDerived={setStructureQuery} />;
         case 'Connectors': return <Connectors />;
         case 'File Uploader': return <FileUploader />;
-        default: return <DB onOpenCollection={setOpenCollectionId} />;
+        default: return <DB onOpenCollection={setOpenCollectionId} onNewDerived={() => setDerivedFlow(true)} onExploreDerived={setStructureQuery} />;
       }
     }
     if (activeTab === 'datamanager') {
@@ -141,7 +157,7 @@ export default function App() {
         case 'Operation Logs': return <OperationLogs />;
         case 'Access Logs': return <AccessLogs />;
         case 'Security Alerts': return <SecurityAlerts />;
-        case 'Sharing Summary': return <SharingSummary />;
+        case 'Sharing Summary': return <SharingSummary onShare={() => setShareOpen(true)} />;
         default: return <OperationLogs />;
       }
     }
@@ -192,6 +208,22 @@ export default function App() {
     );
   }
 
+  // Full-screen: creazione collezione derivata (Query Tool in modalità derived)
+  if (derivedFlow) {
+    return <QueryTool derived onBack={() => setDerivedFlow(false)} onCreateDerived={handleCreateDerived} />;
+  }
+
+  // Full-screen: esplorazione grafica di una query (lineage + anteprima righe)
+  if (structureQuery) {
+    return (
+      <StructureExplorer
+        request={{ mode: 'query', queryId: structureQuery.id }}
+        query={structureQuery}
+        onClose={() => setStructureQuery(null)}
+      />
+    );
+  }
+
   return (
     <TooltipProvider delayDuration={200}>
       <div className="flex h-screen app-backdrop text-zinc-900 font-sans overflow-hidden">
@@ -211,6 +243,8 @@ export default function App() {
             {renderContent()}
           </main>
         </div>
+
+        <ShareWizard open={shareOpen} onOpenChange={setShareOpen} onDone={() => navigate('audit', 'Sharing Summary')} />
       </div>
     </TooltipProvider>
   );

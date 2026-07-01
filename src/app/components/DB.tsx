@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { Plus, CheckCircle2, Clock, AlertCircle, XCircle, ChevronRight, Database, Search, Pencil, FileText, Layers, HardDrive } from 'lucide-react';
+import { Plus, CheckCircle2, Clock, AlertCircle, XCircle, ChevronRight, Database, Search, Pencil, FileText, Layers, HardDrive, Table2, Network } from 'lucide-react';
 import { getSavedStage } from './ingestor/state/persistence';
 import { STAGE_BADGE } from './ingestor/badges';
+import { NewCollectionChooser } from './ingestor/NewCollectionChooser';
+import { listDerived, derivedToQuery, type DerivedCollection } from './explore/derivedStore';
+import { getCollection } from './explore/mock/mockCatalog';
+import type { ExploreQuery } from './explore/types';
 
 interface DataSource {
   id: string;
@@ -47,9 +51,19 @@ const MOCK_SOURCES: DataSource[] = [
   { id: 'DS-0002', name: 'Baseline ECG Data', targetDatabase: 'CARDIO-2024', status: 'draft', filesTotal: 0, filesIngested: 0, sizeGB: 0, entities: 0, variables: 0, createdAt: '2026-04-10T16:00:00', updatedAt: '2026-04-10T16:00:00', createdBy: 'Dr. P. Marino', description: 'Baseline electrocardiogram recordings and automated measurements.' },
 ];
 
-export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => void }) {
+export function DB({
+  onOpenCollection, onNewDerived, onExploreDerived,
+}: {
+  onOpenCollection?: (id: string) => void;
+  onNewDerived?: () => void;
+  onExploreDerived?: (q: ExploreQuery) => void;
+}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [chooserOpen, setChooserOpen] = useState(false);
+  const [derived] = useState<DerivedCollection[]>(() => listDerived());
+
+  const derivedFiltered = derived.filter((d) => !searchTerm || d.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const filtered = MOCK_SOURCES.filter(p => {
     const matchSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.id.toLowerCase().includes(searchTerm.toLowerCase());
@@ -79,12 +93,19 @@ export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => vo
           <p className="text-sm text-zinc-500 mt-1">Crea e gestisci le collection di dati. Aprine una per modellare il flusso di ingestione e conversione.</p>
         </div>
         <button
-          onClick={() => onOpenCollection?.(`new-${Date.now()}`)}
+          onClick={() => setChooserOpen(true)}
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors shadow-sm"
         >
           <Plus className="w-4 h-4" /> New Collection
         </button>
       </div>
+
+      <NewCollectionChooser
+        open={chooserOpen}
+        onOpenChange={setChooserOpen}
+        onIngestion={() => onOpenCollection?.(`new-${Date.now()}`)}
+        onDerived={() => onNewDerived?.()}
+      />
 
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[200px] max-w-md">
@@ -101,11 +122,45 @@ export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => vo
           <option value="completed">Completed</option>
           <option value="failed">Failed</option>
         </select>
-        <span className="text-xs text-zinc-400">{filtered.length} collections</span>
+        <span className="text-xs text-zinc-400">{filtered.length + derivedFiltered.length} collections</span>
       </div>
 
       <div className="flex-1 overflow-auto">
         <div className="grid grid-cols-1 gap-3">
+          {derivedFiltered.map((d) => (
+            <div
+              key={d.id}
+              onClick={() => onExploreDerived?.(derivedToQuery(d))}
+              className="glass-card rounded-xl p-4 hover:shadow-md transition-all cursor-pointer group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="p-2.5 rounded-xl bg-emerald-50 shrink-0">
+                  <Table2 className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="text-xs font-mono text-zinc-400">{d.id}</span>
+                    <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 flex items-center gap-1">
+                      <Table2 className="w-3 h-3" /> Derivata
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-zinc-900 truncate">{d.name}</p>
+                  <p className="text-xs text-zinc-500 mt-0.5 line-clamp-1 italic">“{d.prompt}”</p>
+                  <div className="flex items-center gap-4 mt-2.5 flex-wrap">
+                    <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+                      {d.sourceCollections.map((c) => (
+                        <span key={c} className={`w-2 h-2 rounded-full ${getCollection(c)?.dotClass || 'bg-zinc-400'}`} />
+                      ))}
+                      {d.sourceCollections.map((c) => getCollection(c)?.name ?? c).join(', ')}
+                    </span>
+                    <span className="flex items-center gap-1 text-xs text-zinc-400"><Layers className="w-3 h-3" />{d.rowCount.toLocaleString('it-IT')} righe</span>
+                    <span className="flex items-center gap-1 text-xs text-emerald-600"><Network className="w-3 h-3" /> Esplora su React Flow</span>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-zinc-300 shrink-0 mt-1 group-hover:text-zinc-500 transition-colors" />
+              </div>
+            </div>
+          ))}
           {filtered.map(src => {
             const stCfg = STATUS_CONFIG[src.status];
             const StIcon = stCfg.icon;
@@ -184,7 +239,7 @@ export function DB({ onOpenCollection }: { onOpenCollection?: (id: string) => vo
               </div>
             );
           })}
-          {filtered.length === 0 && (
+          {filtered.length === 0 && derivedFiltered.length === 0 && (
             <div className="py-16 flex flex-col items-center text-zinc-400 glass-card rounded-2xl">
               <Database className="w-8 h-8 mb-2 opacity-50" />
               <p className="text-sm">No databases match your filters</p>

@@ -5,11 +5,14 @@ import {
   ChevronRight, Search, Link2,
 } from 'lucide-react';
 
+import { listShares } from './sharing/sharesStore';
+
 interface DashboardProps {
   onCreateCollection: () => void;
   onExplore: () => void;
   onOpenCollection: (id: string) => void;
   onNavigate: (tab: string, sub?: string) => void;
+  onShare?: () => void;
 }
 
 const DB_DOT: Record<string, string> = {
@@ -107,8 +110,18 @@ function Panel({
   );
 }
 
-export function HomeDashboard({ onCreateCollection, onExplore, onOpenCollection, onNavigate }: DashboardProps) {
+export function HomeDashboard({ onCreateCollection, onExplore, onOpenCollection, onNavigate, onShare }: DashboardProps) {
   const today = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+  const shareRows = [
+    ...listShares().map((sh) => ({
+      name: sh.collectionNames.join(', ') || 'Collezione',
+      with: sh.users.map((u) => u.name).join(', ') || '—',
+      kind: 'team' as const,
+      detail: sh.permissions.join(' · '),
+      icon: Users,
+    })),
+    ...SHARED,
+  ];
 
   return (
     <div className="max-w-7xl mx-auto w-full flex flex-col gap-6 pb-10">
@@ -139,7 +152,7 @@ export function HomeDashboard({ onCreateCollection, onExplore, onOpenCollection,
           subtitle="Condividi collection con team e partner"
           Icon={Share2}
           gradient="bg-gradient-to-br from-emerald-500 to-emerald-600"
-          onClick={() => onNavigate('audit', 'Sharing Summary')}
+          onClick={() => (onShare ? onShare() : onNavigate('audit', 'Sharing Summary'))}
         />
       </div>
 
@@ -211,9 +224,9 @@ export function HomeDashboard({ onCreateCollection, onExplore, onOpenCollection,
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <Panel title="Condivisioni attive" icon={Share2} action="Gestisci" onAction={() => onNavigate('audit', 'Sharing Summary')}>
           <div className="space-y-1">
-            {SHARED.map((s) => (
+            {shareRows.map((s, i) => (
               <button
-                key={s.name}
+                key={i}
                 onClick={() => onNavigate('audit', 'Sharing Summary')}
                 className="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-zinc-50 transition-colors"
               >

@@ -28,6 +28,7 @@ export function QueryTool({
   const [tab, setTab] = useState(0);
   const [structureOpen, setStructureOpen] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [derivedName, setDerivedName] = useState('');
 
   const cols = () => (selected.size ? [...selected] : ['cardio-2024']);
   const toggle = (id: string) => setSelected((prev) => {
@@ -74,6 +75,7 @@ export function QueryTool({
     };
     setTimeout(() => {
       if (!sql) setSql(r.sql);
+      if (derived && !derivedName.trim()) setDerivedName((prompt || 'Collezione derivata').slice(0, 40));
       setQuery(q);
       setTab(0);
       setRunning(false);
@@ -137,7 +139,7 @@ export function QueryTool({
               <span className="text-[11px] text-zinc-400">L'AI genera l'SQL; puoi modificarlo prima di eseguire.</span>
               <button
                 onClick={writeWithAI}
-                disabled={!prompt.trim() || aiLoading}
+                disabled={!prompt.trim() || aiLoading || selected.size === 0}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white transition-colors"
               >
                 {aiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
@@ -152,7 +154,7 @@ export function QueryTool({
               <span className="text-sm font-medium text-zinc-700">SQL</span>
               <button
                 onClick={run}
-                disabled={running}
+                disabled={running || selected.size === 0}
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white transition-colors shadow-sm"
               >
                 {running ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
@@ -196,9 +198,21 @@ export function QueryTool({
                     <Network className="w-3.5 h-3.5" /> Esplora su React Flow
                   </button>
                   {derived ? (
-                    <button onClick={() => onCreateDerived?.(query)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-colors">
-                      <FolderPlus className="w-3.5 h-3.5" /> Crea collezione derivata
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <input
+                        value={derivedName}
+                        onChange={(e) => setDerivedName(e.target.value)}
+                        placeholder="Nome collezione"
+                        className="w-40 px-2.5 py-1.5 text-xs bg-white/70 border border-zinc-200 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      />
+                      <button
+                        onClick={() => onCreateDerived?.({ ...query, title: derivedName.trim() || query.title })}
+                        disabled={!derivedName.trim()}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white transition-colors"
+                      >
+                        <FolderPlus className="w-3.5 h-3.5" /> Crea
+                      </button>
+                    </div>
                   ) : (
                     <button onClick={save} disabled={saved} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${saved ? 'text-emerald-600 border-emerald-200 bg-emerald-50' : 'text-zinc-600 border-zinc-200 hover:bg-zinc-100/60'}`}>
                       {saved ? <BookmarkCheck className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}{saved ? 'Salvata' : 'Salva query'}
